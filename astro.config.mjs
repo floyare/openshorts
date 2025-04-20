@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import node from '@astrojs/node';
@@ -14,5 +14,12 @@ export default defineConfig({
 
   adapter: node({
     mode: 'standalone'
-  })
+  }),
+  experimental: {
+    fonts: [{
+        provider: fontProviders.google(),
+        name: "Lexend",
+        cssVariable: "--font"
+    }]
+  }
 });
