@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css"
+import {AnalyticsProvider} from "shibuitracker-client/client";
 const { subtitle = "" } = Astro.props
 ---
 
@@ -12,6 +13,8 @@ const { subtitle = "" } = Astro.props
 		<title>🪄 openshorts {subtitle ? ` - ${subtitle}` : ""}</title>
 	</head>
 	<body class="bg-background-950 p-8 text-text-50">
-		<slot />
+        <AnalyticsProvider client:load>
+		    <slot />
+        </AnalyticsProvider>
 	</body>
 </html>
