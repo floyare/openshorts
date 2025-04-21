@@ -25,7 +25,7 @@ export const GET: APIRoute = async ({ params, request }) => {
         browser = await puppeteer.connect({ browserWSEndpoint });
         const page = await browser.newPage();
         await page.goto(urlParam, { waitUntil: 'networkidle2' });
-        await page.setViewport({ width: 1280, height: 720 });
+        await page.setViewport({ width: 475, height: 812, isMobile: true });
         const screenshot = await page.screenshot({ type: 'png' });
         await page.close();
         return new Response(screenshot, {

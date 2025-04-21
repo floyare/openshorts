@@ -4,6 +4,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+    --animate-fadein: fadeIn 1s ease-in-out forwards;
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
     --color-text-50: rgb(9, 2, 23);
     --color-text-100: rgb(19, 5, 46);
     --color-text-200: rgb(37, 9, 93);
