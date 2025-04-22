@@ -7,6 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model test {
-  id Int @id @default(autoincrement())
+model websites {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  url         String  @unique
+  image       String
 }
