@@ -2,6 +2,15 @@
 import { ExternalLink } from "lucide-react";
 import { Button } from "../ui/button";
 
+interface Props {
+    website: {
+        name: string;
+        url: string;
+        description: string;
+        image: string;
+    };
+}
+
 const { website } = Astro.props;
 const { name, url, description, image } = website;
 ---

@@ -1,0 +1,18 @@
+---
+import WebsiteItem from "./websites/website-item.astro";
+
+const searchParams = Object.fromEntries(Astro.url.searchParams.entries());
+console.log(searchParams);
+---
+
+<section>
+    <WebsiteItem
+        website={{
+            name: "NextUI",
+            url: "https://nextui.org",
+            description:
+                "Example Eiusmod minim excepteur enim est consequat aliqua occaecat ex id do. Pariatur id laborum dolore laborum dolore laborum quis ullamco nostrud deserunt. Nisi et fugiat proident veniam. Eu dolore sint dolor in et reprehenderit cillum aliquip incididunt dolore proident anim consectetur. Aliquip ipsum fugiat magna veniam dolore velit nisi culpa dolore.",
+            image: "/template2.png",
+        }}
+    />
+</section>
