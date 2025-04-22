@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {}
+
+const { ...rest } = Astro.props;
+---
+
+<div
+    class:list={[
+        `bg-background-900 p-4 rounded-md border-[1px] border-background-800`,
+        rest.class,
+    ]}
+    {...rest}
+>
+    <slot />
+</div>

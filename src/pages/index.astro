@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import Layout from "./layout.astro";
 import { getPrismaInstance } from "@/lib/prisma";
 import Logo from "@/components/logo";
-import Container from "@/components/container";
 import { PackageOpen } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import WebsiteItem from "@/components/websites/website-item.astro";
-import WebsiteBrowser from "@/components/website-browser.astro";
+import WebsiteBrowser from "@/components/website-browser";
+import Container from "@/components/container.astro";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 // const fetch = await getPrismaInstance().test.findMany()
@@ -30,9 +30,9 @@ import WebsiteBrowser from "@/components/website-browser.astro";
                 <h2 class="text-xl font-semibold text-text-500 flex items-center gap-1"><PackageOpen /> Recently added</h2>
             </Container> -->
             <Container
-                className="w-full min-w-3xl flex items-center justify-center gap-4 flex-wrap"
+                class="w-full min-w-3xl flex items-center justify-center gap-4 flex-wrap"
             >
-                <WebsiteBrowser />
+                <WebsiteBrowser client:idle />
             </Container>
         </div>
     </main>
