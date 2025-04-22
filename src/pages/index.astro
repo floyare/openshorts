@@ -6,13 +6,19 @@ import Layout from "./layout.astro";
 import { getPrismaInstance } from "@/lib/prisma";
 import { PackageOpen } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
-import WebsiteItem from "@/components/websites/website-item.astro";
 import WebsiteBrowser from "@/components/website-browser";
 import Container from "@/components/container.astro";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
-// const fetch = await getPrismaInstance().test.findMany()
-// console.log(fetch)
+
+const [websites, totalCount] = await Promise.all([
+    getPrismaInstance().websites.findMany({
+        take: 20,
+    }),
+    getPrismaInstance().websites.count(),
+]);
+
+console.log(websites, totalCount);
 ---
 
 <Layout subtitle="test">
@@ -31,7 +37,11 @@ import Container from "@/components/container.astro";
             <Container
                 class="w-full min-w-3xl flex items-center justify-center gap-4 flex-wrap"
             >
-                <WebsiteBrowser client:idle />
+                <WebsiteBrowser
+                    entryWebsites={websites}
+                    totalWebsites={totalCount}
+                    client:idle
+                />
             </Container>
         </div>
     </main>
