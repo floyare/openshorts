@@ -8,9 +8,17 @@ datasource db {
 }
 
 model websites {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
   description String?
-  url         String  @unique
+  url         String     @unique
   image       String
+  tags        Json       @default("[]") @db.Json
+  category    categories
+}
+
+enum categories {
+  PROGRAMMING
+  UI_UX           @map("UI/UX")
+  GRAPHICS_DESIGN @map("GRAPHICS DESIGN")
 }

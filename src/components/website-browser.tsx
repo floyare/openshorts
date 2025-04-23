@@ -14,7 +14,10 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
     const [page, setPage] = useState(1);
     const totalPages = Math.ceil(totalWebsites / PAGE_SIZE);
 
-    const pagedWebsites = useMemo(() => entryWebsites.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [page, totalPages]);
+    const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
+    const filteredWebsites = currentWebsites.filter((website) => true)
+
+    const pagedWebsites = useMemo(() => filteredWebsites.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [page, totalPages]);
 
     return (
         <section>

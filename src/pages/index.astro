@@ -8,6 +8,8 @@ import { PackageOpen } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import WebsiteBrowser from "@/components/website-browser";
 import Container from "@/components/container.astro";
+import { getAvailableTags } from "@/lib/websites.core";
+import { debugLog } from "@/lib/log";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 
@@ -18,7 +20,8 @@ const [websites, totalCount] = await Promise.all([
     getPrismaInstance().websites.count(),
 ]);
 
-console.log(websites, totalCount);
+const tags = await getAvailableTags();
+debugLog("DEBUG", tags);
 ---
 
 <Layout subtitle="test">
@@ -37,6 +40,7 @@ console.log(websites, totalCount);
             <Container
                 class="w-full min-w-3xl flex items-center justify-center gap-4 flex-wrap"
             >
+                <p>{JSON.stringify(tags)}</p>
                 <WebsiteBrowser
                     entryWebsites={websites}
                     totalWebsites={totalCount}
