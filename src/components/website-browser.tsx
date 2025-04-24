@@ -1,8 +1,10 @@
 import type { WebsiteType } from "@/types/website";
 import WebsiteItem from "./websites/website-item";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { PAGE_SIZE } from "@/lib/websites.core";
+import { debugLog } from "@/lib/log";
+import { actions } from "astro:actions";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -16,12 +18,28 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
     const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
     const filteredWebsites = currentWebsites.filter((website) => true)
 
-    const pagedWebsites = useMemo(() => filteredWebsites.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [page, totalPages]);
+    useEffect(() => {
+        const fetchWebsites = async () => {
+            try {
+                const data = await actions.searchWebsites({ page });
+                debugLog("DEBUG", "page: ", page, " - websites: ", data.data?.websites);
+                if (data.error || !data.data) {
+                    debugLog("ERROR", "Failed to fetch websites: ", data.error);
+                    return;
+                }
+                currentWebsitesSet(data.data.websites);
+            } catch (err) {
+                debugLog("ERROR", "Exception while fetching websites: ", err);
+            }
+        };
+
+        fetchWebsites();
+    }, [page]);
 
     return (
         <section>
             <p>total: {totalWebsites}</p>
-            {pagedWebsites.map((website) => (
+            {filteredWebsites.map((website) => (
                 <WebsiteItem website={website} key={website.id} />
             ))}
             <Pagination className="mt-4">

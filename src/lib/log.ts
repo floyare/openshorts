@@ -48,7 +48,7 @@ function isBrowser(): boolean {
 }
 
 export function debugLog(level: LogLevel, ...args: unknown[]): void {
-    if (import.meta.env.NODE_ENV !== 'development') {
+    if (import.meta.env.NODE_ENV && import.meta.env.NODE_ENV !== 'development') {
         return;
     }
 

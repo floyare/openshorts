@@ -1,24 +1,26 @@
 ---
-import "../styles/global.css"
-import {AnalyticsProvider} from "shibuitracker-client/client";
-import { Font } from 'astro:assets';
+import "../styles/global.css";
+import { AnalyticsProvider } from "shibuitracker-client/client";
+import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
-const { subtitle = "" } = Astro.props
+const { subtitle = "" } = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>🪄 openshorts {subtitle ? ` - ${subtitle}` : ""}</title>
-        <Font cssVariable='--font' preload />
-	</head>
-	<body class="bg-background-950 p-8 text-text-50 rounded-3xl flex flex-col gap-6">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>🪄 openshorts {subtitle ? ` - ${subtitle}` : ""}</title>
+        <Font cssVariable="--font" preload />
+    </head>
+    <body
+        class="bg-background-950 p-8 text-text-50 rounded-3xl flex flex-col gap-6"
+    >
         <Navbar />
         <AnalyticsProvider client:load>
-		    <slot />
+            <slot />
         </AnalyticsProvider>
-	</body>
+    </body>
 </html>
