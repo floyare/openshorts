@@ -2,13 +2,12 @@ import type { WebsiteType } from "@/types/website";
 import WebsiteItem from "./websites/website-item";
 import { useMemo, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { PAGE_SIZE } from "@/lib/websites.core";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
     totalWebsites: number
 }
-
-const PAGE_SIZE = 1
 
 const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
     const [page, setPage] = useState(1);

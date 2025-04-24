@@ -1,22 +1,20 @@
+import type { JsonValue } from "@prisma/client/runtime/library";
 import { debugLog } from "./log";
 import getPrismaInstance from "./prisma"
 import { tryCatch } from "./utils"
-
-export const getAvailableTags = async () => {
+import type { Prisma } from "@prisma/client";
+export const fetchWebsiteTags = async () => {
     const prisma = getPrismaInstance();
-    const result = await tryCatch(
+    return await tryCatch(
         prisma.websites.findMany({
             select: { tags: true }
         })
     );
+};
 
-    if (result.error || !result.data || !Array.isArray(result.data)) {
-        debugLog("ERROR", "Failed to fetch available tags", result.error);
-        return []
-    };
-
+export const formatTagsWithCount = (data: { tags: JsonValue }[]) => {
     const tagCounts: Record<string, number> = {};
-    result.data.forEach(site => {
+    data.forEach(site => {
         if (Array.isArray(site.tags)) {
             site.tags.forEach((tag) => {
                 if (typeof tag === "string") {
@@ -25,6 +23,43 @@ export const getAvailableTags = async () => {
             });
         }
     });
-
     return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
 };
+
+export const PAGE_SIZE = 1
+
+export const searchWebsites = async ({
+    search,
+    tags,
+    page = 1,
+    pageSize = PAGE_SIZE
+}: { search?: string, tags?: string[], page?: number, pageSize?: number }) => {
+    const prisma = getPrismaInstance();
+    const [websites, allTags] = await Promise.all([
+        tryCatch(
+            prisma.websites.findMany({
+                where: ((conditions: Prisma.websitesWhereInput[]) =>
+                    conditions.length > 0 ? { OR: conditions } : {}
+                )([
+                    ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
+                    ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
+                    ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { array_contains: tags } }] : [])
+                ]),
+                take: pageSize,
+                skip: (page - 1) * pageSize
+            })
+        ),
+        tryCatch(
+            prisma.websites.findMany({
+                select: { tags: true }
+            })
+        )
+    ])
+
+    if (websites.error || !websites.data || allTags.error || !allTags.data) {
+        debugLog("ERROR", "Failed to fetch websites: ", websites.error || allTags.error);
+        return { websites: [], total: 0, tags: [] };
+    };
+
+    return { websites: websites.data, total: allTags.data.length, tags: formatTagsWithCount(allTags.data) };
+}
