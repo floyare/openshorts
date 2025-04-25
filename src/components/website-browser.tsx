@@ -1,10 +1,11 @@
 import type { WebsiteType } from "@/types/website";
 import WebsiteItem from "./websites/website-item";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { PAGE_SIZE } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import { actions } from "astro:actions";
+import { cn } from "@/lib/utils";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -17,6 +18,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
 
     const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
     const filteredWebsites = currentWebsites.filter((website) => true)
+
+    const [websitesLoading, startWebsitesLoading] = useTransition()
 
     useEffect(() => {
         const fetchWebsites = async () => {
@@ -33,7 +36,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
             }
         };
 
-        fetchWebsites();
+        startWebsitesLoading(() => fetchWebsites())
     }, [page]);
 
     return (
@@ -42,12 +45,12 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
             {filteredWebsites.map((website) => (
                 <WebsiteItem website={website} key={website.id} />
             ))}
-            <Pagination className="mt-4">
+            <Pagination className={cn("transition-all", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
                             onClick={() => setPage((p) => Math.max(1, p - 1))}
-                            isDisabled={page === 1}
+                            isDisabled={page === 1 || websitesLoading}
                         />
                     </PaginationItem>
                     {Array.from({ length: totalPages }, (_, i) => (
@@ -63,7 +66,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
                     <PaginationItem>
                         <PaginationNext
                             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                            isDisabled={page === totalPages}
+                            isDisabled={page === totalPages || websitesLoading}
                         />
                     </PaginationItem>
                 </PaginationContent>
