@@ -1,4 +1,4 @@
-import type { WebsiteType } from "@/types/website";
+import type { SearchContentType, WebsiteTag, WebsiteType } from "@/types/website";
 import WebsiteItem from "./websites/website-item";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -9,27 +9,37 @@ import { cn } from "@/lib/utils";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
-    totalWebsites: number
+    totalWebsites: number,
+    tags: WebsiteTag[]
 }
 
-const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
+const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) => {
     const [page, setPage] = useState(1);
-    const totalPages = Math.ceil(totalWebsites / PAGE_SIZE);
 
     const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
     const filteredWebsites = currentWebsites.filter((website) => true)
 
+    const [totalPages, totalPagesSet] = useState(Math.ceil(totalWebsites / PAGE_SIZE))
+
     const [websitesLoading, startWebsitesLoading] = useTransition()
+
+    const [searchContent, searchContentSet] = useState<SearchContentType>({
+        search: "",
+        tags: []
+    })
 
     useEffect(() => {
         const fetchWebsites = async () => {
             try {
-                const data = await actions.searchWebsites({ page });
+                debugLog("DEBUG", "Fetching websites with page: ", page, " and search content: ", searchContent);
+                const data = await actions.searchWebsites({ page, search: searchContent.search, tags: searchContent.tags });
                 debugLog("DEBUG", "page: ", page, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
                     return;
                 }
+
+                totalPagesSet(Math.floor(data.data.total / PAGE_SIZE));
                 currentWebsitesSet(data.data.websites);
             } catch (err) {
                 debugLog("ERROR", "Exception while fetching websites: ", err);
@@ -37,11 +47,45 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites }: BrowserProps) => {
         };
 
         startWebsitesLoading(() => fetchWebsites())
-    }, [page]);
+    }, [page, searchContent]);
 
     return (
         <section>
-            <p>total: {totalWebsites}</p>
+            <p>total: {totalPages}</p>
+            <input
+                type="text"
+                placeholder="Search..."
+                className="bg-purple-300 mb-4"
+                value={searchContent.search}
+                onChange={(e) =>
+                    searchContentSet((p) => ({
+                        ...p,
+                        search: e.target.value,
+                    }))
+                }
+            />
+            <ul>
+                {
+                    tags.map((tag) => (
+                        <li>
+                            <input type="checkbox" id={tag.name} onChange={(e) => {
+                                if (e.target.checked) {
+                                    searchContentSet((p) => ({
+                                        ...p,
+                                        tags: [...p.tags, tag.name],
+                                    }))
+                                } else {
+                                    searchContentSet((p) => ({
+                                        ...p,
+                                        tags: p.tags.filter((t) => t !== tag.name),
+                                    }))
+                                }
+                            }} />
+                            <label htmlFor={tag.name} className="ml-2">{tag.name}</label>
+                        </li>
+                    ))
+                }
+            </ul>
             {filteredWebsites.map((website) => (
                 <WebsiteItem website={website} key={website.id} />
             ))}

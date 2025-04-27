@@ -10,6 +10,7 @@ import WebsiteBrowser from "@/components/website-browser";
 import Container from "@/components/container.astro";
 import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
+import type { categories } from "@prisma/client";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 
@@ -32,10 +33,10 @@ const websites = await searchWebsites({});
             <Container
                 class="w-full min-w-3xl flex items-center justify-center gap-4 flex-wrap"
             >
-                <p>{JSON.stringify(websites.tags)}</p>
                 <WebsiteBrowser
                     entryWebsites={websites.websites}
                     totalWebsites={websites.total}
+                    tags={websites.tags}
                     client:idle
                 />
             </Container>

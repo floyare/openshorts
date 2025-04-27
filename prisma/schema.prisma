@@ -13,8 +13,8 @@ model websites {
   description String?
   url         String     @unique
   image       String
-  tags        Json       @default("[]") @db.Json
   category    categories
+  tags        String[]   @default([])
 }
 
 enum categories {
