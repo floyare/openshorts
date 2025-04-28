@@ -8,7 +8,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { Search } from "lucide-react";
+import { Search, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
@@ -62,12 +62,11 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
             <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 !w-max">
                 <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
                 <div className="flex flex-col space-y-1">
-                    <p className="text-sm">Includes:</p>
                     <Input
                         type="text"
-                        placeholder="Search..."
+                        placeholder="Includes phrase..."
                         value={searchContent.search}
-                        className="ml-2"
+                        className=""
                         onChange={(e) =>
                             searchContentSet((p) => ({
                                 ...p,
@@ -77,7 +76,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                     />
                 </div>
                 <div className="flex flex-col space-y-1">
-                    <p>Tags:</p>
+                    <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
                     <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} onValueChange={(value) => searchContentSet((p) => ({
                         ...p,
                         tags: value
@@ -85,7 +84,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         {
                             tags.map((tag) => (
                                 <ToggleGroupItem value={tag.name} key={tag.name} className="flex items-center p-4">
-                                    <p className="flex items-center gap-2">{tag.name} <span className="text-xs">({tag.count})</span></p>
+                                    <p className="flex items-center gap-2">{tag.name} <span className="text-xs text-secondary-800">({tag.count})</span></p>
                                 </ToggleGroupItem>
                             ))
                         }

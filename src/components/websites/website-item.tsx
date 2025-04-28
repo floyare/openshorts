@@ -1,6 +1,7 @@
 import { ExternalLink } from "lucide-react";
 import { Button } from "../ui/button";
 import type { WebsiteType } from "@/types/website";
+import WebsiteIcon from "./website-icon";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -14,12 +15,13 @@ function WebsiteItem({ website }: WebsiteItemProps) {
             <div className="flex items-start gap-4">
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-4">
-                        <img
+                        <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
+                        {/* <img
                             src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`}
                             width={48}
                             height={48}
                             alt={`${name} favicon`}
-                        />
+                        /> */}
                         <div>
                             <h3 className="text-xl font-semibold">{name}</h3>
                         </div>
