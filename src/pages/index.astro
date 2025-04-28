@@ -7,7 +7,6 @@ import { getPrismaInstance } from "@/lib/prisma";
 import { PackageOpen } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import WebsiteBrowser from "@/components/website-browser";
-import Container from "@/components/container.astro";
 import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import type { categories } from "@prisma/client";
@@ -30,16 +29,12 @@ const websites = await searchWebsites({});
             <!-- <Container>
                 <h2 class="text-xl font-semibold text-text-500 flex items-center gap-1"><PackageOpen /> Recently added</h2>
             </Container> -->
-            <Container
-                class="w-full min-w-3xl flex items-center justify-center gap-4 flex-wrap"
-            >
-                <WebsiteBrowser
-                    entryWebsites={websites.websites}
-                    totalWebsites={websites.total}
-                    tags={websites.tags}
-                    client:idle
-                />
-            </Container>
+            <WebsiteBrowser
+                entryWebsites={websites.websites}
+                totalWebsites={websites.total}
+                tags={websites.tags}
+                client:idle
+            />
         </div>
     </main>
 </Layout>

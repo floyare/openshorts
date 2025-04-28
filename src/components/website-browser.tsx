@@ -7,6 +7,10 @@ import { debugLog } from "@/lib/log";
 import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
+import Container from "./container";
+import { Search } from "lucide-react";
+import { Input } from "./ui/input";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -55,44 +59,42 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
 
     return (
         <section className="flex items-start justify-between gap-6 w-full">
-            <aside className="bg-background-950 p-4 rounded-lg border-[1px] border-background-800">
-                <p>total: {totalPages}</p>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="bg-purple-300 mb-4"
-                    value={searchContent.search}
-                    onChange={(e) =>
-                        searchContentSet((p) => ({
-                            ...p,
-                            search: e.target.value,
-                        }))
-                    }
-                />
-                <ul>
-                    {
-                        tags.map((tag) => (
-                            <li>
-                                <input type="checkbox" id={tag.name} onChange={(e) => {
-                                    if (e.target.checked) {
-                                        searchContentSet((p) => ({
-                                            ...p,
-                                            tags: [...p.tags, tag.name],
-                                        }))
-                                    } else {
-                                        searchContentSet((p) => ({
-                                            ...p,
-                                            tags: p.tags.filter((t) => t !== tag.name),
-                                        }))
-                                    }
-                                }} />
-                                <label htmlFor={tag.name} className="ml-2">{tag.name}</label>
-                            </li>
-                        ))
-                    }
-                </ul>
+            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 !w-max">
+                <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
+                <div className="flex flex-col space-y-1">
+                    <p className="text-sm">Includes:</p>
+                    <Input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchContent.search}
+                        className="ml-2"
+                        onChange={(e) =>
+                            searchContentSet((p) => ({
+                                ...p,
+                                search: e.target.value,
+                            }))
+                        }
+                    />
+                </div>
+                <div className="flex flex-col space-y-1">
+                    <p>Tags:</p>
+                    <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} onValueChange={(value) => searchContentSet((p) => ({
+                        ...p,
+                        tags: value
+                    }))} value={searchContent.tags}>
+                        {
+                            tags.map((tag) => (
+                                <ToggleGroupItem value={tag.name} key={tag.name} className="flex items-center p-4">
+                                    <p className="flex items-center gap-2">{tag.name} <span className="text-xs">({tag.count})</span></p>
+                                </ToggleGroupItem>
+                            ))
+                        }
+                    </ToggleGroup>
+                </div>
             </aside>
-            <div>
+            <Container
+                className="min-w-3xl flex items-center justify-center gap-4 flex-wrap"
+            >
                 {filteredWebsites.map((website) => (
                     <WebsiteItem website={website} key={website.id} />
                 ))}
@@ -122,7 +124,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>
-            </div>
+            </Container>
         </section>
     );
 }
