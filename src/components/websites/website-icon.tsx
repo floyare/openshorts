@@ -1,5 +1,5 @@
 import { FileQuestion, Loader, LoaderCircle } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface WebsiteIconProps {
     src: string;
@@ -18,6 +18,15 @@ const WebsiteIcon: React.FC<WebsiteIconProps> = ({
     const [error, setError] = useState(false);
 
     const sizeStyle = { width: size, height: size, fontSize: size };
+
+    useEffect(() => {
+        if (!loading && !error) return;
+        const img = new window.Image();
+        img.src = src;
+        if (img.complete) {
+            setLoading(false);
+        }
+    }, [src, loading, error]);
 
     return (
         <div
