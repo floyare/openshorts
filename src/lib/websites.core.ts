@@ -39,11 +39,11 @@ export const searchWebsites = async ({
     const websites = await tryCatch(
         prisma.websites.findMany({
             where: ((conditions: Prisma.websitesWhereInput[]) =>
-                conditions.length > 0 ? { OR: conditions } : {}
+                conditions.length > 0 ? { AND: conditions } : {}
             )([
                 ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
                 ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasSome: tags } }] : [])
+                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : [])
             ]),
             take: pageSize,
             skip: (page - 1) * pageSize
@@ -53,11 +53,11 @@ export const searchWebsites = async ({
     const allTags = await tryCatch(
         prisma.websites.findMany({
             where: ((conditions: Prisma.websitesWhereInput[]) =>
-                conditions.length > 0 ? { OR: conditions } : {}
+                conditions.length > 0 ? { AND: conditions } : {}
             )([
                 ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
                 ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasSome: tags } }] : [])
+                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : [])
             ]),
             select: { tags: true }
         })

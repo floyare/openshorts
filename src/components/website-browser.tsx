@@ -25,6 +25,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
     const filteredWebsites = currentWebsites.filter((website) => true)
 
     const [totalPages, totalPagesSet] = useState(Math.ceil(totalWebsites / PAGE_SIZE))
+    const [tagsList, tagsListSet] = useState(tags)
+    const noEntries = useMemo(() => totalPages <= 0, [totalPages])
 
     const [websitesLoading, startWebsitesLoading] = useTransition()
 
@@ -48,6 +50,12 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                 }
 
                 totalPagesSet(Math.floor(data.data.total / PAGE_SIZE));
+                tagsListSet((prevTags) =>
+                    prevTags.map((tag) => {
+                        const updatedTag = data.data.tags.find((t: WebsiteTag) => t.name === tag.name);
+                        return updatedTag ? { ...tag, count: updatedTag.count } : { ...tag, count: 0 };
+                    })
+                );
                 currentWebsitesSet(data.data.websites);
             } catch (err) {
                 debugLog("ERROR", "Exception while fetching websites: ", err);
@@ -82,8 +90,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         tags: value
                     }))} value={searchContent.tags}>
                         {
-                            tags.map((tag) => (
-                                <ToggleGroupItem value={tag.name} key={tag.name} className="flex items-center p-4">
+                            tagsList.map((tag) => (
+                                <ToggleGroupItem value={tag.name} key={tag.name} className={cn("flex items-center p-4")} disabled={tag.count <= 0}>
                                     <p className="flex items-center gap-2">{tag.name} <span className="text-xs text-secondary-800">({tag.count})</span></p>
                                 </ToggleGroupItem>
                             ))
@@ -92,12 +100,14 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                 </div>
             </aside>
             <Container
-                className="min-w-3xl flex items-center justify-center gap-4 flex-wrap"
+                className={cn("min-w-3xl flex items-center justify-center gap-4 flex-wrap", websitesLoading ? "opacity-70 pointer-events-none" : "")}
             >
                 {filteredWebsites.map((website) => (
                     <WebsiteItem website={website} key={website.id} />
                 ))}
-                <Pagination className={cn("transition-all", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
+
+
+                {!noEntries ? <Pagination className={cn("transition-all", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
                     <PaginationContent>
                         <PaginationItem>
                             <PaginationPrevious
@@ -122,7 +132,11 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                             />
                         </PaginationItem>
                     </PaginationContent>
-                </Pagination>
+                </Pagination> : (
+                    <>
+                        <p>no webs</p>
+                    </>
+                )}
             </Container>
         </section>
     );
