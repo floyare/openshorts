@@ -23,13 +23,27 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
     const sizeStyle = { width: size.width, height: size.height, fontSize: fontSize };
 
     useEffect(() => {
-        if (!loading && !error) return;
+        setLoading(true);
+        setError(false);
+
         const img = new window.Image();
         img.src = src;
-        if (img.complete) {
+
+        img.onload = () => setLoading(false);
+        img.onerror = () => {
+            setLoading(false);
+            setError(true);
+        };
+
+        if (img.complete && img.naturalWidth !== 0) {
             setLoading(false);
         }
-    }, [src, loading, error]);
+
+        return () => {
+            img.onload = null;
+            img.onerror = null;
+        };
+    }, [src]);
 
     return (
         <div
