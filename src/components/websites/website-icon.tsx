@@ -30,7 +30,7 @@ const WebsiteIcon: React.FC<WebsiteIconProps> = ({
 
     return (
         <div
-            className="relative flex items-center justify-center bg-background-900 rounded-sm overflow-hidden p-1.5"
+            className="relative flex items-center justify-center bg-background-900 rounded-sm overflow-hidden p-1.5 shrink-0"
             style={{ width: size, height: size }}
         >
             {loading && !error && (

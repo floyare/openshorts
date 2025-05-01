@@ -10,10 +10,21 @@ import WebsiteBrowser from "@/components/website-browser";
 import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import type { categories } from "@prisma/client";
+import { uploadFile, uploadWebsite } from "@/lib/upload.core";
+import { tryCatch } from "@/lib/utils";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 
 const websites = await searchWebsites({});
+
+// const b = await uploadWebsite({
+//     url: "https://spotify.com",
+//     description:
+//         "Voluptate amet laboris irure duis nulla minim velit cillum dolore exercitation Lorem ut sint in. Sit elit elit laboris culpa. Tempor labore qui ut culpa sint ad adipisicing magna tempor adipisicing mollit. Duis aliqua amet ex minim et. Minim elit consequat ex occaecat quis cupidatat.",
+//     tags: ["test"],
+// });
+
+// debugLog("DEBUG", b);
 ---
 
 <Layout subtitle="test">

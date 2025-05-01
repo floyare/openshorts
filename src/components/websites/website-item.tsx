@@ -13,13 +13,13 @@ function WebsiteItem({ website }: WebsiteItemProps) {
     const { name, url, description, image } = website;
 
     return (
-        <div className="px-6 py-4 max-w-md rounded-sm border-[1px] border-background-800 bg-background-950 w-fit flex flex-col gap-2 grow relative">
+        <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-background-950 w-fit flex flex-col gap-2 grow relative">
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
                         <h2 className="font-bold text-2xl flex items-center gap-1">
-                            {name}
+                            <span className="truncate inline-block max-w-[95%]">{name}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                         {/* <div>
@@ -48,7 +48,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                         Visit website <ExternalLink />
                     </Button> */}
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start justify-end gap-3">
                     {/* <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} /> */}
                     <WebsitePreview src={image} className="rounded-sm w-[80%] shrink" size={{ width: 150, height: 250 }} />
                     <div className="flex flex-col items-center justify-center cursor-pointer group">

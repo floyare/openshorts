@@ -4,6 +4,7 @@ import getPrismaInstance from "./prisma"
 import { tryCatch } from "./utils"
 import type { Prisma } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
+
 export const fetchWebsiteTags = async () => {
     const prisma = getPrismaInstance();
     return await tryCatch(
