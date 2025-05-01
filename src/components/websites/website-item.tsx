@@ -1,5 +1,4 @@
-import { ExternalLink } from "lucide-react";
-import { Button } from "../ui/button";
+import { ExternalLink, Heart } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 
@@ -14,7 +13,6 @@ function WebsiteItem({ website }: WebsiteItemProps) {
 
     return (
         <div className="px-6 py-4 max-w-md rounded-sm border-[1px] border-background-800 bg-background-950 w-fit flex flex-col gap-2 grow relative">
-            {/* <ExternalLink className="absolute top-3 right-3 text-text-600" /> */}
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm">
@@ -49,7 +47,13 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                         Visit website <ExternalLink />
                     </Button> */}
                 </div>
-                <img src={image} width={150} height={350} className="rounded-sm w-full" alt={`${name} screenshot`} />
+                <div className="flex items-start gap-3">
+                    <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} />
+                    <div className="flex flex-col items-center justify-center cursor-pointer group">
+                        <Heart className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-900" size={34} />
+                        <p className="font-semibold">10</p>
+                    </div>
+                </div>
             </div>
         </div>
     );
