@@ -1,7 +1,7 @@
-import type { categories } from "@prisma/client"
+import type { categories, websites } from "@prisma/client"
 
 
-export type WebsiteType = {
+export interface WebsiteType extends websites {
     id: string,
     name: string,
     url: string,

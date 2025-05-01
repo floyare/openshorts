@@ -49,6 +49,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                     return;
                 }
 
+                //await new Promise((resolve) => setTimeout(resolve, 5000));
+
                 totalPagesSet(Math.floor(data.data.total / PAGE_SIZE));
                 tagsListSet((prevTags) =>
                     prevTags.map((tag) => {
@@ -100,7 +102,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                 </div>
             </aside>
             <Container
-                className={cn("min-w-3xl flex items-center justify-center gap-4 flex-wrap", websitesLoading ? "opacity-70 pointer-events-none" : "")}
+                className={cn("min-w-3xl flex items-center justify-center gap-4 flex-wrap", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
             >
                 {filteredWebsites.map((website) => (
                     <WebsiteItem website={website} key={website.id} />

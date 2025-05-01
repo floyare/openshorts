@@ -15,6 +15,7 @@ model websites {
   image       String
   category    categories
   tags        String[]   @default([])
+  created_by  String
 }
 
 enum categories {
