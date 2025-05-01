@@ -2,7 +2,7 @@ import { UTApi, UTFile } from "uploadthing/server";
 import { uuidv7 } from "uuidv7";
 import getPrismaInstance from "./prisma";
 import { getWebsiteScreen } from "./screen.core";
-import { tryCatch } from "./utils";
+import { capitalizeFirstLetter, tryCatch } from "./utils";
 import sharp from "sharp";
 
 const utapi = new UTApi({
@@ -70,7 +70,7 @@ export const uploadWebsite = async ({
             description,
             tags,
             category: "UI_UX",
-            name: hostnameOnly,
+            name: capitalizeFirstLetter(hostnameOnly),
             created_by: "1234"
         },
     });

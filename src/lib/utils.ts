@@ -27,3 +27,7 @@ export async function tryCatch<T, E = Error>(
         return { data: null, error: error as E };
     }
 }
+
+export function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
