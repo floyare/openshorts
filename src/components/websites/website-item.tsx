@@ -1,6 +1,7 @@
 import { ExternalLink, Heart } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
+import WebsitePreview from "./website-preview";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -48,7 +49,8 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                     </Button> */}
                 </div>
                 <div className="flex items-start gap-3">
-                    <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} />
+                    {/* <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} /> */}
+                    <WebsitePreview src={image} className="rounded-sm w-[80%] shrink" size={{ width: 150, height: 250 }} />
                     <div className="flex flex-col items-center justify-center cursor-pointer group">
                         <Heart className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-900" size={34} />
                         <p className="font-semibold">10</p>

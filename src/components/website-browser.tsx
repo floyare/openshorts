@@ -26,7 +26,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
 
     const [totalPages, totalPagesSet] = useState(Math.ceil(totalWebsites / PAGE_SIZE))
     const [tagsList, tagsListSet] = useState(tags)
-    const noEntries = useMemo(() => totalPages <= 0, [totalPages])
+    const noEntries = useMemo(() => tagsList.length <= 0, [tagsList])
 
     const [websitesLoading, startWebsitesLoading] = useTransition()
 
@@ -114,7 +114,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         <PaginationItem>
                             <PaginationPrevious
                                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                isDisabled={page === 1 || websitesLoading}
+                                isDisabled={page <= 1 || websitesLoading}
                             />
                         </PaginationItem>
                         {Array.from({ length: totalPages }, (_, i) => (
@@ -122,6 +122,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                                 <PaginationLink
                                     isActive={page === i + 1}
                                     onClick={() => setPage(i + 1)}
+                                    isDisabled={websitesLoading}
                                 >
                                     {i + 1}
                                 </PaginationLink>
@@ -130,7 +131,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         <PaginationItem>
                             <PaginationNext
                                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                isDisabled={page === totalPages || websitesLoading}
+                                isDisabled={page >= totalPages || websitesLoading}
                             />
                         </PaginationItem>
                     </PaginationContent>
