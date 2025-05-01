@@ -47,9 +47,10 @@ function PaginationLink({
     isActive,
     size = "icon",
     ...props
-}: PaginationLinkProps) {
+}: { isDisabled: boolean } & PaginationLinkProps) {
     return (
         <a
+            {...props}
             aria-current={isActive ? "page" : undefined}
             data-slot="pagination-link"
             data-active={isActive}
@@ -58,9 +59,18 @@ function PaginationLink({
                     variant: isActive ? "secondary" : "ghost",
                     size,
                 }),
-                className
+                className,
+                props.isDisabled ? "pointer-events-none" : ""
             )}
-            {...props}
+            onClick={(e) => {
+                if (props.isDisabled) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    return
+                }
+
+                props.onClick && props.onClick(e)
+            }}
         />
     )
 }
@@ -75,6 +85,7 @@ function PaginationPrevious({
             aria-label="Go to previous page"
             size="default"
             className={cn("gap-1 px-2.5 sm:pl-2.5", isDisabled ? "cursor-not-allowed grayscale-100 opacity-60" : "", className)}
+            isDisabled={isDisabled}
             {...props}
         >
             <ChevronLeftIcon />
@@ -93,6 +104,7 @@ function PaginationNext({
             aria-label="Go to next page"
             size="default"
             className={cn("gap-1 px-2.5 sm:pr-2.5", isDisabled ? "cursor-not-allowed grayscale-100 opacity-60" : "", className)}
+            isDisabled={isDisabled}
             {...props}
         >
             <span className="hidden sm:block"></span>
