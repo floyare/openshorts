@@ -8,7 +8,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { Search, Tags } from "lucide-react";
+import { FileQuestion, Search, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
@@ -133,9 +133,13 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination> : (
-                    <>
-                        <p>no webs</p>
-                    </>
+                    <div className="flex flex-col items-center space-y-1.5">
+                        <FileQuestion className="text-primary-500" size={48} />
+                        <div className="text-center">
+                            <h3 className="text-lg font-semibold">No websites found!</h3>
+                            <p>Try adjusting your search preferences</p>
+                        </div>
+                    </div>
                 )}
             </Container>
         </section>
