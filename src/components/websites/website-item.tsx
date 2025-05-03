@@ -19,7 +19,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
                         <h2 className="font-bold text-2xl flex items-center gap-1">
-                            <span className="truncate inline-block max-w-[95%]">{name}</span>
+                            <span className="truncate inline-block max-w-[85%]">{name}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                         {/* <div>
