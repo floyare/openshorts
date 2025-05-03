@@ -4,7 +4,7 @@ import puppeteer from "puppeteer-core";
 export const getWebsiteScreen = async (url: string) => {
     const BROWSERLESS_API_KEY = import.meta.env.BROWSERLESS_API_KEY;
     if (!BROWSERLESS_API_KEY) {
-        throw new Error("No browserless api key")
+        throw new Error("No browserless api key");
     }
 
     const browserWSEndpoint = `wss://production-sfo.browserless.io/chromium?token=${BROWSERLESS_API_KEY}`;
@@ -12,8 +12,22 @@ export const getWebsiteScreen = async (url: string) => {
     try {
         browser = await puppeteer.connect({ browserWSEndpoint });
         const page = await browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2' });
+
+        await page.setUserAgent(
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) " +
+            "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"
+        );
+
+        await page.setExtraHTTPHeaders({
+            "Accept-Language": "en-US,en;q=0.9",
+            "Upgrade-Insecure-Requests": "1",
+        });
+
         await page.setViewport({ width: 475, height: 812, isMobile: true });
+
+        await page.goto(url, { waitUntil: 'networkidle2' });
+        await new Promise(resolve => setTimeout(resolve, 1000 + Math.floor(Math.random() * 1000)));
+
         const screenshot = await page.screenshot({ type: 'webp', encoding: 'binary' });
         await page.close();
 
@@ -26,4 +40,4 @@ export const getWebsiteScreen = async (url: string) => {
     } catch (error) {
         return null;
     }
-}
+};

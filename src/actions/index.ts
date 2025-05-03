@@ -1,3 +1,5 @@
+import { uploadSchema } from '@/helpers/upload.helper';
+import { uploadWebsite } from '@/lib/upload.core';
 import { searchWebsites } from '@/lib/websites.core';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
@@ -14,6 +16,16 @@ export const server = {
         }) as z.ZodType<SearchWebsitesProps>,
         handler: async (input) => {
             return await searchWebsites(input);
+        }
+    }),
+    uploadWebsite: defineAction({
+        input: uploadSchema,
+        handler: async (input) => {
+            return await uploadWebsite({
+                url: input.url,
+                description: input.description,
+                tags: input.tags.split(",").map(tag => tag.trim())
+            })
         }
     })
 }

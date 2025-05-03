@@ -14,8 +14,8 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
     const buffer = await fileObj.arrayBuffer();
 
     const optimizedBuffer = await sharp(Buffer.from(buffer))
-        .webp({ quality: 30, effort: 6 })
-        .resize({ width: 250, height: 350 })
+        .webp({ quality: 30 })
+        .resize({ width: 300, height: 500 })
         .toFormat("webp")
         .toBuffer();
 
@@ -48,15 +48,18 @@ export const uploadWebsite = async ({
 
     const websiteScreen = await tryCatch(getWebsiteScreen(url));
     if (!websiteScreen.data || websiteScreen.error) {
-        throw new Error('Failed while getting website screen: ' + websiteScreen.error?.message || "data empty");
+        throw new Error('Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
     }
 
     const uploadResult = await tryCatch(uploadFile({ fileObj: websiteScreen.data }));
     if (!uploadResult.data || uploadResult.error) {
-        throw new Error('Failed while uploading website screen: ' + uploadResult.error?.message || "data empty");
+        throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
     }
 
-    const fullHost = new URL(url).host;
+    let fullHost = new URL(url).host;
+    if (fullHost.startsWith("www.")) {
+        fullHost = fullHost.slice(4);
+    }
 
     const hostParts = fullHost.split('.');
     const hostnameOnly = hostParts.length > 2

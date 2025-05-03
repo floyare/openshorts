@@ -6,6 +6,7 @@ export const prerender = false;
 
 import puppeteer, { Browser } from 'puppeteer-core';
 import type { APIRoute } from 'astro';
+import sharp from 'sharp';
 
 export const GET: APIRoute = async ({ params, request }) => {
     const BROWSERLESS_API_KEY = import.meta.env.BROWSERLESS_API_KEY;
@@ -28,8 +29,17 @@ export const GET: APIRoute = async ({ params, request }) => {
         await page.setViewport({ width: 475, height: 812, isMobile: true });
         const screenshot = await page.screenshot({ type: 'png' });
         await page.close();
-        return new Response(screenshot, {
-            headers: { 'Content-Type': 'image/png' }
+
+        const buffer = await screenshot.buffer
+
+        const optimizedBuffer = await sharp(Buffer.from(buffer))
+            .webp({ quality: 30, effort: 6 })
+            .resize({ width: 300, height: 350 })
+            .toFormat("webp")
+            .toBuffer();
+
+        return new Response(optimizedBuffer, {
+            headers: { 'Content-Type': 'image/webp' }
         });
     } catch (error) {
         return new Response('Error connecting or taking screenshot', { status: 500 });
