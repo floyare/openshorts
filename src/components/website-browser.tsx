@@ -14,6 +14,7 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import type { SORTING_TYPE } from "@/helpers/websites.helper";
+import { authClient } from "@/lib/auth-client";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -23,6 +24,10 @@ type BrowserProps = {
 
 const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) => {
     const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        authClient.getSession().then((r) => debugLog("WARN", r))
+    }, [])
 
     const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
     const filteredWebsites = currentWebsites.filter((website) => true)
@@ -44,6 +49,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
     // BUG: searchWebsites() uruchamia sie po zaladowaniu komponentu mimo, że juz wczesniej serwer go uruchamia i wstawia dane
+    // TODO: add on search tags, phrase change then set page to first
     useEffect(() => {
         const fetchWebsites = async () => {
             try {

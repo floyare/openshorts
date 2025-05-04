@@ -39,7 +39,7 @@ export const formatTagsWithCount = (data: { tags: JsonValue }[]) => {
     return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
 };
 
-export const PAGE_SIZE = 9
+export const PAGE_SIZE = 12
 export const searchWebsites = async ({
     search,
     tags,

@@ -1,0 +1,13 @@
+---
+import { auth } from "@/lib/auth";
+
+const result = await auth.api.signInSocial({
+    body: {
+        provider: "github",
+    },
+});
+
+return Astro.redirect(result.url);
+---
+
+<p>If you haven't been redirected, <a href={result.url}>click here!</a></p>
