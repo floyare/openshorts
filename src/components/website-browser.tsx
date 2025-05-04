@@ -26,7 +26,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
 
     const [totalPages, totalPagesSet] = useState(Math.ceil(totalWebsites / PAGE_SIZE))
     const [tagsList, tagsListSet] = useState(tags)
-    const noEntries = useMemo(() => tagsList.length <= 0, [tagsList])
+    const noEntries = useMemo(() => tagsList.every((p) => p.count === 0), [tagsList])
 
     const [websitesLoading, startWebsitesLoading] = useTransition()
 
@@ -36,13 +36,13 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
     })
 
     const debouncedSearch = useDebounce(searchContent.search, 600)
-    const debouncedTags = useDebounce(searchContent.tags, 300)
+    //const debouncedTags = useDebounce(searchContent.tags, 300)
 
     useEffect(() => {
         const fetchWebsites = async () => {
             try {
                 debugLog("DEBUG", "Fetching websites with page: ", page, " and search content: ", searchContent);
-                const data = await actions.searchWebsites({ page, search: debouncedSearch, tags: debouncedTags });
+                const data = await actions.searchWebsites({ page, search: debouncedSearch, tags: searchContent.tags });
                 debugLog("DEBUG", "page: ", page, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
@@ -65,11 +65,11 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         };
 
         startWebsitesLoading(() => fetchWebsites())
-    }, [page, debouncedSearch, debouncedTags]);
+    }, [page, debouncedSearch, searchContent.tags]);
 
     return (
-        <section className="flex items-start justify-between gap-6 w-full">
-            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 !w-max">
+        <section className="grid grid-cols-4 gap-6 w-full">
+            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 col-span-1">
                 <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
                 <div className="flex flex-col space-y-1">
                     <Input
@@ -93,7 +93,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                     }))} value={searchContent.tags}>
                         {
                             tagsList.map((tag) => (
-                                <ToggleGroupItem value={tag.name} key={tag.name} className={cn("flex items-center p-4")} disabled={tag.count <= 0}>
+                                <ToggleGroupItem value={tag.name} key={tag.name} className={cn("flex items-center p-4 !flex-0")} disabled={tag.count <= 0}>
                                     <p className="flex items-center gap-2">{tag.name} <span className="text-xs text-secondary-800">({tag.count})</span></p>
                                 </ToggleGroupItem>
                             ))
@@ -102,7 +102,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                 </div>
             </aside>
             <Container
-                className={cn("min-w-3xl flex items-center justify-center gap-4 flex-wrap", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
+                className={cn("min-w-3xl flex items-center justify-center gap-4 flex-wrap col-span-3", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
             >
                 {filteredWebsites.map((website) => (
                     <WebsiteItem website={website} key={website.id} />
