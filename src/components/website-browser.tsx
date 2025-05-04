@@ -8,9 +8,12 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { FileQuestion, Search, Tags } from "lucide-react";
+import { ArrowDown01, ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, FileQuestion, Heart, Search, SortAsc, SortDesc, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { memo } from "react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import type { SORTING_TYPE } from "@/helpers/websites.helper";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -35,6 +38,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         tags: []
     })
 
+    const [sortingSelected, sortingSelectedSet] = useState<SORTING_TYPE>("new")
+
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
@@ -42,7 +47,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         const fetchWebsites = async () => {
             try {
                 debugLog("DEBUG", "Fetching websites with page: ", page, " and search content: ", searchContent);
-                const data = await actions.searchWebsites({ page, search: debouncedSearch, tags: searchContent.tags });
+                const data = await actions.searchWebsites({ page, search: debouncedSearch, tags: searchContent.tags, sorting: sortingSelected });
                 debugLog("DEBUG", "page: ", page, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
@@ -65,11 +70,44 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         };
 
         startWebsitesLoading(() => fetchWebsites())
-    }, [page, debouncedSearch, searchContent.tags]);
+    }, [page, debouncedSearch, searchContent.tags, sortingSelected]);
+
+    const PaginationControls = memo(() => {
+        if (noEntries) return null
+        return (
+            <Pagination className={cn("transition-all bg-background-600 text-white px-4 py-1 w-fit rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            onClick={() => setPage((p) => Math.max(1, p - 1))}
+                            isDisabled={page <= 1 || websitesLoading}
+                        />
+                    </PaginationItem>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <PaginationItem key={i + 1}>
+                            <PaginationLink
+                                isActive={page === i + 1}
+                                onClick={() => setPage(i + 1)}
+                                isDisabled={websitesLoading}
+                            >
+                                {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                        <PaginationNext
+                            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                            isDisabled={page >= totalPages || websitesLoading}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        )
+    })
 
     return (
-        <section className="grid grid-cols-4 gap-6 w-full">
-            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 col-span-1">
+        <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1">
+            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 col-span-1 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
                 <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
                 <div className="flex flex-col space-y-1">
                     <Input
@@ -102,40 +140,34 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                 </div>
             </aside>
             <Container
-                className={cn("min-w-3xl flex items-center justify-center gap-4 flex-wrap col-span-3", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
+                className={cn("min-w-3xl col-span-4 space-y-4 relative", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
             >
-                {filteredWebsites.map((website) => (
-                    <WebsiteItem website={website} key={website.id} />
-                ))}
+                <div className="bg-white border-background-900 border-[1px] rounded-sm absolute top-4 right-4">
+                    <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
+                        <SelectTrigger size="default" className="text-lg">
+                            <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value="new"><CalendarArrowDown /> Newest</SelectItem>
+                                <SelectItem value="old"><CalendarArrowUp /> Oldest</SelectItem>
+                                <SelectItem value="alphabet"><ArrowDownAZ /> Alphabetically</SelectItem>
+                                <SelectItem value="likes"><Heart /> Most likes</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="w-full flex">
+                    <PaginationControls />
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                    {filteredWebsites.map((website) => (
+                        <WebsiteItem website={website} key={website.id} />
+                    ))}
+                </div>
+                <PaginationControls />
 
-
-                {!noEntries ? <Pagination className={cn("transition-all", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious
-                                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                isDisabled={page <= 1 || websitesLoading}
-                            />
-                        </PaginationItem>
-                        {Array.from({ length: totalPages }, (_, i) => (
-                            <PaginationItem key={i + 1}>
-                                <PaginationLink
-                                    isActive={page === i + 1}
-                                    onClick={() => setPage(i + 1)}
-                                    isDisabled={websitesLoading}
-                                >
-                                    {i + 1}
-                                </PaginationLink>
-                            </PaginationItem>
-                        ))}
-                        <PaginationItem>
-                            <PaginationNext
-                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                isDisabled={page >= totalPages || websitesLoading}
-                            />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination> : (
+                {noEntries && (
                     <div className="flex flex-col items-center space-y-1.5">
                         <FileQuestion className="text-primary-500" size={48} />
                         <div className="text-center">

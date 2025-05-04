@@ -61,3 +61,5 @@ export const DEFINED_TOPICS = {
 export const DEFINED_TAGS = [
     "AI", "ASSETS", "UI/UX"
 ]
+
+export type SORTING_TYPE = "new" | "old" | "alphabet" | "likes"

@@ -13,7 +13,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
     const { name, url, description, image } = website;
 
     return (
-        <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-background-950 w-fit flex flex-col gap-2 grow relative">
+        <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-background-950 w-full flex flex-col gap-2 grow relative">
             <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm">

@@ -13,6 +13,7 @@ export const server = {
             tags: z.array(z.string()).optional(),
             page: z.number().optional(),
             pageSize: z.number().optional(),
+            sorting: z.enum(["new", "old", "alphabet", "likes"]).optional()
         }) as z.ZodType<SearchWebsitesProps>,
         handler: async (input) => {
             return await searchWebsites(input);

@@ -16,6 +16,7 @@ model websites {
   category    categories
   tags        String[]   @default([])
   created_by  String
+  created_at  DateTime   @default(now()) @db.Timestamp(6)
 }
 
 enum categories {

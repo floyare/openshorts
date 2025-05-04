@@ -3,6 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html body[data-scroll-locked] {
+    overflow: visible !important;
+    margin-right: 0 !important;
+    /* padding: unset !important; */
+
+}
+
 @theme {
     --animate-fadein: fadeIn 1s ease-in-out forwards;
 

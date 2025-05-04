@@ -4,6 +4,7 @@ import getPrismaInstance from "./prisma"
 import { tryCatch } from "./utils"
 import type { Prisma } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
+import type { SORTING_TYPE } from "@/helpers/websites.helper";
 
 export const fetchWebsiteTags = async () => {
     const prisma = getPrismaInstance();
@@ -28,15 +29,36 @@ export const formatTagsWithCount = (data: { tags: JsonValue }[]) => {
     return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
 };
 
-export const PAGE_SIZE = 10
+export const PAGE_SIZE = 9
 export const searchWebsites = async ({
     search,
     tags,
     page = 1,
-    pageSize = PAGE_SIZE
-}: { search?: string, tags?: string[], page?: number, pageSize?: number }): Promise<SearchWebsitesResult> => {
+    pageSize = PAGE_SIZE,
+    sorting
+}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE }): Promise<SearchWebsitesResult> => {
     const prisma = getPrismaInstance();
     //debugLog("SUCCESS", ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { array_contains: tags } }] : []))
+    let orderBy: Prisma.websitesOrderByWithRelationInput | undefined;
+
+    switch (sorting) {
+        case "new":
+            orderBy = { created_at: "desc" };
+            break;
+        case "old":
+            orderBy = { created_at: "asc" };
+            break;
+        case "alphabet":
+            orderBy = { name: "asc" };
+            break;
+        // TODO: add likes sorting
+        // case "likes":
+        //     orderBy = { likes: "desc" };
+        //     break;
+        default:
+            orderBy = undefined;
+    }
+
     const websites = await tryCatch(
         prisma.websites.findMany({
             where: ((conditions: Prisma.websitesWhereInput[]) =>
@@ -47,7 +69,8 @@ export const searchWebsites = async ({
                 ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : [])
             ]),
             take: pageSize,
-            skip: (page - 1) * pageSize
+            skip: (page - 1) * pageSize,
+            orderBy
         })
     );
 
@@ -60,7 +83,8 @@ export const searchWebsites = async ({
                 ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
                 ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : [])
             ]),
-            select: { tags: true }
+            select: { tags: true },
+            orderBy
         })
     );
 
