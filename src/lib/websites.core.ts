@@ -6,6 +6,16 @@ import type { Prisma } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
 import type { SORTING_TYPE } from "@/helpers/websites.helper";
 
+export const doesWebsiteExists = async (url: string) => {
+    const prisma = getPrismaInstance();
+    return !!(
+        (await prisma.websites.findFirst({
+            where: { url },
+            select: { id: true }
+        }))
+    ) as boolean
+}
+
 export const fetchWebsiteTags = async () => {
     const prisma = getPrismaInstance();
     return await tryCatch(

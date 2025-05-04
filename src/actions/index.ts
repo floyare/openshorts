@@ -1,6 +1,6 @@
 import { uploadSchema } from '@/helpers/upload.helper';
 import { uploadWebsite } from '@/lib/upload.core';
-import { searchWebsites } from '@/lib/websites.core';
+import { doesWebsiteExists, searchWebsites } from '@/lib/websites.core';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 
@@ -28,5 +28,11 @@ export const server = {
                 tags: input.tags
             })
         }
+    }),
+    doesWebsiteExists: defineAction({
+        input: z.object({
+            url: z.string().nonempty()
+        }),
+        handler: async (input) => await doesWebsiteExists(input.url)
     })
 }
