@@ -4,6 +4,7 @@ import getPrismaInstance from "./prisma";
 import { getWebsiteScreen } from "./screen.core";
 import { capitalizeFirstLetter, tryCatch } from "./utils";
 import sharp from "sharp";
+import { DEFINED_TAGS } from "@/helpers/websites.helper";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -35,6 +36,13 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
 export const uploadWebsite = async ({
     url, description, tags
 }: { url: string, description: string, tags: string[] }) => {
+    if (!tags.every(tag => DEFINED_TAGS.includes(tag))) {
+        throw new Error("Invalid tags provided");
+    }
+
+    // await new Promise(resolve => setTimeout(resolve, 2000));
+    // throw new Error("test")
+
     const prisma = getPrismaInstance();
     const existingWebsite = await prisma.websites.findUnique({
         where: {
@@ -78,5 +86,5 @@ export const uploadWebsite = async ({
         },
     });
 
-    return { success: true }
+    return true
 }
