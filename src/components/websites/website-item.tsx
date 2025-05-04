@@ -2,6 +2,7 @@ import { ExternalLink, Heart } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
+import { Button } from "../ui/button";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -19,7 +20,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
                         <h2 className="font-bold text-2xl flex items-center gap-1">
-                            <span className="truncate inline-block max-w-[85%]">{name}</span>
+                            <span className="truncate inline-block max-w-[88%]">{name}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                         {/* <div>
@@ -48,13 +49,13 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                         Visit website <ExternalLink />
                     </Button> */}
                 </div>
-                <div className="flex items-start justify-end gap-3">
+                <div className="flex flex-col items-end gap-2">
                     {/* <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} /> */}
-                    <WebsitePreview src={image} className="rounded-sm w-[80%] shrink" size={{ width: 150, height: 250 }} />
-                    {/* <div className="flex flex-col items-center justify-center cursor-pointer group">
+                    <WebsitePreview src={image} className="rounded-sm w-full grow" size={{ width: 150, height: 250 }} />
+                    <Button variant={"secondary"} className="flex items-center justify-center cursor-pointer group gap-2">
                         <Heart className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-900" size={34} />
-                        <p className="font-semibold">10</p>
-                    </div> */}
+                        <p className="font-semibold text-xl">10</p>
+                    </Button>
                 </div>
             </div>
         </div>
