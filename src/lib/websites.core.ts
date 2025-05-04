@@ -37,6 +37,7 @@ export const searchWebsites = async ({
     pageSize = PAGE_SIZE,
     sorting
 }: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE }): Promise<SearchWebsitesResult> => {
+    debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting });
     const prisma = getPrismaInstance();
     //debugLog("SUCCESS", ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { array_contains: tags } }] : []))
     let orderBy: Prisma.websitesOrderByWithRelationInput | undefined;

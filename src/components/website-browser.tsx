@@ -43,6 +43,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
+    // BUG: searchWebsites() uruchamia sie po zaladowaniu komponentu mimo, że juz wczesniej serwer go uruchamia i wstawia dane
     useEffect(() => {
         const fetchWebsites = async () => {
             try {
@@ -75,7 +76,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
     const PaginationControls = memo(() => {
         if (noEntries) return null
         return (
-            <Pagination className={cn("transition-all bg-background-600 text-white px-4 py-1 w-fit rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
+            <Pagination className={cn("transition-all bg-white text-text-50 px-4 py-1 w-fit rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
@@ -160,7 +161,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                 <div className="w-full flex">
                     <PaginationControls />
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-4">
                     {filteredWebsites.map((website) => (
                         <WebsiteItem website={website} key={website.id} />
                     ))}
