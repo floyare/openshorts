@@ -51,7 +51,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
 
                 //await new Promise((resolve) => setTimeout(resolve, 5000));
 
-                totalPagesSet(Math.floor(data.data.total / PAGE_SIZE));
+                totalPagesSet(Math.ceil(data.data.total / PAGE_SIZE));
                 tagsListSet((prevTags) =>
                     prevTags.map((tag) => {
                         const updatedTag = data.data.tags.find((t: WebsiteTag) => t.name === tag.name);
