@@ -24,7 +24,7 @@ export const server = {
             return await uploadWebsite({
                 url: input.url,
                 description: input.description,
-                tags: input.tags.split(",").map(tag => tag.trim())
+                tags: input.tags
             })
         }
     })

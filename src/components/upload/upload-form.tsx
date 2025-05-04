@@ -10,16 +10,19 @@ import { debugLog } from "@/lib/log";
 import { cn, tryCatch } from "@/lib/utils";
 import { useState } from "react";
 import TagsSelector from "./tags-selector";
-import { Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
+import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
 
 type UploadFormInputs = {
     url: string,
     description: string,
-    tags: string,
+    tags: string[],
 }
 
 const UploadForm = () => {
     const methods = useForm<UploadFormInputs>({
+        defaultValues: {
+            tags: []
+        },
         resolver: zodResolver(uploadSchema),
         mode: "onBlur"
     })
@@ -35,6 +38,11 @@ const UploadForm = () => {
         };
 
         console.log('uploading', uploadData);
+
+        if (tags.length <= 0) {
+            setError("tags", { type: "manual", message: "Minimum 1 tag is required!" });
+            return;
+        }
 
         const result = await actions.uploadWebsite(uploadData);
         debugLog("INFO", "Upload result: ", result);
@@ -71,7 +79,11 @@ const UploadForm = () => {
                     </div>
 
                     {errors.root && <span className="text-red-500">{errors.root.message}</span>}
-                    {isSubmitSuccessful && !errors.root && <p>uploaded!</p>}
+                    {isSubmitSuccessful && !errors.root && (
+                        <div className="text-green-700 bg-green-300/70 p-3 rounded-md border-[1px] border-green-500">
+                            <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>
+                        </div>
+                    )}
                     <Button type="submit" disabled={isSubmitting}>{isSubmitting ? <><LoaderCircle className="animate-spin" /> Uploading...</> : <><UploadCloud /> Upload</>}</Button>
                 </form>
             </FormProvider>

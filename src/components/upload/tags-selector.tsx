@@ -2,32 +2,24 @@ import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-type TagsSelectorProps = {
-
-}
+type TagsSelectorProps = {}
 
 const TagsSelector = ({ }: TagsSelectorProps) => {
-    const { register, setValue } = useFormContext()
-    const [selectedTags, selectedTagsSet] = useState<string[]>([])
-
-    useEffect(() => {
-        setValue("tags", selectedTags.toString())
-    }, [selectedTags])
+    const { register, setValue } = useFormContext();
+    const [selectedTags, selectedTagsSet] = useState<string[]>([]);
 
     return (
         <div className="flex flex-col gap-2">
             <div className="flex flex-wrap gap-2">
-                {/* <input type="text" {...register("tags", { required: true })} value={selectedTags.join(",")} /> */}
                 {DEFINED_TAGS.map((tag) => (
                     <span
                         key={tag}
-                        className={`px-4 py-2 cursor-pointer rounded-full transition-colors ${selectedTags.includes(tag) ? "bg-background-500 text-white" : "bg-background-950 text-text-100"}`}
+                        className={`px-4 py-2 cursor-pointer rounded-full transition-colors ${selectedTags.includes(tag) ? "bg-background-500 text-white hover:bg-background-700" : "bg-background-950 text-text-100 hover:bg-background-700/50"}`}
                         onClick={() => {
-                            if (selectedTags.includes(tag)) {
-                                selectedTagsSet(selectedTags.filter((t) => t !== tag));
-                            } else {
-                                selectedTagsSet([...selectedTags, tag]);
-                            }
+                            const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
+                            selectedTagsSet(newTags);
+
+                            setValue("tags", newTags, { shouldValidate: true });
                         }}
                     >
                         {tag}

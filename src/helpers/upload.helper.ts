@@ -7,5 +7,5 @@ export const uploadSchema = z.object({
             return true
         }, { message: "Website already exists" }),
     description: z.string().min(10).max(200),
-    tags: z.string(),
+    tags: z.string({ message: "Minimum 1 tag is required!" }).array(),
 })
