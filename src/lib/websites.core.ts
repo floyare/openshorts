@@ -116,23 +116,30 @@ export const searchWebsites = async ({
         headers: context.request.headers
     }) : null;
 
+    const whereConditions: Prisma.websitesWhereInput[] = [
+        ...(search ? [
+            {
+                OR: [
+                    { name: { contains: search, mode: "insensitive" as Prisma.QueryMode } },
+                    { description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }
+                ]
+            }
+        ] : []),
+        ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : []),
+        ...(showOnlyLiked && currentUser?.user?.id ? [{
+            user_likes: {
+                some: {
+                    user_id: currentUser.user.id
+                }
+            }
+        }] : [])
+    ];
+
+    const where: Prisma.websitesWhereInput = whereConditions.length > 0 ? { AND: whereConditions } : {};
+
     const websites = await tryCatch(
         prisma.websites.findMany({
-            where: ((conditions: Prisma.websitesWhereInput[]) =>
-                conditions.length > 0 ? { AND: conditions } : {}
-            )([
-                ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : []),
-
-                ...(showOnlyLiked && currentUser?.user.id ? [{
-                    user_likes: {
-                        some: {
-                            user_id: currentUser?.user.id
-                        }
-                    }
-                }] : [])
-            ]),
+            where,
             take: pageSize,
             skip: (page - 1) * pageSize,
             orderBy
@@ -141,21 +148,7 @@ export const searchWebsites = async ({
 
     const allTags = await tryCatch(
         prisma.websites.findMany({
-            where: ((conditions: Prisma.websitesWhereInput[]) =>
-                conditions.length > 0 ? { AND: conditions } : {}
-            )([
-                ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : []),
-
-                ...(showOnlyLiked && currentUser?.user.id ? [{
-                    user_likes: {
-                        some: {
-                            user_id: currentUser?.user.id
-                        }
-                    }
-                }] : [])
-            ]),
+            where,
             select: { tags: true },
             orderBy
         })
