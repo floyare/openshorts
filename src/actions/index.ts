@@ -21,11 +21,12 @@ export const server = {
     }),
     uploadWebsite: defineAction({
         input: uploadSchema,
-        handler: async (input) => {
+        handler: async (input, context) => {
             return await uploadWebsite({
                 url: input.url,
                 description: input.description,
-                tags: input.tags
+                tags: input.tags,
+                context: context
             })
         }
     }),

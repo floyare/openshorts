@@ -5,6 +5,8 @@ import { getWebsiteScreen } from "./screen.core";
 import { capitalizeFirstLetter, tryCatch } from "./utils";
 import sharp from "sharp";
 import { DEFINED_TAGS } from "@/helpers/websites.helper";
+import { auth } from "./auth";
+import type { ActionAPIContext } from "astro:actions";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -34,11 +36,17 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
 }
 
 export const uploadWebsite = async ({
-    url, description, tags
-}: { url: string, description: string, tags: string[] }) => {
+    url, description, tags, context
+}: { url: string, description: string, tags: string[], context: ActionAPIContext }) => {
     if (!tags.every(tag => DEFINED_TAGS.includes(tag))) {
         throw new Error("Invalid tags provided");
     }
+
+    const currentUser = await auth.api.getSession({
+        headers: context.request.headers
+    })
+
+    if (!currentUser?.user) throw new Error("User not logged in")
 
     // await new Promise(resolve => setTimeout(resolve, 2000));
     // throw new Error("test")
@@ -82,7 +90,7 @@ export const uploadWebsite = async ({
             tags,
             category: "UI_UX",
             name: capitalizeFirstLetter(hostnameOnly),
-            created_by: "1234"
+            created_by: currentUser.user.name
         },
     });
 
