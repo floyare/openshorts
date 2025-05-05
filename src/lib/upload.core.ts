@@ -72,6 +72,7 @@ export const uploadWebsite = async ({
         throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
     }
 
+    // TODO: fix url hostname getting due to bad parts of url being cut
     let fullHost = new URL(url).host;
     if (fullHost.startsWith("www.")) {
         fullHost = fullHost.slice(4);
