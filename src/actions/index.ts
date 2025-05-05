@@ -1,6 +1,6 @@
 import { uploadSchema } from '@/helpers/upload.helper';
 import { uploadWebsite } from '@/lib/upload.core';
-import { doesWebsiteExists, searchWebsites } from '@/lib/websites.core';
+import { doesWebsiteExists, searchWebsites, toggleLikeWebsite } from '@/lib/websites.core';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 
@@ -15,8 +15,8 @@ export const server = {
             pageSize: z.number().optional(),
             sorting: z.enum(["new", "old", "alphabet", "likes"]).optional()
         }) as z.ZodType<SearchWebsitesProps>,
-        handler: async (input) => {
-            return await searchWebsites(input);
+        handler: async (input, context) => {
+            return await searchWebsites({ ...input, context: context });
         }
     }),
     uploadWebsite: defineAction({
@@ -26,6 +26,17 @@ export const server = {
                 url: input.url,
                 description: input.description,
                 tags: input.tags,
+                context: context
+            })
+        }
+    }),
+    toggleLikeWebsite: defineAction({
+        input: z.object({
+            websiteId: z.string()
+        }),
+        handler: async (input, context) => {
+            return await toggleLikeWebsite({
+                websiteId: input.websiteId,
                 context: context
             })
         }

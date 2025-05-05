@@ -1,3 +1,4 @@
+import type { JsonValue } from "@prisma/client/runtime/library";
 
 // TODO: może wlasnie kategoryzowac tagi do kategorii tak jak tu i potem je wyswietlac w takich kategoriach
 export const DEFINED_TOPICS = {
@@ -63,3 +64,18 @@ export const DEFINED_TAGS = [
 ]
 
 export type SORTING_TYPE = "new" | "old" | "alphabet" | "likes"
+
+
+export const formatTagsWithCount = (data: { tags: JsonValue }[]) => {
+    const tagCounts: Record<string, number> = {};
+    data.forEach(site => {
+        if (Array.isArray(site.tags)) {
+            site.tags.forEach((tag) => {
+                if (typeof tag === "string") {
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                }
+            });
+        }
+    });
+    return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+};

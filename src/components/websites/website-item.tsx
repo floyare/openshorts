@@ -1,8 +1,12 @@
-import { ExternalLink, Heart } from "lucide-react";
+import { ExternalLink, Heart, LoaderCircle, LoaderIcon } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
 import { Button } from "../ui/button";
+import { actions } from "astro:actions";
+import { useEffect, useState, useTransition } from "react";
+import { cn } from "@/lib/utils";
+import { debugLog } from "@/lib/log";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -11,7 +15,23 @@ type WebsiteItemProps = {
 const MAX_TAGS_TO_DISPLAY = 4;
 
 function WebsiteItem({ website }: WebsiteItemProps) {
-    const { name, url, description, image } = website;
+    const [likeActionPending, likeActionPendingSet] = useTransition()
+    const [isWebsiteLiked, isWebsiteLikedSet] = useState(website.isLiked)
+    const [likes, likesSet] = useState(website.likesCount ?? 0)
+    const { name, url, description, image, isLiked } = website;
+
+    useEffect(() => {
+        isWebsiteLikedSet(isLiked)
+    }, [isLiked])
+
+    const handleLike = async () => {
+        const likeResult = await actions.toggleLikeWebsite({ websiteId: website.id })
+        if (likeResult.error) throw new Error("Failed while toggling like")
+
+        likeResult.data.liked ? likesSet(p => p + 1) : likesSet(p => p - 1)
+
+        isWebsiteLikedSet(likeResult.data.liked)
+    }
 
     return (
         <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-background-950 w-full flex flex-col gap-2 grow relative">
@@ -26,6 +46,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                     </a>
                     <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] bg-blue-300 break-words text-balance">
                         {description}
+                        <p>{JSON.stringify(website.isLiked)}</p>
                     </p>
                     <div className="mt-auto flex flex-col gap-2 bg-purple-400">
                         <div className="flex items-center gap-1">
@@ -49,9 +70,12 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                 <div className="flex flex-col items-end gap-2 bg-orange-300 w-max">
                     {/* <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} /> */}
                     <WebsitePreview src={image} className="rounded-sm w-full grow" size={{ width: 150, height: 250 }} />
-                    <Button variant={"secondary"} className="flex items-center justify-center cursor-pointer group gap-2">
-                        <Heart className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-900" size={34} />
-                        <p className="font-semibold text-xl">10</p>
+                    <Button variant={"secondary"} disabled={likeActionPending} onClick={() => likeActionPendingSet(handleLike)} className="flex items-center justify-center cursor-pointer group gap-2">
+                        {
+                            likeActionPending ? <LoaderCircle className="animate-spin" /> :
+                                <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} size={34} />
+                        }
+                        <p className="font-semibold text-xl">{likes}</p>
                     </Button>
                 </div>
             </div>

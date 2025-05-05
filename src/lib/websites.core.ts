@@ -1,10 +1,51 @@
-import type { JsonValue } from "@prisma/client/runtime/library";
 import { debugLog } from "./log";
 import getPrismaInstance from "./prisma"
 import { tryCatch } from "./utils"
 import type { Prisma } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
-import type { SORTING_TYPE } from "@/helpers/websites.helper";
+import { formatTagsWithCount, type SORTING_TYPE } from "@/helpers/websites.helper";
+import { auth } from "./auth";
+import type { ActionAPIContext } from "astro:actions";
+
+export const toggleLikeWebsite = async ({ websiteId, context }: { websiteId: string, context: ActionAPIContext }) => {
+    debugLog("ACTION", 'Executing like action', websiteId)
+    const currentUser = await auth.api.getSession({
+        headers: context.request.headers
+    })
+
+    if (!currentUser?.user) throw new Error("User not logged in")
+
+    const prisma = getPrismaInstance();
+
+    const existingLike = await prisma.user_likes.findUnique({
+        where: {
+            user_id_website_id: {
+                user_id: currentUser.user.id,
+                website_id: websiteId
+            }
+        }
+    });
+
+    if (existingLike) {
+        await prisma.user_likes.delete({
+            where: {
+                user_id_website_id: {
+                    user_id: currentUser.user.id,
+                    website_id: websiteId
+                }
+            }
+        });
+        return { liked: false };
+    } else {
+        await prisma.user_likes.create({
+            data: {
+                user_id: currentUser.user.id,
+                website_id: websiteId
+            }
+        });
+        return { liked: true };
+    }
+}
 
 export const doesWebsiteExists = async (url: string) => {
     const prisma = getPrismaInstance();
@@ -25,31 +66,18 @@ export const fetchWebsiteTags = async () => {
     );
 };
 
-export const formatTagsWithCount = (data: { tags: JsonValue }[]) => {
-    const tagCounts: Record<string, number> = {};
-    data.forEach(site => {
-        if (Array.isArray(site.tags)) {
-            site.tags.forEach((tag) => {
-                if (typeof tag === "string") {
-                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-                }
-            });
-        }
-    });
-    return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
-};
-
 export const PAGE_SIZE = 12
 export const searchWebsites = async ({
     search,
     tags,
     page = 1,
     pageSize = PAGE_SIZE,
-    sorting
-}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE }): Promise<SearchWebsitesResult> => {
+    sorting,
+    context
+}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, context?: ActionAPIContext }): Promise<SearchWebsitesResult> => {
     debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting });
     const prisma = getPrismaInstance();
-    //debugLog("SUCCESS", ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { array_contains: tags } }] : []))
+
     let orderBy: Prisma.websitesOrderByWithRelationInput | undefined;
 
     switch (sorting) {
@@ -62,10 +90,9 @@ export const searchWebsites = async ({
         case "alphabet":
             orderBy = { name: "asc" };
             break;
-        // TODO: add likes sorting
-        // case "likes":
-        //     orderBy = { likes: "desc" };
-        //     break;
+        case "likes":
+            orderBy = { user_likes: { _count: "desc" } };
+            break;
         default:
             orderBy = undefined;
     }
@@ -104,8 +131,53 @@ export const searchWebsites = async ({
         return { websites: [], total: 0, tags: [] };
     };
 
+    let likedWebsiteIds: string[] = [];
+    const websiteIds = websites.data.map(w => w.id);
+
+    if (context) {
+        debugLog("DEBUG", "(searchWebsites) context detected")
+        const currentUser = await auth.api.getSession({
+            headers: context.request.headers
+        });
+
+        if (currentUser?.user) {
+            debugLog("DEBUG", "(searchWebsites) user loged in")
+
+            const prisma = getPrismaInstance();
+            const userLikes = await prisma.user_likes.findMany({
+                where: {
+                    user_id: currentUser.user.id,
+                    website_id: { in: websiteIds }
+                },
+                select: { website_id: true }
+            });
+
+            likedWebsiteIds = userLikes.map(like => like.website_id);
+            debugLog("DEBUG", "(searchWebsites) user likes", likedWebsiteIds)
+        }
+    }
+
+    const likeCountsRaw = await prisma.user_likes.groupBy({
+        by: ['website_id'],
+        where: {
+            website_id: { in: websiteIds }
+        },
+        _count: { website_id: true }
+    });
+
+    const likeCounts: Record<string, number> = {};
+    likeCountsRaw.forEach(item => {
+        likeCounts[item.website_id] = item._count.website_id;
+    });
+
+    const websitesWithIsLiked = websites.data.map(w => ({
+        ...w,
+        isLiked: likedWebsiteIds.includes(w.id),
+        likesCount: likeCounts[w.id]
+    }));
+
     return {
-        websites: websites.data,
+        websites: websitesWithIsLiked,
         total: allTags.data.length,
         tags: formatTagsWithCount(allTags.data)
     };

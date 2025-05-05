@@ -8,7 +8,9 @@ export interface WebsiteType extends websites {
     description: string | null,
     image: string,
     category: categories,
-    tags: string[]
+    tags: string[],
+    isLiked: boolean,
+    likesCount: number
 }
 
 export type WebsiteTag = {
