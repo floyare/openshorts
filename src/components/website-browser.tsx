@@ -15,19 +15,19 @@ import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import type { SORTING_TYPE } from "@/helpers/websites.helper";
 import { authClient } from "@/lib/auth-client";
+import { Label } from "./ui/label";
+import { Checkbox } from "./ui/checkbox";
+import type { User } from "better-auth";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
     totalWebsites: number,
-    tags: WebsiteTag[]
+    tags: WebsiteTag[],
+    currentUser?: User
 }
 
-const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) => {
+const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: BrowserProps) => {
     const [page, setPage] = useState(1);
-
-    useEffect(() => {
-        authClient.getSession().then((r) => debugLog("WARN", r))
-    }, [])
 
     const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
     const filteredWebsites = currentWebsites.filter((website) => true)
@@ -43,6 +43,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         tags: []
     })
 
+    const [showOnlyLiked, showOnlyLikedSet] = useState(false)
+
     const [sortingSelected, sortingSelectedSet] = useState<SORTING_TYPE>("new")
 
     const debouncedSearch = useDebounce(searchContent.search, 600)
@@ -54,7 +56,14 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         const fetchWebsites = async () => {
             try {
                 debugLog("DEBUG", "Fetching websites with page: ", page, " and search content: ", searchContent);
-                const data = await actions.searchWebsites({ page, search: debouncedSearch, tags: searchContent.tags, sorting: sortingSelected });
+                const data = await actions.searchWebsites({
+                    page,
+                    search: debouncedSearch,
+                    tags: searchContent.tags,
+                    sorting: sortingSelected,
+                    showOnlyLiked: showOnlyLiked
+                });
+
                 debugLog("DEBUG", "page: ", page, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
@@ -77,7 +86,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
         };
 
         startWebsitesLoading(() => fetchWebsites())
-    }, [page, debouncedSearch, searchContent.tags, sortingSelected]);
+    }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
     const PaginationControls = memo(() => {
         if (noEntries) return null
@@ -114,7 +123,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
 
     return (
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1">
-            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-3 col-span-1 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
+            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5 col-span-1 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
                 <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
                 <div className="flex flex-col space-y-1">
                     <Input
@@ -145,6 +154,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags }: BrowserProps) =>
                         }
                     </ToggleGroup>
                 </div>
+                <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
+                    <Checkbox id="only-liked" checked={showOnlyLiked} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
+                </Label>
             </aside>
             <Container
                 className={cn("min-w-3xl col-span-4 space-y-4 relative", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}

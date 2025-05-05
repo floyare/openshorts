@@ -14,7 +14,8 @@ export const server = {
             tags: z.array(z.string()).optional(),
             page: z.number().optional(),
             pageSize: z.number().optional(),
-            sorting: z.enum(["new", "old", "alphabet", "likes"]).optional()
+            sorting: z.enum(["new", "old", "alphabet", "likes"]).optional(),
+            showOnlyLiked: z.boolean().default(false)
         }) as z.ZodType<SearchWebsitesProps>,
         handler: async (input, context) => {
             return await searchWebsites({ ...input, context: context });

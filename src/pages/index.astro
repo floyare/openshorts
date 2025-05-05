@@ -12,13 +12,15 @@ import { debugLog } from "@/lib/log";
 import type { categories } from "@prisma/client";
 import { uploadFile, uploadWebsite } from "@/lib/upload.core";
 import { tryCatch } from "@/lib/utils";
+import { undefined } from "astro:schema";
+import type { User } from "better-auth";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 
 // BUG: Fix the isLiked not properly fetched because there is no context
 const websites = await searchWebsites({ sorting: "new" });
 
-debugLog("INFO", "Session", Astro.locals.session);
+debugLog("INFO", "Session", Astro.locals.user);
 ---
 
 <Layout subtitle="test">
@@ -38,6 +40,7 @@ debugLog("INFO", "Session", Astro.locals.session);
                 entryWebsites={websites.websites}
                 totalWebsites={websites.total}
                 tags={websites.tags}
+                currentUser={(Astro.locals.user as User) ?? undefined}
                 client:idle
             />
         </div>

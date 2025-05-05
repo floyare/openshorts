@@ -87,9 +87,10 @@ export const searchWebsites = async ({
     page = 1,
     pageSize = PAGE_SIZE,
     sorting,
-    context
-}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, context?: ActionAPIContext }): Promise<SearchWebsitesResult> => {
-    debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting });
+    context,
+    showOnlyLiked
+}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, context?: ActionAPIContext, showOnlyLiked: boolean }): Promise<SearchWebsitesResult> => {
+    debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting, showOnlyLiked });
     const prisma = getPrismaInstance();
 
     let orderBy: Prisma.websitesOrderByWithRelationInput | undefined;
@@ -111,6 +112,10 @@ export const searchWebsites = async ({
             orderBy = undefined;
     }
 
+    const currentUser = context ? await auth.api.getSession({
+        headers: context.request.headers
+    }) : null;
+
     const websites = await tryCatch(
         prisma.websites.findMany({
             where: ((conditions: Prisma.websitesWhereInput[]) =>
@@ -118,7 +123,15 @@ export const searchWebsites = async ({
             )([
                 ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
                 ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : [])
+                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : []),
+
+                ...(showOnlyLiked && currentUser?.user.id ? [{
+                    user_likes: {
+                        some: {
+                            user_id: currentUser?.user.id
+                        }
+                    }
+                }] : [])
             ]),
             take: pageSize,
             skip: (page - 1) * pageSize,
@@ -133,7 +146,15 @@ export const searchWebsites = async ({
             )([
                 ...(search ? [{ name: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
                 ...(search ? [{ description: { contains: search, mode: "insensitive" as Prisma.QueryMode } }] : []),
-                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : [])
+                ...(tags && Array.isArray(tags) && tags.length > 0 ? [{ tags: { hasEvery: tags } }] : []),
+
+                ...(showOnlyLiked && currentUser?.user.id ? [{
+                    user_likes: {
+                        some: {
+                            user_id: currentUser?.user.id
+                        }
+                    }
+                }] : [])
             ]),
             select: { tags: true },
             orderBy
@@ -150,9 +171,6 @@ export const searchWebsites = async ({
 
     if (context) {
         debugLog("DEBUG", "(searchWebsites) context detected")
-        const currentUser = await auth.api.getSession({
-            headers: context.request.headers
-        });
 
         if (currentUser?.user) {
             debugLog("DEBUG", "(searchWebsites) user loged in")
@@ -177,7 +195,7 @@ export const searchWebsites = async ({
         ...w,
         isLiked: likedWebsiteIds.includes(w.id),
         likesCount: likeCounts[w.id]
-    }));
+    }))
 
     return {
         websites: websitesWithIsLiked,

@@ -5,7 +5,7 @@ let prismaInstance: PrismaClient;
 export const getPrismaInstance = () => {
     if (!prismaInstance) {
         prismaInstance = new PrismaClient({
-            log: ['query', 'info', 'warn', 'error']
+            //log: ['query', 'info', 'warn', 'error']
         });
     }
     return prismaInstance;
