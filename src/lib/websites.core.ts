@@ -88,8 +88,8 @@ export const searchWebsites = async ({
     pageSize = PAGE_SIZE,
     sorting,
     context,
-    showOnlyLiked
-}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, context?: ActionAPIContext, showOnlyLiked: boolean }): Promise<SearchWebsitesResult> => {
+    showOnlyLiked = false
+}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, context?: ActionAPIContext, showOnlyLiked?: boolean }): Promise<SearchWebsitesResult> => {
     debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting, showOnlyLiked });
     const prisma = getPrismaInstance();
 
