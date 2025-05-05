@@ -1,6 +1,121 @@
 ---
 export const prerender = false;
+import { Image } from "astro:assets";
+import Layout from "../layout.astro";
+import getPrismaInstance from "@/lib/prisma";
+import { debugLog } from "@/lib/log";
+import Container from "@/components/container";
+import { Heart, Star, UploadCloud, User } from "lucide-react";
+import SkewedHighlight from "@/components/skewed-highlight";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import BestUploads from "./components/best-uploads";
+
 const { profile } = Astro.params;
+const currentUser = Astro.locals.user;
+
+const isOwnProfile = profile === currentUser?.name;
+
+const profileData = await getPrismaInstance().user.findFirst({
+    where: {
+        name: profile,
+    },
+    select: { image: true, name: true, role: true, id: true },
+});
+
+debugLog("DEBUG", "Profile data", profileData);
+
+if (!profileData) return Astro.redirect("/404?error=profile-not-found");
 ---
 
-<p>profile: {profile}</p>
+<Layout
+    subtitle={`${profile}'s profile`}
+    class="justify-center items-center !gap-2"
+>
+    <div class="flex gap-2 mt-10">
+        <div class="flex flex-col gap-2">
+            <Container className="px-8 relative">
+                <SkewedHighlight className="absolute -top-16 -left-8 z-10">
+                    <h2
+                        class="text-xl font-semibold text-text-950 flex items-center gap-1"
+                    >
+                        <User /> User Profile
+                    </h2>
+                </SkewedHighlight>
+                <div class="flex items-center gap-6">
+                    <Image
+                        src={profileData?.image!}
+                        alt="Profile image"
+                        class="rounded-full w-32 h-32"
+                        width={128}
+                        height={128}
+                    />
+                    <div>
+                        <h2 class="text-3xl font-semibold">
+                            {profileData.name}
+                        </h2>
+                        <p
+                            class:list={[
+                                profileData.role === "OWNER"
+                                    ? "relative inline-block text-primary-500 font-bold before:content-[''] before:absolute before:z-20 before:top-1/2 before:-translate-y-1/2 before:w-full before:h-3 before:rounded-full before:bg-primary-600 before:blur-sm before:animate-pulse"
+                                    : "",
+                            ]}
+                        >
+                            {
+                                capitalizeFirstLetter(
+                                    profileData.role.toLowerCase(),
+                                )
+                            }
+                        </p>
+                    </div>
+                </div>
+            </Container>
+            <Container className="px-8 flex items-center justify-around gap-12">
+                <div
+                    class="flex flex-col items-center gap-1"
+                    title="Likes"
+                    aria-label="Likes"
+                >
+                    <Heart size={32} className="fill-primary-600" />
+                    <h2 class="text-3xl font-semibold">100</h2>
+                </div>
+                <div
+                    class="flex flex-col items-center gap-1"
+                    title="Uploads"
+                    aria-label="Uploads"
+                >
+                    <UploadCloud size={32} className="fill-primary-600" />
+                    <h2 class="text-3xl font-semibold">100</h2>
+                </div>
+            </Container>
+        </div>
+        <Container className="relative">
+            <SkewedHighlight
+                className="absolute -top-16 -right-8 z-10"
+                skew="skew-6"
+            >
+                <h2
+                    class="text-xl font-semibold text-text-950 flex items-center gap-1"
+                >
+                    <Star /> Best uploads
+                </h2>
+            </SkewedHighlight>
+            <div class="flex flex-col gap-4">
+                <p class="text-text-500">
+                    {
+                        isOwnProfile
+                            ? "You have not uploaded any files yet."
+                            : `${profile} has not uploaded any files yet.`
+                    }
+                    <BestUploads id={profileData.id} client:load />
+                    <!-- {
+                        (
+                            await getPrismaInstance().websites.findMany({
+                                take: 3,
+                            })
+                        ).map((website) => <WebsiteItem website={website} />)
+                    } -->
+                </p>
+            </div>
+        </Container>
+    </div>
+</Layout>

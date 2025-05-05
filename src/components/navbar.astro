@@ -21,19 +21,23 @@ import Logo from "./logo.astro";
                 <UploadCloud size={32} /> Upload
             </a>
 
-            <a
-                href="#"
-                class="flex flex-col items-center cursor-pointer text-xl hover:text-text-500 transition-colors"
-            >
-                <User size={32} /> Account
-            </a>
-
-            <a
-                href="/signin"
-                class="flex flex-col items-center cursor-pointer text-xl hover:text-text-500 transition-colors"
-            >
-                <LogIn size={32} /> Sign In
-            </a>
+            {
+                Astro.locals.user ? (
+                    <a
+                        href="/profile"
+                        class="flex flex-col items-center cursor-pointer text-xl hover:text-text-500 transition-colors"
+                    >
+                        <User size={32} /> Account
+                    </a>
+                ) : (
+                    <a
+                        href="/signin"
+                        class="flex flex-col items-center cursor-pointer text-xl hover:text-text-500 transition-colors"
+                    >
+                        <LogIn size={32} /> Sign In
+                    </a>
+                )
+            }
         </div>
     </div>
 </nav>

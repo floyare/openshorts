@@ -8,9 +8,9 @@ import { uploadSchema } from "@/helpers/upload.helper";
 import { actions } from "astro:actions";
 import { debugLog } from "@/lib/log";
 import { cn, tryCatch } from "@/lib/utils";
-import { useState } from "react";
 import TagsSelector from "./tags-selector";
 import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
+import SkewedHighlight from "../skewed-highlight";
 
 type UploadFormInputs = {
     url: string,
@@ -18,6 +18,7 @@ type UploadFormInputs = {
     tags: string[],
 }
 
+// BUG: on every blur the doesWebsiteCheck is being run so idk if it's good
 const UploadForm = () => {
     const methods = useForm<UploadFormInputs>({
         defaultValues: {
@@ -55,10 +56,17 @@ const UploadForm = () => {
         <section>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className={cn(
-                    "flex flex-col gap-4 bg-background-900 p-4 rounded-md border-[1px] border-background-800 min-w-xl transition-all",
+                    "flex flex-col gap-4 bg-background-900 p-4 rounded-md border-[1px] border-background-800 min-w-xl transition-all relative my-8",
                     isSubmitting ? "opacity-60 animate-pulse pointer-events-none" : ""
                 )}>
-                    <h1 className="text-center font-semibold text-lg">Upload a website</h1>
+                    <SkewedHighlight className="absolute -top-20 -left-8 z-10">
+                        <h2
+                            className="text-xl font-semibold text-text-950 flex items-center gap-1"
+                        >
+                            <UploadCloud /> Upload website
+                        </h2>
+                    </SkewedHighlight>
+
                     <div className="space-y-2">
                         <Label><Link size={18} /> Website URL</Label>
                         <Input placeholder={"https://example.com"} {...register("url", { required: true })} />
