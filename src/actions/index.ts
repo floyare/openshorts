@@ -60,8 +60,8 @@ export const server = {
         input: z.object({
             name: z.string()
         }),
-        handler: async (input) => {
-            return await getBestUploads(input.name)
+        handler: async (input, ctx) => {
+            return await getBestUploads(input.name, ctx)
         }
     })
 }

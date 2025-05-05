@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { actions } from "astro:actions";
 import { useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
-import { debugLog } from "@/lib/log";
+import { toast } from "sonner";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -26,28 +26,32 @@ function WebsiteItem({ website }: WebsiteItemProps) {
 
     const handleLike = async () => {
         const likeResult = await actions.toggleLikeWebsite({ websiteId: website.id })
-        if (likeResult.error) throw new Error("Failed while toggling like")
+        if (likeResult.error) {
+            toast.error("Failed while sending a like. Try again later!")
+            throw new Error("Failed while toggling like")
+        }
 
         likeResult.data.liked ? likesSet(p => p + 1) : likesSet(p => p - 1)
 
         isWebsiteLikedSet(likeResult.data.liked)
+        toast.success(`Successfully ${likeResult.data.liked ? "Liked" : "Disliked"}!`)
     }
 
     return (
         <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-background-950 w-full flex flex-col gap-2 grow relative">
-            <div className="grid grid-cols-[1fr_auto] gap-1 bg-accent-700 !w-full">
-                <div className="flex flex-col gap-2 bg-yellow-200 w-full">
+            <div className="grid grid-cols-[1fr_auto] gap-1 !w-full">
+                <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
-                        <h2 className="font-bold text-2xl flex items-center gap-1 relative bg-green-300 w-full">
-                            <span className="truncate inline-block !max-w-[160px] bg-red-400">{name}</span>
+                        <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full">
+                            <span className="truncate inline-block !max-w-[160px]">{name}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                     </a>
-                    <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] bg-blue-300 break-words text-balance">
+                    <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
                         {description}
                     </p>
-                    <div className="mt-auto flex flex-col gap-2 bg-purple-400">
+                    <div className="mt-auto flex flex-col gap-2">
                         <div className="flex items-center gap-1">
                             {
                                 website.tags.slice(0, MAX_TAGS_TO_DISPLAY).map((tag, index) => (
@@ -62,14 +66,10 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                             <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
                         </div>
                     </div>
-                    {/* <Button variant="primary">
-                        Visit website <ExternalLink />
-                    </Button> */}
                 </div>
-                <div className="flex flex-col items-end gap-2 bg-orange-300 w-max">
-                    {/* <img src={image} width={150} height={350} className="rounded-sm w-[80%] shrink" alt={`${name} screenshot`} /> */}
+                <div className="flex flex-col items-end gap-2 w-max">
                     <WebsitePreview src={image} className="rounded-sm w-full grow" size={{ width: 150, height: 250 }} />
-                    <Button variant={"secondary"} disabled={likeActionPending} onClick={() => likeActionPendingSet(handleLike)} className="flex items-center justify-center cursor-pointer group gap-2">
+                    <Button variant={"secondary"} disabled={likeActionPending} onClick={() => likeActionPendingSet(handleLike)} className="flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
                         {
                             likeActionPending ? <LoaderCircle className="animate-spin" /> :
                                 <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} size={34} />

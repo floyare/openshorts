@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { AnalyticsProvider } from "shibuitracker-client/client";
 import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
+import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", class: className, ...props } = Astro.props;
 ---
 
@@ -22,6 +23,7 @@ const { subtitle = "", class: className, ...props } = Astro.props;
         ]}
         {...props}
     >
+        <Toaster position="top-right" richColors client:idle />
         <Navbar />
         <AnalyticsProvider client:load>
             <slot />
