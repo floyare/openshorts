@@ -23,9 +23,9 @@ const { subtitle = "", class: className, ...props } = Astro.props;
         ]}
         {...props}
     >
-        <Toaster position="top-right" richColors client:idle />
+        <Toaster position="top-right" richColors client:visible />
         <Navbar />
-        <AnalyticsProvider client:load>
+        <AnalyticsProvider client:idle>
             <slot />
         </AnalyticsProvider>
     </body>
