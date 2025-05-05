@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+import { Meh } from "lucide-react";
+import Layout from "./layout.astro";
+
+const url = new URL(Astro.request.url);
+const searchParams = url.searchParams;
+const errorParam = searchParams.get("error");
+---
+
+<Layout subtitle="Not found">
+    <section class="flex gap-4 justify-center items-center">
+        <Meh size={128} className="text-text-600" />
+        <div class="flex flex-col gap-4">
+            <div>
+                <h2 class="text-3xl font-semibold text-text-400">
+                    You look lost...
+                </h2>
+                <p class="text-xl">
+                    Go back to the <a
+                        href="/"
+                        class="text-text-500 font-semibold underline decoration-1 decoration-text-600"
+                        >home</a
+                    > okay?
+                </p>
+            </div>
+            {errorParam && <p class="!text-neutral-500">Error: {errorParam}</p>}
+        </div>
+    </section>
+</Layout>
