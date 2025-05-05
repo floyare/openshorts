@@ -66,7 +66,21 @@ export const fetchWebsiteTags = async () => {
     );
 };
 
+export async function getLikeCountsForWebsites(prisma: ReturnType<typeof getPrismaInstance>, websiteIds: string[]) {
+    if (websiteIds.length === 0) return {};
+    const likes = await prisma.user_likes.groupBy({
+        by: ['website_id'],
+        where: { website_id: { in: websiteIds } },
+        _count: { website_id: true }
+    });
+    return likes.reduce((acc, curr) => {
+        acc[curr.website_id] = curr._count.website_id;
+        return acc;
+    }, {} as Record<string, number>);
+}
+
 export const PAGE_SIZE = 12
+
 export const searchWebsites = async ({
     search,
     tags,
@@ -157,18 +171,7 @@ export const searchWebsites = async ({
         }
     }
 
-    const likeCountsRaw = await prisma.user_likes.groupBy({
-        by: ['website_id'],
-        where: {
-            website_id: { in: websiteIds }
-        },
-        _count: { website_id: true }
-    });
-
-    const likeCounts: Record<string, number> = {};
-    likeCountsRaw.forEach(item => {
-        likeCounts[item.website_id] = item._count.website_id;
-    });
+    const likeCounts = await getLikeCountsForWebsites(prisma, websiteIds);
 
     const websitesWithIsLiked = websites.data.map(w => ({
         ...w,

@@ -46,7 +46,6 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                     </a>
                     <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] bg-blue-300 break-words text-balance">
                         {description}
-                        <p>{JSON.stringify(website.isLiked)}</p>
                     </p>
                     <div className="mt-auto flex flex-col gap-2 bg-purple-400">
                         <div className="flex items-center gap-1">

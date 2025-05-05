@@ -1,4 +1,5 @@
 import { uploadSchema } from '@/helpers/upload.helper';
+import { getBestUploads, getProfileStats } from '@/lib/profile.core';
 import { uploadWebsite } from '@/lib/upload.core';
 import { doesWebsiteExists, searchWebsites, toggleLikeWebsite } from '@/lib/websites.core';
 import { defineAction } from 'astro:actions';
@@ -46,5 +47,21 @@ export const server = {
             url: z.string().nonempty()
         }),
         handler: async (input) => await doesWebsiteExists(input.url)
+    }),
+    getProfileStats: defineAction({
+        input: z.object({
+            name: z.string()
+        }),
+        handler: async (input) => {
+            return await getProfileStats(input.name)
+        }
+    }),
+    getBestUploads: defineAction({
+        input: z.object({
+            name: z.string()
+        }),
+        handler: async (input) => {
+            return await getBestUploads(input.name)
+        }
     })
 }

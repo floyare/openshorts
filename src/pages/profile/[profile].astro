@@ -8,7 +8,8 @@ import Container from "@/components/container";
 import { Heart, Star, UploadCloud, User } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import BestUploads from "./components/best-uploads";
+import BestUploads from "../../components/profile/best-uploads";
+import ProfileStats from "@/components/profile/profile-stats";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
@@ -70,22 +71,7 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
                 </div>
             </Container>
             <Container className="px-8 flex items-center justify-around gap-12">
-                <div
-                    class="flex flex-col items-center gap-1"
-                    title="Likes"
-                    aria-label="Likes"
-                >
-                    <Heart size={32} className="fill-primary-600" />
-                    <h2 class="text-3xl font-semibold">100</h2>
-                </div>
-                <div
-                    class="flex flex-col items-center gap-1"
-                    title="Uploads"
-                    aria-label="Uploads"
-                >
-                    <UploadCloud size={32} className="fill-primary-600" />
-                    <h2 class="text-3xl font-semibold">100</h2>
-                </div>
+                <ProfileStats name={profileData.name} client:load />
             </Container>
         </div>
         <Container className="relative">
@@ -97,21 +83,7 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
                 </h2>
             </SkewedHighlight>
             <div class="flex flex-col gap-4">
-                <p class="text-text-500">
-                    {
-                        isOwnProfile
-                            ? "You have not uploaded any files yet."
-                            : `${profile} has not uploaded any files yet.`
-                    }
-                    <BestUploads id={profileData.id} client:load />
-                    <!-- {
-                        (
-                            await getPrismaInstance().websites.findMany({
-                                take: 3,
-                            })
-                        ).map((website) => <WebsiteItem website={website} />)
-                    } -->
-                </p>
+                <BestUploads name={profileData.name} client:load />
             </div>
         </Container>
     </div>

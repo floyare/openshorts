@@ -9,8 +9,8 @@ export interface WebsiteType extends websites {
     image: string,
     category: categories,
     tags: string[],
-    isLiked: boolean,
-    likesCount: number
+    isLiked?: boolean,
+    likesCount?: number
 }
 
 export type WebsiteTag = {
