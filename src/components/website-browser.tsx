@@ -2,7 +2,6 @@ import type { SearchContentType, WebsiteTag, WebsiteType } from "@/types/website
 import WebsiteItem from "./websites/website-item";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { PAGE_SIZE } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
@@ -13,7 +12,7 @@ import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import type { SORTING_TYPE } from "@/helpers/websites.helper";
+import { PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { authClient } from "@/lib/auth-client";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";

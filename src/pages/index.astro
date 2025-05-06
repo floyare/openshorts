@@ -1,17 +1,12 @@
 ---
 export const prerender = false;
 
-import { Button } from "@/components/ui/button";
 import Layout from "./layout.astro";
-import { getPrismaInstance } from "@/lib/prisma";
 import { PackageOpen } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import WebsiteBrowser from "@/components/website-browser";
 import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
-import type { categories } from "@prisma/client";
-import { uploadFile, uploadWebsite } from "@/lib/upload.core";
-import { tryCatch } from "@/lib/utils";
 import type { User } from "better-auth";
 
 // TODO: font https://fonts.google.com/specimen/Dongle

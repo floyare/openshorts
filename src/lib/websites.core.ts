@@ -3,7 +3,7 @@ import getPrismaInstance from "./prisma"
 import { tryCatch } from "./utils"
 import type { Prisma } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
-import { formatTagsWithCount, type SORTING_TYPE } from "@/helpers/websites.helper";
+import { formatTagsWithCount, PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
 
@@ -78,8 +78,6 @@ export async function getLikeCountsForWebsites(prisma: ReturnType<typeof getPris
         return acc;
     }, {} as Record<string, number>);
 }
-
-export const PAGE_SIZE = 12
 
 export const searchWebsites = async ({
     search,

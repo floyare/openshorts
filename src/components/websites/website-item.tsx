@@ -7,6 +7,7 @@ import { actions } from "astro:actions";
 import { useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { debugLog } from "@/lib/log";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -28,7 +29,8 @@ function WebsiteItem({ website }: WebsiteItemProps) {
         const likeResult = await actions.toggleLikeWebsite({ websiteId: website.id })
         if (likeResult.error) {
             toast.error("Failed while sending a like. Try again later!")
-            throw new Error("Failed while toggling like")
+            debugLog("ERROR", likeResult.error)
+            return
         }
 
         likeResult.data.liked ? likesSet(p => p + 1) : likesSet(p => p - 1)

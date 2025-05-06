@@ -1,5 +1,7 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 
+export const PAGE_SIZE = 12
+
 // TODO: może wlasnie kategoryzowac tagi do kategorii tak jak tu i potem je wyswietlac w takich kategoriach
 export const DEFINED_TOPICS = {
     "Frontend Development": [
