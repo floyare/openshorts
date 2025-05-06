@@ -1,6 +1,6 @@
 import type { SearchContentType, WebsiteTag, WebsiteType } from "@/types/website";
 import WebsiteItem from "./websites/website-item";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { debugLog } from "@/lib/log";
 import { actions } from "astro:actions";
@@ -48,9 +48,21 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
+    useEffect(() => {
+        setPage(1)
+    }, [debouncedSearch, searchContent.tags, showOnlyLiked])
+
     // BUG: searchWebsites() uruchamia sie po zaladowaniu komponentu mimo, że juz wczesniej serwer go uruchamia i wstawia dane
     // TODO: add on search tags, phrase change then set page to first
+
+    const didMount = useRef(false);
+
     useEffect(() => {
+        if (!didMount.current) {
+            didMount.current = true;
+            return;
+        }
+
         const fetchWebsites = async () => {
             try {
                 debugLog("DEBUG", "Fetching websites with page: ", page, " and search content: ", searchContent);
@@ -67,8 +79,6 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
                     return;
                 }
-
-                //await new Promise((resolve) => setTimeout(resolve, 5000));
 
                 totalPagesSet(Math.ceil(data.data.total / PAGE_SIZE));
                 tagsListSet((prevTags) =>

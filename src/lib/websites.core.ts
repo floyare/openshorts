@@ -85,9 +85,9 @@ export const searchWebsites = async ({
     page = 1,
     pageSize = PAGE_SIZE,
     sorting,
-    context,
+    headers,
     showOnlyLiked = false
-}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, context?: ActionAPIContext, showOnlyLiked?: boolean }): Promise<SearchWebsitesResult> => {
+}: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, headers?: Headers, showOnlyLiked?: boolean }): Promise<SearchWebsitesResult> => {
     debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting, showOnlyLiked });
     const prisma = getPrismaInstance();
 
@@ -110,8 +110,8 @@ export const searchWebsites = async ({
             orderBy = undefined;
     }
 
-    const currentUser = context ? await auth.api.getSession({
-        headers: context.request.headers
+    const currentUser = headers ? await auth.api.getSession({
+        headers: headers
     }) : null;
 
     const whereConditions: Prisma.websitesWhereInput[] = [
@@ -160,8 +160,8 @@ export const searchWebsites = async ({
     let likedWebsiteIds: string[] = [];
     const websiteIds = websites.data.map(w => w.id);
 
-    if (context) {
-        debugLog("DEBUG", "(searchWebsites) context detected")
+    if (headers) {
+        debugLog("DEBUG", "(searchWebsites) headers detected")
 
         if (currentUser?.user) {
             debugLog("DEBUG", "(searchWebsites) user loged in")

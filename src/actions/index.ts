@@ -7,6 +7,8 @@ import { z } from 'astro:schema';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
+// TODO: maybe ad unkey.com ratelimit here
+
 export const server = {
     searchWebsites: defineAction({
         input: z.object({
@@ -18,7 +20,7 @@ export const server = {
             showOnlyLiked: z.boolean().optional().default(false)
         }) as z.ZodType<SearchWebsitesProps>,
         handler: async (input, context) => {
-            return await searchWebsites({ ...input, context: context });
+            return await searchWebsites({ ...input, headers: context.request.headers });
         }
     }),
     uploadWebsite: defineAction({
