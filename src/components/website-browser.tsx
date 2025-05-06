@@ -13,7 +13,6 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
-import { authClient } from "@/lib/auth-client";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
 import type { User } from "better-auth";
@@ -122,7 +121,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
 
     return (
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1">
-            <aside className="bg-neutral-50 p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5 col-span-1 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
+            <aside className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5 col-span-1 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
                 <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
                 <div className="flex flex-col space-y-1">
                     <Input
@@ -153,9 +152,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         }
                     </ToggleGroup>
                 </div>
-                <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
+                {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
                     <Checkbox id="only-liked" checked={showOnlyLiked} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
-                </Label>
+                </Label>}
             </aside>
             <Container
                 className={cn("min-w-3xl col-span-4 space-y-4 relative", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}

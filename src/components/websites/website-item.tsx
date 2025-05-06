@@ -4,10 +4,12 @@ import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
 import { Button } from "../ui/button";
 import { actions } from "astro:actions";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { debugLog } from "@/lib/log";
+import { authClient } from "@/lib/auth-client";
+import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
 
 type WebsiteItemProps = {
     website: WebsiteType
@@ -20,12 +22,20 @@ function WebsiteItem({ website }: WebsiteItemProps) {
     const [isWebsiteLiked, isWebsiteLikedSet] = useState(website.isLiked)
     const [likes, likesSet] = useState(website.likesCount ?? 0)
     const { name, url, description, image, isLiked } = website;
+    const { data } = authClient.useSession()
+
+    const canBeLiked = useMemo(() => DEBUG_ALLOW_LIKE_OWN_WEBSITES ?? data?.user.image !== website.name, [data?.user])
 
     useEffect(() => {
         isWebsiteLikedSet(isLiked)
     }, [isLiked])
 
     const handleLike = async () => {
+        if (!canBeLiked) {
+            toast.error("You can't like your own websites!")
+            return
+        }
+
         const likeResult = await actions.toggleLikeWebsite({ websiteId: website.id })
         if (likeResult.error) {
             toast.error("Failed while sending a like. Try again later!")
@@ -40,7 +50,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
     }
 
     return (
-        <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-background-950 w-full flex flex-col gap-2 grow relative">
+        <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative">
             <div className="grid grid-cols-[1fr_auto] gap-1 !w-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
@@ -71,7 +81,7 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                 </div>
                 <div className="flex flex-col items-end gap-2 w-max">
                     <WebsitePreview src={image} className="rounded-sm w-full grow" size={{ width: 150, height: 250 }} />
-                    <Button variant={"secondary"} disabled={likeActionPending} onClick={() => likeActionPendingSet(handleLike)} className="flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
+                    <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
                         {
                             likeActionPending ? <LoaderCircle className="animate-spin" /> :
                                 <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} size={34} />
