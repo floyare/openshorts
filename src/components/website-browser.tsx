@@ -48,33 +48,46 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
-    useEffect(() => {
-        setPage(1)
-    }, [debouncedSearch, searchContent.tags, showOnlyLiked])
+    // useEffect(() => {
+    //     setPage(1)
+    // }, [debouncedSearch, searchContent.tags, showOnlyLiked])
 
-    // BUG: searchWebsites() uruchamia sie po zaladowaniu komponentu mimo, że juz wczesniej serwer go uruchamia i wstawia dane
     // TODO: add on search tags, phrase change then set page to first
-
+    const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({ searchContent: null, showOnlyLiked })
     const didMount = useRef(false);
 
     useEffect(() => {
-        if (!didMount.current) {
-            didMount.current = true;
+        const isSearchTheSame = JSON.stringify(previousSearch.current) === JSON.stringify({ searchContent, showOnlyLiked })
+        debugLog("WARN", 'thesame', isSearchTheSame, JSON.stringify(previousSearch.current), JSON.stringify({ searchContent, showOnlyLiked }))
+
+        // * check if filters are empty and browser was not mounted
+        if (!isSearchTheSame && !didMount.current) {
+            previousSearch.current = { searchContent, showOnlyLiked }
+            didMount.current = true
             return;
+        }
+
+        // * if user changed filters then set page to first
+        const currentPage = !isSearchTheSame ? 1 : page
+
+        // TODO: fix double trigger because the 'page' dependency is being triggered when not return but with return is not lauching
+        if (!isSearchTheSame) {
+            setPage(1)
+            //return
         }
 
         const fetchWebsites = async () => {
             try {
-                debugLog("DEBUG", "Fetching websites with page: ", page, " and search content: ", searchContent);
+                debugLog("DEBUG", "Fetching websites with page: ", currentPage, " and search content: ", searchContent);
                 const data = await actions.searchWebsites({
-                    page,
+                    page: currentPage,
                     search: debouncedSearch,
                     tags: searchContent.tags,
                     sorting: sortingSelected,
                     showOnlyLiked: showOnlyLiked
                 });
 
-                debugLog("DEBUG", "page: ", page, " - websites: ", data.data?.websites);
+                debugLog("DEBUG", "page: ", currentPage, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
                     return;
@@ -88,6 +101,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                     })
                 );
                 currentWebsitesSet(data.data.websites);
+
+                previousSearch.current = { searchContent, showOnlyLiked }
             } catch (err) {
                 debugLog("ERROR", "Exception while fetching websites: ", err);
             }
