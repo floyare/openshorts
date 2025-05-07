@@ -51,6 +51,17 @@ export const uploadWebsite = async ({
     // await new Promise(resolve => setTimeout(resolve, 2000));
     // throw new Error("test")
 
+    // TODO: fix url hostname getting due to bad parts of url being cut
+    let fullHost = new URL(url).host;
+    if (fullHost.startsWith("www.")) {
+        fullHost = fullHost.slice(4);
+    }
+
+    const hostParts = fullHost.split('.');
+    const hostnameOnly = hostParts.slice(0, -1).join('.');
+
+    //throw new Error(hostnameOnly)
+
     const prisma = getPrismaInstance();
     const existingWebsite = await prisma.websites.findUnique({
         where: {
@@ -71,17 +82,6 @@ export const uploadWebsite = async ({
     if (!uploadResult.data || uploadResult.error) {
         throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
     }
-
-    // TODO: fix url hostname getting due to bad parts of url being cut
-    let fullHost = new URL(url).host;
-    if (fullHost.startsWith("www.")) {
-        fullHost = fullHost.slice(4);
-    }
-
-    const hostParts = fullHost.split('.');
-    const hostnameOnly = hostParts.length > 2
-        ? hostParts.slice(0, hostParts.length - 2).join('.')
-        : hostParts[0];
 
     await prisma.websites.create({
         data: {
