@@ -1,5 +1,7 @@
 import { uploadSchema } from '@/helpers/upload.helper';
+import { debugLog } from '@/lib/log';
 import { getBestUploads, getProfileStats } from '@/lib/profile.core';
+import { validateLimit } from '@/lib/ratelimiter';
 import { uploadWebsite } from '@/lib/upload.core';
 import { doesWebsiteExists, searchWebsites, toggleLikeWebsite } from '@/lib/websites.core';
 import { defineAction } from 'astro:actions';
@@ -20,6 +22,9 @@ export const server = {
             showOnlyLiked: z.boolean().optional().default(false)
         }) as z.ZodType<SearchWebsitesProps>,
         handler: async (input, context) => {
+            const limit = await validateLimit(context.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+            debugLog("DEBUG", context.clientAddress)
             return await searchWebsites({ ...input, headers: context.request.headers });
         }
     }),

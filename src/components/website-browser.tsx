@@ -16,6 +16,7 @@ import { PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
 import type { User } from "better-auth";
+import { toast } from "sonner";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -79,6 +80,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 debugLog("DEBUG", "page: ", overridePage ?? currentPage, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
+                    toast.error("Failed to get websites: " + (data.error.message ?? "Unknown error"))
                     return;
                 }
 
