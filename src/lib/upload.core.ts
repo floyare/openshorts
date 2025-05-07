@@ -51,7 +51,6 @@ export const uploadWebsite = async ({
     // await new Promise(resolve => setTimeout(resolve, 2000));
     // throw new Error("test")
 
-    // TODO: fix url hostname getting due to bad parts of url being cut
     let fullHost = new URL(url).host;
     if (fullHost.startsWith("www.")) {
         fullHost = fullHost.slice(4);
@@ -73,7 +72,7 @@ export const uploadWebsite = async ({
         throw new Error("Website already exists");
     }
 
-    const websiteScreen = await tryCatch(getWebsiteScreen(url));
+    const websiteScreen = await tryCatch(getWebsiteScreen(url)); // TODO: optimize getWebsiteScreen to work faster
     if (!websiteScreen.data || websiteScreen.error) {
         throw new Error('Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
     }
@@ -89,7 +88,7 @@ export const uploadWebsite = async ({
             url,
             description,
             tags,
-            category: "UI_UX",
+            category: "UI_UX", // TODO: something with categories
             name: capitalizeFirstLetter(hostnameOnly),
             created_by: currentUser.user.name
         },
