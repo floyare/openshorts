@@ -12,7 +12,7 @@ export const uploadSchema = z.object({
             if (!url) return false;
             if (url === currentUploadUrl.url) {
                 debugLog("INFO", "Used cached result from URL")
-                return currentUploadUrl.available === false
+                return currentUploadUrl.available
             }
 
             const isServer = typeof window === "undefined";
