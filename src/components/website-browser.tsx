@@ -48,11 +48,6 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
-    // useEffect(() => {
-    //     setPage(1)
-    // }, [debouncedSearch, searchContent.tags, showOnlyLiked])
-
-    // TODO: add on search tags, phrase change then set page to first
     const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({ searchContent: null, showOnlyLiked })
     const didMount = useRef(false);
 
@@ -70,24 +65,18 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
         // * if user changed filters then set page to first
         const currentPage = !isSearchTheSame ? 1 : page
 
-        // TODO: fix double trigger because the 'page' dependency is being triggered when not return but with return is not lauching
-        if (!isSearchTheSame) {
-            setPage(1)
-            //return
-        }
-
-        const fetchWebsites = async () => {
+        const fetchWebsites = async ({ overridePage }: { overridePage?: number }) => {
             try {
-                debugLog("DEBUG", "Fetching websites with page: ", currentPage, " and search content: ", searchContent);
+                debugLog("DEBUG", "Fetching websites with page: ", overridePage ?? currentPage, " and search content: ", searchContent);
                 const data = await actions.searchWebsites({
-                    page: currentPage,
+                    page: overridePage ?? currentPage,
                     search: debouncedSearch,
                     tags: searchContent.tags,
                     sorting: sortingSelected,
                     showOnlyLiked: showOnlyLiked
                 });
 
-                debugLog("DEBUG", "page: ", currentPage, " - websites: ", data.data?.websites);
+                debugLog("DEBUG", "page: ", overridePage ?? currentPage, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
                     return;
@@ -108,7 +97,14 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
             }
         };
 
-        startWebsitesLoading(() => fetchWebsites())
+        if (!isSearchTheSame && page !== 1) {
+            debugLog("WARN", "search not the same setting page to 1")
+            setPage(1)
+            //startWebsitesLoading(() => fetchWebsites({ overridePage: 1 }))
+            return
+        }
+
+        startWebsitesLoading(() => fetchWebsites({}))
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
     const PaginationControls = memo(() => {
