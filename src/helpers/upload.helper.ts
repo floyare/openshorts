@@ -3,7 +3,6 @@ import { debugLog } from "@/lib/log";
 import { z } from "astro/zod";
 import { actions } from "astro:actions";
 
-// TODO: it might not work on serverless
 let currentUploadUrl = { url: "", available: true }
 
 export const uploadSchema = z.object({

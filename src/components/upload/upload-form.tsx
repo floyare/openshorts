@@ -18,7 +18,6 @@ type UploadFormInputs = {
     tags: string[],
 }
 
-// BUG: on every blur the doesWebsiteCheck is being run so idk if it's good
 const UploadForm = () => {
     const methods = useForm<UploadFormInputs>({
         defaultValues: {

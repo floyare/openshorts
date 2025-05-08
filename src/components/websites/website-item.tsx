@@ -13,12 +13,12 @@ import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
 
 type WebsiteItemProps = {
     website: WebsiteType,
-    highlightedText: string[]
+    highlightedText?: string[]
 }
 
 const MAX_TAGS_TO_DISPLAY = 4;
 
-function WebsiteItem({ website, highlightedText }: WebsiteItemProps) {
+function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
     const [likeActionPending, likeActionPendingSet] = useTransition()
     const [isWebsiteLiked, isWebsiteLikedSet] = useState(website.isLiked)
     const [likes, likesSet] = useState(website.likesCount ?? 0)
