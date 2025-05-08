@@ -9,8 +9,6 @@ import { z } from 'astro:schema';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
-// TODO: maybe ad unkey.com ratelimit here
-
 export const server = {
     searchWebsites: defineAction({
         input: z.object({
@@ -31,6 +29,9 @@ export const server = {
     uploadWebsite: defineAction({
         input: uploadSchema,
         handler: async (input, context) => {
+            const limit = await validateLimit(context.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+
             return await uploadWebsite({
                 url: input.url,
                 description: input.description,
@@ -44,6 +45,9 @@ export const server = {
             websiteId: z.string()
         }),
         handler: async (input, context) => {
+            const limit = await validateLimit(context.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+
             return await toggleLikeWebsite({
                 websiteId: input.websiteId,
                 context: context
@@ -54,13 +58,19 @@ export const server = {
         input: z.object({
             url: z.string().nonempty()
         }),
-        handler: async (input) => await doesWebsiteExists(input.url)
+        handler: async (input, context) => {
+            const limit = await validateLimit(context.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+            return await doesWebsiteExists(input.url)
+        }
     }),
     getProfileStats: defineAction({
         input: z.object({
             name: z.string()
         }),
-        handler: async (input) => {
+        handler: async (input, context) => {
+            const limit = await validateLimit(context.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
             return await getProfileStats(input.name)
         }
     }),
@@ -69,6 +79,8 @@ export const server = {
             name: z.string()
         }),
         handler: async (input, ctx) => {
+            const limit = await validateLimit(ctx.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
             return await getBestUploads(input.name, ctx)
         }
     })
