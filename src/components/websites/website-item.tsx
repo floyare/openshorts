@@ -12,12 +12,13 @@ import { authClient } from "@/lib/auth-client";
 import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
 
 type WebsiteItemProps = {
-    website: WebsiteType
+    website: WebsiteType,
+    highlightedText: string[]
 }
 
 const MAX_TAGS_TO_DISPLAY = 4;
 
-function WebsiteItem({ website }: WebsiteItemProps) {
+function WebsiteItem({ website, highlightedText }: WebsiteItemProps) {
     const [likeActionPending, likeActionPendingSet] = useTransition()
     const [isWebsiteLiked, isWebsiteLikedSet] = useState(website.isLiked)
     const [likes, likesSet] = useState(website.likesCount ?? 0)
@@ -29,6 +30,22 @@ function WebsiteItem({ website }: WebsiteItemProps) {
     useEffect(() => {
         isWebsiteLikedSet(isLiked)
     }, [isLiked])
+
+    const highlight = (text: string): React.ReactNode => {
+        if (!highlightedText.some(word => word.length > 0))
+            return text;
+
+        const parts = text.split(new RegExp(`(${highlightedText.join('|')})`, 'gi'));
+        return parts.map((part, index) =>
+            highlightedText.includes(part.toLowerCase()) ? (
+                <span key={index} className="bg-secondary-400/50 font-bold">
+                    {part}
+                </span>
+            ) : (
+                part
+            )
+        );
+    };
 
     const handleLike = async () => {
         if (!canBeLiked) {
@@ -56,12 +73,12 @@ function WebsiteItem({ website }: WebsiteItemProps) {
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
                         <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full">
-                            <span className="truncate inline-block !max-w-[160px]">{name}</span>
+                            <span className="truncate inline-block !max-w-[160px]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                     </a>
                     <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
-                        {description}
+                        {description ? highlight(description) : "No description"}
                     </p>
                     <div className="mt-auto flex flex-col gap-2">
                         <div className="flex items-center gap-1">

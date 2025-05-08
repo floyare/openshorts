@@ -79,6 +79,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
 
                 debugLog("DEBUG", "page: ", overridePage ?? currentPage, " - websites: ", data.data?.websites);
                 if (data.error || !data.data) {
+                    // TODO: somehow on error cancel every filter change
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
                     toast.error("Failed to get websites: " + (data.error.message ?? "Unknown error"))
                     return;
@@ -200,9 +201,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 <div className="w-full flex">
                     <PaginationControls />
                 </div>
-                <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-4">
+                <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
                     {filteredWebsites.map((website) => (
-                        <WebsiteItem website={website} key={website.id} />
+                        <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
                     ))}
                 </div>
                 <PaginationControls />
