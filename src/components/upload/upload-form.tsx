@@ -80,7 +80,6 @@ const UploadForm = () => {
 
                     <div className="space-y-2">
                         <Label><Tags /> Tags</Label>
-                        {/* <Input placeholder={"tag1, tag2"} {...register("tags", { required: true })} /> */}
                         <TagsSelector />
                         {errors.tags && <span className="text-red-500">{errors.tags.message}</span>}
                     </div>
@@ -91,7 +90,7 @@ const UploadForm = () => {
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>
                         </div>
                     )}
-                    <Button type="submit" disabled={isSubmitting}>{isSubmitting ? <><LoaderCircle className="animate-spin" /> Uploading...</> : <><UploadCloud /> Upload</>}</Button>
+                    <Button type="submit" variant={"primary"} disabled={isSubmitting}>{isSubmitting ? <><LoaderCircle className="animate-spin" /> Uploading...</> : <><UploadCloud /> Upload</>}</Button>
                 </form>
             </FormProvider>
         </section>

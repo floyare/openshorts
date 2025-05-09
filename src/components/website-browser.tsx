@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDown01, ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, FileQuestion, Heart, Search, SortAsc, SortDesc, Tags } from "lucide-react";
+import { ArrowDown01, ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Compass, FileQuestion, Heart, Search, SortAsc, SortDesc, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
@@ -17,6 +17,7 @@ import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
 import type { User } from "better-auth";
 import { toast } from "sonner";
+import SkewedHighlight from "./skewed-highlight";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -183,6 +184,13 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
             <Container
                 className={cn("min-w-3xl col-span-4 space-y-4 relative", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
             >
+                <SkewedHighlight className="absolute -top-12 -left-8 z-[1000]">
+                    <h2
+                        className="text-xl font-semibold text-text-950 flex items-center gap-1"
+                    >
+                        <Compass /> Explore websites
+                    </h2>
+                </SkewedHighlight>
                 <div className="bg-white border-background-900 border-[1px] rounded-sm absolute top-4 right-4">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
                         <SelectTrigger size="default" className="text-lg">

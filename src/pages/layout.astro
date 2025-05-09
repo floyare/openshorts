@@ -6,6 +6,7 @@ import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
 import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", class: className, ...props } = Astro.props;
+import Background from "@/assets/bc.svg";
 ---
 
 <html lang="en">
@@ -19,11 +20,14 @@ const { subtitle = "", class: className, ...props } = Astro.props;
     </head>
     <body
         class:list={[
-            "bg-background-950 !p-8 text-text-50 rounded-3xl flex flex-col gap-6",
+            "bg-background-950 !p-8 text-text-50 rounded-3xl flex flex-col gap-6 relative",
             className,
         ]}
         {...props}
     >
+        <Background
+            class={"fixed top-0 left-0 !w-full !h-full opacity-35 -z-10"}
+        />
         <Toaster position="top-right" richColors client:visible />
         <Navbar />
         <!-- <AnalyticsProvider client:idle> -->
