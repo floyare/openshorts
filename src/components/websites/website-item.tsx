@@ -81,7 +81,7 @@ function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
                         {description ? highlight(description) : "No description"}
                     </p>
                     <div className="mt-auto flex flex-col gap-2">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 flex-wrap">
                             {
                                 website.tags.slice(0, MAX_TAGS_TO_DISPLAY).map((tag, index) => (
                                     <div className="bg-secondary-700 text-text-950 text-sm font-semibold px-2 py-1 rounded-sm" key={index}>
