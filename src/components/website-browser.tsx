@@ -114,7 +114,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const PaginationControls = memo(() => {
         if (noEntries) return null
         return (
-            <Pagination className={cn("transition-all bg-white text-text-50 px-4 py-1 w-fit rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
+            <Pagination className={cn("transition-all bg-white text-text-50 px-4 py-1 sm:w-fit w-full rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
@@ -128,6 +128,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                                 isActive={page === i + 1}
                                 onClick={() => setPage(i + 1)}
                                 isDisabled={websitesLoading}
+                                className="!text-xl"
                             >
                                 {i + 1}
                             </PaginationLink>
@@ -145,8 +146,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     })
 
     return (
-        <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1">
-            <aside className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5 col-span-1 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
+        <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1 relative">
+            <aside className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5 lg:col-span-1 col-span-4 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
                 <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
                 <div className="flex flex-col space-y-1">
                     <Input
@@ -182,18 +183,18 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 </Label>}
             </aside>
             <Container
-                className={cn("min-w-3xl col-span-4 space-y-4 relative", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
+                className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
             >
-                <SkewedHighlight className="absolute -top-12 -left-8 z-[1000]">
+                <SkewedHighlight className="absolute sm:-top-12 sm:-left-8 z-[1000] -top-20 left-[50%] sm:translate-x-0 translate-x-[-50%] text-center w-max">
                     <h2
-                        className="text-xl font-semibold text-text-950 flex items-center gap-1"
+                        className="text-xl font-semibold text-text-950 flex items-center justify-center gap-1 w-full"
                     >
                         <Compass /> Explore websites
                     </h2>
                 </SkewedHighlight>
-                <div className="bg-white border-background-900 border-[1px] rounded-sm absolute top-4 right-4">
+                <div className="bg-white border-background-900 border-[1px] rounded-sm sm:absolute sm:top-4 sm:right-4 relative">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
-                        <SelectTrigger size="default" className="text-lg">
+                        <SelectTrigger size="default" className="text-lg w-full">
                             <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
                         </SelectTrigger>
                         <SelectContent>

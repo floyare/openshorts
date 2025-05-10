@@ -32,10 +32,12 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
     subtitle={isOwnProfile ? "My profile" : `${profile}'s profile`}
     class="justify-center items-center !gap-2"
 >
-    <div class="flex gap-2 mt-10">
+    <div class="flex flex-wrap gap-2 mt-10">
         <div class="flex flex-col gap-2">
-            <Container className="px-8 relative">
-                <SkewedHighlight className="absolute -top-16 -left-8 z-10">
+            <Container className="px-8 relative sm:grow-0 grow">
+                <SkewedHighlight
+                    className="absolute sm:-top-16 sm:-left-8 left-[50%] -translate-x-[50%] sm:translate-x-0 -top-16 z-10"
+                >
                     <h2
                         class="text-xl font-semibold text-text-950 flex items-center gap-1"
                     >
@@ -75,8 +77,10 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
                 <ProfileStats name={profileData.name} client:load />
             </Container>
         </div>
-        <Container className="relative">
-            <SkewedHighlight className="absolute -top-16 -right-8 z-10">
+        <Container className="relative sm:mt-0 mt-22 grow">
+            <SkewedHighlight
+                className="absolute sm:-top-16 sm:-right-8 left-[50%] -translate-x-[50%] sm:translate-x-0 -top-20 w-max z-10"
+            >
                 <h2
                     class="text-xl font-semibold text-text-950 flex items-center gap-1"
                 >

@@ -48,7 +48,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
     return (
         <div
             {...props}
-            className={cn("relative flex items-center justify-center bg-background-900 rounded-sm overflow-hidden", props.className)}
+            className={cn("relative flex items-center justify-center bg-background-900 rounded-sm overflow-hidden ", props.className)}
             style={{ width: size.width, height: size.height }}
         >
             {loading && !error && (
@@ -65,7 +65,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                     alt={alt}
                     width={size.width}
                     height={size.height}
-                    className={`object-contain ${loading ? "hidden" : "block"} w-full h-full`}
+                    className={`sm:object-contain object-cover ${loading ? "hidden" : "block"} w-full h-full`}
                     onLoad={() => setLoading(false)}
                     onError={() => {
                         setLoading(false);

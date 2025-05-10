@@ -68,7 +68,7 @@ function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
 
     return (
         <div className="px-6 py-4 max-w-lg rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative">
-            <div className="grid grid-cols-[1fr_auto] gap-1 !w-full">
+            <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
@@ -96,9 +96,9 @@ function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-end gap-2 w-max">
-                    <WebsitePreview src={image} className="rounded-sm w-full grow" size={{ width: 150, height: 250 }} />
-                    <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
+                <div className="flex flex-col items-end gap-2 sm:w-max w-full">
+                    <WebsitePreview src={image} className="rounded-sm grow w-full" size={{ width: 150, height: 250 }} />
+                    <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
                         {
                             likeActionPending ? <LoaderCircle className="animate-spin" /> :
                                 <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} size={34} />
