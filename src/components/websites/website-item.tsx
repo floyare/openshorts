@@ -16,7 +16,7 @@ type WebsiteItemProps = {
     highlightedText?: string[]
 }
 
-const MAX_TAGS_TO_DISPLAY = 4;
+const MAX_TAGS_TO_DISPLAY = 3;
 
 function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
     const [likeActionPending, likeActionPendingSet] = useTransition()
