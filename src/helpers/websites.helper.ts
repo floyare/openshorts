@@ -23,7 +23,9 @@ export const DEFINED_TAGS = [
     "FONTS",
     "HOSTING",
     "CMS",
-    "API"
+    "API",
+    "AUDIO",
+    "VIDEO"
 ];
 
 export type SORTING_TYPE = "new" | "old" | "alphabet" | "likes"

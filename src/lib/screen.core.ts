@@ -48,6 +48,7 @@ export const getWebsiteScreen = async (url: string) => {
         );
         return file;
     } catch (error) {
+        debugLog("ERROR", "(getWebsiteScreen) failed due to: ", error)
         return null;
     }
 };

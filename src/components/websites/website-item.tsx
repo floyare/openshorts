@@ -97,7 +97,7 @@ function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2 sm:w-max w-full">
-                    <WebsitePreview src={image} className="rounded-sm grow w-full" size={{ width: 150, height: 250 }} />
+                    <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full" size={{ width: 150, height: 250 }} />
                     <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
                         {
                             likeActionPending ? <LoaderCircle className="animate-spin" /> :

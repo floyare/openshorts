@@ -6,7 +6,7 @@ export interface WebsiteType extends websites {
     name: string,
     url: string,
     description: string | null,
-    image: string,
+    image: string | null,
     category: categories,
     tags: string[],
     isLiked?: boolean,

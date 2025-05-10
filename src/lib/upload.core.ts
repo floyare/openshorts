@@ -80,11 +80,11 @@ export const uploadWebsite = async ({
     debugLog("DEBUG", "(uploadWebsite) Getting website screen...")
     const websiteScreen = await tryCatch(getWebsiteScreen(url)); // TODO: optimize getWebsiteScreen to work faster
     if (!websiteScreen.data || websiteScreen.error) {
-        throw new Error('Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
+        debugLog("ERROR", 'Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
     }
 
     debugLog("DEBUG", "(uploadWebsite) Uploading website screen...")
-    const uploadResult = await tryCatch(uploadFile({ fileObj: websiteScreen.data }));
+    const uploadResult = websiteScreen.error || !websiteScreen.data ? { data: { ufsUrl: null }, error: null } : await tryCatch(uploadFile({ fileObj: websiteScreen.data }));
     if (!uploadResult.data || uploadResult.error) {
         throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
     }
