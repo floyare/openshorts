@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import "../styles/global.css";
-//import { AnalyticsProvider } from "shibuitracker-client/client";
+import { AnalyticsProvider } from "shibuitracker-client/client";
 import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
 import { Toaster } from "@/components/ui/sonner";
@@ -30,8 +30,8 @@ import Background from "@/assets/bc.svg";
         />
         <Toaster position="top-right" richColors client:visible />
         <Navbar />
-        <!-- <AnalyticsProvider client:idle> -->
-        <slot />
-        <!-- </AnalyticsProvider> -->
+        <AnalyticsProvider client:idle>
+            <slot />
+        </AnalyticsProvider>
     </body>
 </html>
