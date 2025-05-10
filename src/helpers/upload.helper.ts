@@ -5,6 +5,8 @@ import { actions } from "astro:actions";
 
 let currentUploadUrl = { url: "", available: true }
 
+export const MAX_TAGS_PER_UPLOAD = 4
+
 export const uploadSchema = z.object({
     url: z.string().url({ message: "Invalid URL" })
         .refine(async (url: string): Promise<boolean> => {
@@ -23,5 +25,5 @@ export const uploadSchema = z.object({
             return exists === false
         }, { message: "Website already exists" }),
     description: z.string().min(10).max(200),
-    tags: z.string({ message: "Minimum 1 tag is required!" }).array().max(4).min(1),
+    tags: z.string({ message: "Minimum 1 tag is required!" }).array().max(MAX_TAGS_PER_UPLOAD).min(1),
 })

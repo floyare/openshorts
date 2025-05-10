@@ -63,8 +63,27 @@ export const DEFINED_TOPICS = {
 };
 
 export const DEFINED_TAGS = [
-    "AI", "ASSETS", "UI/UX"
-]
+    "AI",
+    "ASSETS",
+    "UI/UX",
+    "FRONTEND",
+    "BACKEND",
+    "GRAPHICS",
+    "TOOLS",
+    "PLATFORMS",
+    "LIBRARIES",
+    "FRAMEWORKS",
+    "INSPIRATION",
+    "COMMUNITY",
+    "LEARNING",
+    "DOCUMENTATION",
+    "TEMPLATES",
+    "ICONS",
+    "FONTS",
+    "HOSTING",
+    "CMS",
+    "API"
+];
 
 export type SORTING_TYPE = "new" | "old" | "alphabet" | "likes"
 
