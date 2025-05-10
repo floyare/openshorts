@@ -7,6 +7,7 @@ import sharp from "sharp";
 import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
+import { debugLog } from "./log";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -42,6 +43,8 @@ export const uploadWebsite = async ({
         throw new Error("Invalid tags provided");
     }
 
+    debugLog("DEBUG", "(uploadWebsite) Started uploading: ", { url, description, tags })
+
     const currentUser = await auth.api.getSession({
         headers: context.request.headers
     })
@@ -72,11 +75,15 @@ export const uploadWebsite = async ({
         throw new Error("Website already exists");
     }
 
+    debugLog("DEBUG", "(uploadWebsite) Website does not exists, working...")
+
+    debugLog("DEBUG", "(uploadWebsite) Getting website screen...")
     const websiteScreen = await tryCatch(getWebsiteScreen(url)); // TODO: optimize getWebsiteScreen to work faster
     if (!websiteScreen.data || websiteScreen.error) {
         throw new Error('Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
     }
 
+    debugLog("DEBUG", "(uploadWebsite) Uploading website screen...")
     const uploadResult = await tryCatch(uploadFile({ fileObj: websiteScreen.data }));
     if (!uploadResult.data || uploadResult.error) {
         throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));

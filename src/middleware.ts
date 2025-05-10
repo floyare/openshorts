@@ -8,8 +8,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
             headers: context.request.headers,
         })
 
-    //debugLog("DEBUG", "isAuthed", isAuthed);
-
     if (isAuthed) {
         context.locals.user = isAuthed.user;
         context.locals.session = isAuthed.session;

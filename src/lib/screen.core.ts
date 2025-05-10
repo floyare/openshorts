@@ -1,5 +1,6 @@
 import type { Browser } from "puppeteer-core";
 import puppeteer from "puppeteer-core";
+import { debugLog } from "./log";
 
 export const getWebsiteScreen = async (url: string) => {
     const BROWSERLESS_API_KEY = import.meta.env.BROWSERLESS_API_KEY;
@@ -7,9 +8,12 @@ export const getWebsiteScreen = async (url: string) => {
         throw new Error("No browserless api key");
     }
 
+    debugLog("DEBUG", "(getWebsiteScreen) Fetching - ", url)
+
     const browserWSEndpoint = `wss://production-sfo.browserless.io/chromium?token=${BROWSERLESS_API_KEY}`;
     let browser: Browser | null = null;
     try {
+        debugLog("DEBUG", "(getWebsiteScreen) Connecting")
         browser = await puppeteer.connect({ browserWSEndpoint });
         const page = await browser.newPage();
 
@@ -25,9 +29,15 @@ export const getWebsiteScreen = async (url: string) => {
 
         await page.setViewport({ width: 475, height: 812, isMobile: true });
 
-        await page.goto(url, { waitUntil: 'networkidle2' });
-        await new Promise(resolve => setTimeout(resolve, 1000 + Math.floor(Math.random() * 1000)));
+        debugLog("DEBUG", "(getWebsiteScreen) Navigating into url...")
 
+        await page.goto(url, { waitUntil: 'networkidle2' });
+
+        const delay = 1000 + Math.floor(Math.random() * 1000)
+        debugLog("DEBUG", "(getWebsiteScreen) Waiting for " + delay + "ms")
+        await new Promise(resolve => setTimeout(resolve, delay));
+
+        debugLog("DEBUG", "(getWebsiteScreen) Screenshoting...")
         const screenshot = await page.screenshot({ type: 'webp', encoding: 'binary' });
         await page.close();
 

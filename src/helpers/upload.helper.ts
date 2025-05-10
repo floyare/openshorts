@@ -1,5 +1,4 @@
 import { debugLog } from "@/lib/log";
-//import { doesWebsiteExists } from "@/lib/websites.core";
 import { z } from "astro/zod";
 import { actions } from "astro:actions";
 
@@ -18,8 +17,13 @@ export const uploadSchema = z.object({
 
             const isServer = typeof window === "undefined";
             debugLog("ACTION", "Checking if website exists", `(${isServer ? "SERVER" : "CLIENT"})`, url);
-            const exists: boolean | undefined = await (await actions.doesWebsiteExists({ url })).data
-            //isServer ? await doesWebsiteExists(url) : (await actions.doesWebsiteExists({ url })).data;
+            const exists: boolean | undefined = isServer
+                ? await (async () => {
+                    const { doesWebsiteExists } = await import("@/lib/websites.core")
+                    return await doesWebsiteExists(url)
+                })()
+                : (await actions.doesWebsiteExists({ url })).data;
+
 
             currentUploadUrl = { url: url, available: exists === false }
             return exists === false

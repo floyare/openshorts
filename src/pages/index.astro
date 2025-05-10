@@ -2,8 +2,6 @@
 export const prerender = false;
 
 import Layout from "./layout.astro";
-import { PackageOpen } from "lucide-react";
-import SkewedHighlight from "@/components/skewed-highlight";
 import WebsiteBrowser from "@/components/website-browser";
 import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
@@ -11,7 +9,6 @@ import type { User } from "better-auth";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 
-// BUG: Fix the isLiked not properly fetched because there is no context
 const websites = await searchWebsites({
     sorting: "new",
     headers: Astro.request.headers,
@@ -23,9 +20,6 @@ debugLog("INFO", "Session", Astro.locals.user);
 <Layout subtitle="test">
     <main class="flex flex-col items-center gap-8">
         <div class="flex flex-col gap-2 items-start">
-            <!-- <Container>
-                <h2 class="text-xl font-semibold text-text-500 flex items-center gap-1"><PackageOpen /> Recently added</h2>
-            </Container> -->
             <WebsiteBrowser
                 entryWebsites={websites.websites}
                 totalWebsites={websites.total}
