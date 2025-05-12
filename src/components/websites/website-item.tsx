@@ -11,14 +11,14 @@ import { debugLog } from "@/lib/log";
 import { authClient } from "@/lib/auth-client";
 import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
 
-type WebsiteItemProps = {
+interface WebsiteItemProps extends React.HTMLAttributes<HTMLDivElement> {
     website: WebsiteType,
     highlightedText?: string[]
 }
 
 const MAX_TAGS_TO_DISPLAY = 3;
 
-function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
+function WebsiteItem({ website, highlightedText = [], className, ...props }: WebsiteItemProps) {
     const [likeActionPending, likeActionPendingSet] = useTransition()
     const [isWebsiteLiked, isWebsiteLikedSet] = useState(website.isLiked)
     const [likes, likesSet] = useState(website.likesCount ?? 0)
@@ -67,7 +67,7 @@ function WebsiteItem({ website, highlightedText = [] }: WebsiteItemProps) {
     }
 
     return (
-        <div className="px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative">
+        <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full">
                 <div className="flex flex-col gap-2 w-full bg-blue-400">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">

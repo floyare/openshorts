@@ -38,7 +38,7 @@ export default function BestUploads({ name }: Props) {
                 <div className="w-sm h-56 bg-gray-400 animate-pulse" />
                 <div className="w-sm h-56 bg-gray-400 animate-pulse" />
             </> : uploads?.map((website, idx) => (
-                <WebsiteItem website={website} key={idx} />
+                <WebsiteItem website={website} key={idx} className="!max-w-lg" />
             ))}
         </div>
     );

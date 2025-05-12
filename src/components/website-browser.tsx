@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDown01, ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Compass, FileQuestion, Heart, Search, SortAsc, SortDesc, Tags } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Compass, FileQuestion, Heart, Search, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
