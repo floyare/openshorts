@@ -84,9 +84,9 @@ const MyUploads = () => {
     return (
         <ul className="flex flex-col gap-2">
             {isLoading ? <>
-                <div className="w-sm h-24 bg-gray-400 animate-pulse" />
-                <div className="w-sm h-24 bg-gray-400 animate-pulse" />
-                <div className="w-sm h-24 bg-gray-400 animate-pulse" />
+                <div className="w-xs h-16 bg-gray-400 animate-pulse" />
+                <div className="w-xs h-16 bg-gray-400 animate-pulse" />
+                <div className="w-xs h-16 bg-gray-400 animate-pulse" />
             </> :
                 <>
                     {slicedUploads?.map((website, idx) => (
@@ -95,7 +95,7 @@ const MyUploads = () => {
                                 <p className="inline-block truncate max-w-3xs">{website.url}</p>
                                 <p className="flex items-center gap-1"><Heart size={14} className="text-red-400" /> {website.likes ?? 0}</p>
                             </div>
-                            <Button variant={"secondary"} className="ml-auto" onClick={() => callDialog("edit-website")}><Edit /></Button>
+                            <Button variant={"secondary"} className="ml-auto" onClick={() => callDialog("edit-website", { url: website.url })}><Edit /></Button>
                         </li>
                     ))}
                     <PaginationControls />
