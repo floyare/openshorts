@@ -54,7 +54,7 @@ export const getMyUploads = async ({ headers }: { headers: Headers }) => {
 
     if (!currentUser) return []
 
-    await new Promise(resolve => setTimeout(resolve, 3500));
+    //await new Promise(resolve => setTimeout(resolve, 3500));
 
     const result = await getPrismaInstance().websites.findMany({
         where: {
@@ -62,7 +62,16 @@ export const getMyUploads = async ({ headers }: { headers: Headers }) => {
         }
     })
 
-    return result
+    const likes = await getLikeCountsForWebsites(getPrismaInstance(), result.map((w) => w.id))
+
+    debugLog("DEBUG", 'likes', likes)
+
+    return result.map((web) => {
+        return {
+            ...web,
+            likes: likes[web.id]
+        }
+    })
 }
 
 export const doesWebsiteExists = async (url: string) => {

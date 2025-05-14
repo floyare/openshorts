@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar.astro";
 import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
+import { Dialog } from "easy-dialogs";
 ---
 
 <html lang="en">
@@ -25,6 +26,7 @@ import Background from "@/assets/bc.svg";
         ]}
         {...props}
     >
+        <Dialog client:idle />
         <Background
             class={"fixed top-0 left-0 !w-full !h-full opacity-35 -z-10"}
         />

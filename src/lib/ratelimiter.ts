@@ -3,7 +3,7 @@ import { redis } from "./prisma";
 
 const ratelimit = new Ratelimit({
     redis: redis,
-    limiter: Ratelimit.tokenBucket(1, "15s", 5),
+    limiter: Ratelimit.tokenBucket(1, "3s", 5),
     prefix: "ops-ratelimit",
 });
 
