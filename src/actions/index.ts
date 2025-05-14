@@ -3,7 +3,7 @@ import { debugLog } from '@/lib/log';
 import { getBestUploads, getProfileStats } from '@/lib/profile.core';
 import { validateLimit } from '@/lib/ratelimiter';
 import { uploadWebsite } from '@/lib/upload.core';
-import { doesWebsiteExists, searchWebsites, toggleLikeWebsite } from '@/lib/websites.core';
+import { doesWebsiteExists, getMyUploads, searchWebsites, toggleLikeWebsite } from '@/lib/websites.core';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 
@@ -82,6 +82,13 @@ export const server = {
             const limit = await validateLimit(ctx.clientAddress)
             if (!limit.success) throw new Error("Ratelimited!")
             return await getBestUploads(input.name, ctx)
+        }
+    }),
+    getMyUploads: defineAction({
+        handler: async (input, ctx) => {
+            const limit = await validateLimit(ctx.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+            return await getMyUploads({ headers: ctx.request.headers })
         }
     })
 }

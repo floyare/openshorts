@@ -9,7 +9,14 @@ const ProfileStats = ({ name }: { name: string }) => {
             return data;
         });
 
-    const { data: stats, error, isLoading } = useSWR("stats-fetch", () => fetcher(name));
+    const { data: stats, error, isLoading } = useSWR("stats-fetch", () => fetcher(name), {
+        revalidateOnFocus: false,
+        revalidateOnMount: true,
+        revalidateOnReconnect: false,
+        refreshWhenOffline: false,
+        refreshWhenHidden: false,
+        refreshInterval: 0
+    });
 
     if (error) return (
         <p className="text-red-500 max-w-3xs break-words text-balance">

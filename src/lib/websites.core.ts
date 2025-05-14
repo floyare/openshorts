@@ -47,6 +47,24 @@ export const toggleLikeWebsite = async ({ websiteId, context }: { websiteId: str
     }
 }
 
+export const getMyUploads = async ({ headers }: { headers: Headers }) => {
+    const currentUser = await auth.api.getSession({
+        headers: headers
+    })
+
+    if (!currentUser) return []
+
+    await new Promise(resolve => setTimeout(resolve, 3500));
+
+    const result = await getPrismaInstance().websites.findMany({
+        where: {
+            created_by: currentUser.user.name
+        }
+    })
+
+    return result
+}
+
 export const doesWebsiteExists = async (url: string) => {
     const prisma = getPrismaInstance();
     return !!(

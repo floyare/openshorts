@@ -10,6 +10,9 @@ import SkewedHighlight from "@/components/skewed-highlight";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import BestUploads from "../../components/profile/best-uploads";
 import ProfileStats from "@/components/profile/profile-stats";
+import { getMyUploads } from "@/lib/websites.core";
+import MyUploads from "@/components/profile/my-uploads";
+import { Suspense } from "react";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
@@ -26,6 +29,10 @@ const profileData = await getPrismaInstance().user.findFirst({
 debugLog("DEBUG", "Profile data", profileData);
 
 if (!profileData) return Astro.redirect("/404?error=profile-not-found");
+
+// const myUploads = isOwnProfile
+//     ? await getMyUploads({ headers: Astro.request.headers })
+//     : [];
 ---
 
 <Layout
@@ -42,7 +49,7 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
                         class="text-xl font-semibold text-text-950 flex items-center gap-1"
                     >
                         <User />
-                        {isOwnProfile ? "My Profile" : "User Profile"}
+                        {isOwnProfile ? "My Profile" : "User's Profile"}
                     </h2>
                 </SkewedHighlight>
                 <div class="flex items-center gap-6">
@@ -76,6 +83,16 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
             <Container className="px-8 flex items-center justify-around gap-12">
                 <ProfileStats name={profileData.name} client:load />
             </Container>
+            {
+                isOwnProfile && (
+                    <Container>
+                        <h2>My uploads</h2>
+                        <ul>
+                            <MyUploads client:load />
+                        </ul>
+                    </Container>
+                )
+            }
         </div>
         <Container className="relative sm:mt-0 mt-22 grow">
             <SkewedHighlight

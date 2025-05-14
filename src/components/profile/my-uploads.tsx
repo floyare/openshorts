@@ -1,19 +1,15 @@
-import WebsiteItem from "@/components/websites/website-item";
+
 import { actions } from "astro:actions";
 import useSWR from "swr";
 
-type Props = {
-    name: string;
-};
-
-export default function BestUploads({ name }: Props) {
-    const fetcher = (name: string) =>
-        actions.getBestUploads({ name }).then(({ data, error }) => {
+const MyUploads = () => {
+    const fetcher = () =>
+        actions.getMyUploads().then(({ data, error }) => {
             if (error) throw error;
             return data;
         });
 
-    const { data: uploads, error, isLoading } = useSWR("uploads-fetch", () => fetcher(name), {
+    const { data: uploads, error, isLoading } = useSWR("my-uploads-fetch", () => fetcher(), {
         revalidateOnFocus: false,
         revalidateOnMount: true,
         revalidateOnReconnect: false,
@@ -45,8 +41,10 @@ export default function BestUploads({ name }: Props) {
                 <div className="w-sm h-56 bg-gray-400 animate-pulse" />
                 <div className="w-sm h-56 bg-gray-400 animate-pulse" />
             </> : uploads?.map((website, idx) => (
-                <WebsiteItem website={website} key={idx} className="!max-w-lg" />
+                <p>{website.url}</p>
             ))}
         </div>
     );
 }
+
+export default MyUploads;
