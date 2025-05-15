@@ -67,7 +67,7 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
                         <p className="text-red-500 w-full text-balance">Are you sure you want to remove this website? This action is irreversible!</p>
                         <Input placeholder="Enter full website url..." onChange={(e) => e.target.value === additionalProps.url ? canRemoveWebsiteSet(true) : canRemoveWebsiteSet(false)} />
                         <div className="flex gap-2 items-center">
-                            <Button variant={"ghost"}>Cancel</Button>
+                            <Button variant={"ghost"} onClick={() => deleteConfirmationShownSet(false)}>Cancel</Button>
                             <Button variant={"destructive"} disabled={!canRemoveWebsite || removingPending} onClick={handleRemove}>{
                                 removingPending ? <><LoaderCircle className="animate-spin" /> Removing...</> : <><Trash /> Remove website</>
                             }</Button>
