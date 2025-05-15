@@ -121,6 +121,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         <PaginationPrevious
                             onClick={() => setPage((p) => Math.max(1, p - 1))}
                             isDisabled={page <= 1 || websitesLoading}
+                            aria-label="Previous page"
+                            title="Previous page"
                         />
                     </PaginationItem>
                     {Array.from({ length: totalPages }, (_, i) => (
@@ -139,6 +141,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         <PaginationNext
                             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                             isDisabled={page >= totalPages || websitesLoading}
+                            aria-label="Next page"
+                            title="Next page"
                         />
                     </PaginationItem>
                 </PaginationContent>
@@ -150,7 +154,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1 relative">
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
                 <div className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5">
-                    <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
+                    <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
                     <div className="flex flex-col space-y-1">
                         <Input
                             type="text"
@@ -207,7 +211,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 </SkewedHighlight>
                 <div className="bg-white border-background-900 border-[1px] rounded-sm sm:absolute sm:top-4 sm:right-4 relative">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
-                        <SelectTrigger size="default" className="text-lg w-full">
+                        <SelectTrigger size="default" className="text-lg w-full" type="button">
                             <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
                         </SelectTrigger>
                         <SelectContent>

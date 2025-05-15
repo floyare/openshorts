@@ -56,6 +56,8 @@ const MyUploads = ({ name }: { name: string }) => {
                         <PaginationPrevious
                             onClick={() => setPage((p) => Math.max(1, p - 1))}
                             isDisabled={page <= 1}
+                            aria-label="Previous page"
+                            title="Previous page"
                         />
                     </PaginationItem>
                     {Array.from({ length: totalPages }, (_, i) => (
@@ -74,6 +76,8 @@ const MyUploads = ({ name }: { name: string }) => {
                         <PaginationNext
                             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                             isDisabled={page >= totalPages}
+                            aria-label="Next page"
+                            title="Next page"
                         />
                     </PaginationItem>
                 </PaginationContent>
