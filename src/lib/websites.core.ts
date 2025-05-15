@@ -93,6 +93,25 @@ export const fetchWebsiteTags = async () => {
     );
 };
 
+export const removeWebsite = async ({ headers, url }: { headers: Headers, url: string }) => {
+    const currentUser = await auth.api.getSession({
+        headers: headers
+    })
+
+    if (!currentUser) return false
+
+    const result = await tryCatch(getPrismaInstance().websites.delete({
+        where: {
+            url: url,
+            created_by: currentUser.user.name
+        }
+    }))
+
+    debugLog("SUCCESS", 'r', result)
+
+    return !!result.data || !(!!result.error)
+}
+
 export async function getLikeCountsForWebsites(prisma: ReturnType<typeof getPrismaInstance>, websiteIds: string[]) {
     if (websiteIds.length === 0) return {};
     const likes = await prisma.user_likes.groupBy({
