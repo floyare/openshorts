@@ -14,7 +14,7 @@ export default defineConfig({
 
   integrations: [react()],
 
-  adapter: vercel(),//node({mode: "standalone"}),
+  adapter: node({mode: "standalone"}),
   experimental: {
     fonts: [{
         provider: fontProviders.google(),

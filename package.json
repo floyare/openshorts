@@ -55,7 +55,7 @@
             "@prisma/engines",
             "esbuild",
             "prisma",
-            "puppeteer",
+            "puppeteer-core",
             "sharp"
         ]
     },

@@ -5,7 +5,6 @@ import { useState, useTransition } from "react"
 import { Input } from "../ui/input"
 import { actions } from "astro:actions"
 import { toast } from "sonner"
-import { tryCatch } from "@/lib/utils"
 
 type EditDialogWebsiteProps = {
     onClose: (val: boolean) => void
@@ -23,7 +22,6 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
     const handlePreviewUpdate = () => {
         setUpdatingransition(async () => {
             const result = await actions.updateWebsitePreview({ url: additionalProps.url })
-            console.log('rrr', result)
             if (result.error) {
                 toast.error(result.error.message)
                 return

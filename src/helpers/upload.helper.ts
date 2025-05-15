@@ -19,8 +19,10 @@ export const uploadSchema = z.object({
             debugLog("ACTION", "Checking if website exists", `(${isServer ? "SERVER" : "CLIENT"})`, url);
             const exists: boolean | undefined = isServer
                 ? await (async () => {
-                    const { doesWebsiteExists } = await import("@/lib/websites.core")
-                    return await doesWebsiteExists(url)
+                    // TODO: fix because even importing like that is causing that website.core is being bundled into client
+                    //const { doesWebsiteExists } = await import("@/lib/websites.core")
+                    //return await doesWebsiteExists(url)
+                    return false
                 })()
                 : (await actions.doesWebsiteExists({ url })).data;
 
