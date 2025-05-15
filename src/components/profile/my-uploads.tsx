@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useDialogManager } from "easy-dialogs"
 import { dialogs } from "@/lib/dialogs";
 
-const MyUploads = () => {
+const MyUploads = ({ name }: { name: string }) => {
     const fetcher = () =>
         actions.getMyUploads().then(({ data, error }) => {
             if (error) throw error;
@@ -19,7 +19,7 @@ const MyUploads = () => {
     const [page, setPage] = useState(1)
     const { callDialog } = useDialogManager(dialogs)
 
-    const { data: uploads, error, isLoading } = useSWR("my-uploads-fetch", () => fetcher(), {
+    const { data: uploads, error, isLoading, mutate } = useSWR("my-uploads-fetch", () => fetcher(), {
         revalidateOnFocus: false,
         revalidateOnMount: true,
         revalidateOnReconnect: false,
@@ -95,7 +95,12 @@ const MyUploads = () => {
                                 <p className="inline-block truncate max-w-3xs">{website.url}</p>
                                 <p className="flex items-center gap-1"><Heart size={14} className="text-red-400" /> {website.likes ?? 0}</p>
                             </div>
-                            <Button variant={"secondary"} className="ml-auto" onClick={() => callDialog("edit-website", { url: website.url })}><Edit /></Button>
+                            <Button variant={"secondary"} className="ml-auto" onClick={async () => {
+                                const result = await callDialog("edit-website", { url: website.url })
+                                if (result) {
+                                    mutate((up) => up?.filter((p) => p.id !== website.url))
+                                }
+                            }}><Edit /></Button>
                         </li>
                     ))}
                     <PaginationControls />

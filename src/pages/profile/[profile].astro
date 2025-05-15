@@ -90,7 +90,7 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
                             <UploadCloud /> My uploads
                         </h2>
                         <ul>
-                            <MyUploads client:load />
+                            <MyUploads name={profileData.name} client:load />
                         </ul>
                     </Container>
                 )

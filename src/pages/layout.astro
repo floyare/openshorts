@@ -30,7 +30,7 @@ import { Dialog } from "easy-dialogs";
         <Background
             class={"fixed top-0 left-0 !w-full !h-full opacity-35 -z-10"}
         />
-        <Toaster position="top-right" richColors client:visible />
+        <Toaster position="top-right" richColors client:idle />
         <Navbar />
         <AnalyticsProvider client:idle>
             <slot />

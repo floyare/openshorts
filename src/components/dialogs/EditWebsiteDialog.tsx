@@ -22,7 +22,6 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
     const handleRemove = async () => {
         if (!canRemoveWebsite) return
 
-        // TODO: toast not working
         setTransition(async () => {
             const result = await actions.removeWebsite({ url: additionalProps.url })
             console.log("RRRR", result)
