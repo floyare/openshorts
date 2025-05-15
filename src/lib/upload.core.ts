@@ -14,8 +14,12 @@ const utapi = new UTApi({
 });
 
 export async function uploadFile({ fileObj }: { fileObj: File }) {
-    const fileId = uuidv7()
+    const fileId = fileObj.name.includes('.')
+        ? fileObj.name.split('.').slice(0, -1).join('.')
+        : fileObj.name;
     const buffer = await fileObj.arrayBuffer();
+
+    debugLog("ACTION", "Started uploading file with fileId:", fileId)
 
     const optimizedBuffer = await sharp(Buffer.from(buffer))
         .webp({ quality: 30 })
@@ -23,12 +27,18 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
         .toFormat("webp")
         .toBuffer();
 
-    const file = new UTFile([optimizedBuffer], `${fileObj.name}`, {
+    debugLog("ACTION", "Deleting old file..")
+    const deleteResult = await utapi.deleteFiles(fileId, { keyType: "customId" });
+
+    debugLog("SUCCESS", 'deleted?: ', deleteResult.success, deleteResult.deletedCount)
+
+    const file = new UTFile([optimizedBuffer], fileObj.name, {
         customId: fileId,
         type: "image/webp",
     });
 
-    const uploadResult = await (await utapi.uploadFiles([file])).at(0)
+    debugLog("ACTION", "Uploading...")
+    const uploadResult = await utapi.uploadFiles(new File([file], fileObj.name))
     if (uploadResult?.error) {
         throw new Error("Failed to upload file: " + uploadResult.error.message);
     }

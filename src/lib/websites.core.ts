@@ -6,6 +6,10 @@ import type { SearchWebsitesResult } from "@/types/website";
 import { formatTagsWithCount, PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
+import { differenceInHours } from "date-fns"
+import { getWebsiteScreen } from "./screen.core";
+import { uploadFile } from "./upload.core";
+import { UTApi } from "uploadthing/server";
 
 export const toggleLikeWebsite = async ({ websiteId, context }: { websiteId: string, context: ActionAPIContext }) => {
     debugLog("ACTION", 'Executing like action', websiteId)
@@ -74,6 +78,47 @@ export const getMyUploads = async ({ headers }: { headers: Headers }) => {
     })
 }
 
+export const updateWebsitePreview = async ({ headers, url }: { headers: Headers, url: string }) => {
+    const currentUser = await auth.api.getSession({
+        headers: headers
+    })
+
+    if (!currentUser) throw new Error("User not logged in")
+
+    const result = await getPrismaInstance().websites.findFirst({
+        where: {
+            url: url,
+            created_by: currentUser.user.name
+        }
+    })
+
+    if (!(!!result)) throw new Error("You don't have access to this website.")
+
+    if (differenceInHours(new Date(), result.last_preview_update) < 24) throw new Error("You can update this website's preview once a day.")
+
+    debugLog("DEBUG", "(updateWebsitePreview) Getting website screen...")
+    const websiteScreen = await tryCatch(getWebsiteScreen(url));
+    if (!websiteScreen.data || websiteScreen.error) {
+        debugLog("ERROR", 'Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
+        throw new Error("Failed while getting website screen. Try again later")
+    }
+
+    debugLog("DEBUG", "(updateWebsitePreview) Uploading website screen...")
+    const uploadResult = websiteScreen.error || !websiteScreen.data ? { data: { ufsUrl: null }, error: null } : await tryCatch(uploadFile({ fileObj: websiteScreen.data }));
+    if (!uploadResult.data || uploadResult.error) throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
+
+    await getPrismaInstance().websites.update({
+        where: {
+            url: url,
+            created_by: currentUser.user.name
+        },
+        data: {
+            image: uploadResult.data.ufsUrl,
+            last_preview_update: new Date()
+        }
+    })
+}
+
 export const doesWebsiteExists = async (url: string) => {
     const prisma = getPrismaInstance();
     return !!(
@@ -106,6 +151,12 @@ export const removeWebsite = async ({ headers, url }: { headers: Headers, url: s
             created_by: currentUser.user.name
         }
     }))
+
+    const utapi = new UTApi({
+        token: import.meta.env.UPLOADTHING_TOKEN,
+    });
+
+    await utapi.deleteFiles(new URL(url).hostname, { keyType: "customId" });
 
     debugLog("SUCCESS", 'r', result)
 

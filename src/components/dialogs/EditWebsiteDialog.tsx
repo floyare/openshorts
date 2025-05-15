@@ -5,6 +5,7 @@ import { useState, useTransition } from "react"
 import { Input } from "../ui/input"
 import { actions } from "astro:actions"
 import { toast } from "sonner"
+import { tryCatch } from "@/lib/utils"
 
 type EditDialogWebsiteProps = {
     onClose: (val: boolean) => void
@@ -16,12 +17,27 @@ type EditDialogWebsiteProps = {
 const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps) => {
     const [deleteConfirmationShown, deleteConfirmationShownSet] = useState(false)
     const [canRemoveWebsite, canRemoveWebsiteSet] = useState(false)
-    const [isPending, setTransition] = useTransition()
+    const [removingPending, setRemovingTransition] = useTransition()
+    const [updatingPending, setUpdatingransition] = useTransition()
+
+    const handlePreviewUpdate = () => {
+        setUpdatingransition(async () => {
+            const result = await actions.updateWebsitePreview({ url: additionalProps.url })
+            console.log('rrr', result)
+            if (result.error) {
+                toast.error(result.error.message)
+                return
+            }
+
+            toast.success("Website preview updated!")
+            onClose(true)
+        })
+    }
 
     const handleRemove = async () => {
         if (!canRemoveWebsite) return
 
-        setTransition(async () => {
+        setRemovingTransition(async () => {
             const result = await actions.removeWebsite({ url: additionalProps.url })
 
             if (result.data) {
@@ -42,7 +58,9 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
                 </div>
                 <div className="flex flex-col gap-2 my-4">
                     <p>Currently editing: {additionalProps.url}</p>
-                    <Button><RefreshCcw /> Update website's preview</Button>
+                    <Button onClick={handlePreviewUpdate} disabled={updatingPending}>{
+                        updatingPending ? <><LoaderCircle className="animate-spin" /> Updating...</> : <><RefreshCcw /> Update website's preview</>
+                    }</Button>
                     <Button variant={"destructive"} onClick={() => deleteConfirmationShownSet(true)} disabled={deleteConfirmationShown}><Trash /> Remove website</Button>
 
                     {deleteConfirmationShown && <div className="space-y-3 mt-6 border-[1px] border-red-500 p-3 rounded-sm">
@@ -50,8 +68,8 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
                         <Input placeholder="Enter full website url..." onChange={(e) => e.target.value === additionalProps.url ? canRemoveWebsiteSet(true) : canRemoveWebsiteSet(false)} />
                         <div className="flex gap-2 items-center">
                             <Button variant={"ghost"}>Cancel</Button>
-                            <Button variant={"destructive"} disabled={!canRemoveWebsite || isPending} onClick={handleRemove}>{
-                                isPending ? <><LoaderCircle className="animate-spin" /> Removing...</> : <><Trash /> Remove website</>
+                            <Button variant={"destructive"} disabled={!canRemoveWebsite || removingPending} onClick={handleRemove}>{
+                                removingPending ? <><LoaderCircle className="animate-spin" /> Removing...</> : <><Trash /> Remove website</>
                             }</Button>
                         </div>
                     </div>}

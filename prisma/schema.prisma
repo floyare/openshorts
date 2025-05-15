@@ -8,17 +8,18 @@ datasource db {
 }
 
 model websites {
-  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String
-  description String?
-  url         String       @unique
-  image       String?
-  category    categories
-  tags        String[]     @default([])
-  created_at  DateTime     @default(now()) @db.Timestamp(6)
-  created_by  String
-  user_likes  user_likes[]
-  user        User         @relation(fields: [created_by], references: [name], onDelete: Cascade, map: "created_by_key")
+  id                  String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String
+  description         String?
+  url                 String       @unique
+  image               String?
+  category            categories
+  tags                String[]     @default([])
+  created_at          DateTime     @default(now()) @db.Timestamp(6)
+  created_by          String
+  last_preview_update DateTime     @default(now()) @db.Timestamp(6)
+  user_likes          user_likes[]
+  user                User         @relation(fields: [created_by], references: [name], onDelete: Cascade, map: "created_by_key")
 }
 
 model User {
