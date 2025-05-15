@@ -190,8 +190,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         <h1 className="font-semibold text-xl">Make <u>openshorts</u> Go Global!</h1>
                     </div>
                     <div className="flex items-center gap-2 flex-wrap justify-center">
-                        <a href="https://github.com/floyare" target="_blank"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
-                        <a href="https://buymeacoffee.com/floyare" target="_blank"><Button variant={"secondary"}><Coffee size={20} /> Buy me a coffee!</Button></a>
+                        <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
+                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"}><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
                 </Container>
             </aside>

@@ -8,16 +8,34 @@ import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
+
+const TITLE = "openshorts.";
+const DESCRIPTION =
+    "Discover and share the best online tools and websites. Explore curated resources and contribute your favorites to our growing community.";
 ---
 
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
         <title>🪄 openshorts {subtitle ? ` - ${subtitle}` : ""}</title>
+        <meta name="description" content={DESCRIPTION} />
+        <link rel="canonical" href={Astro.url} />
+        <meta name="theme-color" content="#501be4" />
         <Font cssVariable="--font" preload />
+
+        <meta property="og:title" content={TITLE} />
+        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={Astro.url} />
+        <meta property="og:image" content="/og-bc.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={TITLE} />
+        <meta name="twitter:description" content={DESCRIPTION} />
+        <meta name="twitter:image" content="/og-bc.png" />
     </head>
     <body
         class:list={[
