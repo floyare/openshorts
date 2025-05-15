@@ -5,7 +5,6 @@ import { useState, useTransition } from "react"
 import { Input } from "../ui/input"
 import { actions } from "astro:actions"
 import { toast } from "sonner"
-import { tryCatch } from "@/lib/utils"
 
 type EditDialogWebsiteProps = {
     onClose: (val: boolean) => void
@@ -24,7 +23,7 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
 
         setTransition(async () => {
             const result = await actions.removeWebsite({ url: additionalProps.url })
-            console.log("RRRR", result)
+
             if (result.data) {
                 toast.success("Website removed!")
                 onClose(true)
