@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Compass, FileQuestion, Heart, Search, Tags } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, HeartPlus, Search, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
@@ -18,6 +18,7 @@ import { Checkbox } from "./ui/checkbox";
 import type { User } from "better-auth";
 import { toast } from "sonner";
 import SkewedHighlight from "./skewed-highlight";
+import { Button } from "./ui/button";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -147,40 +148,52 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
 
     return (
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1 relative">
-            <aside className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5 lg:col-span-1 col-span-4 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full">
-                <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
-                <div className="flex flex-col space-y-1">
-                    <Input
-                        type="text"
-                        placeholder="Includes phrase..."
-                        value={searchContent.search}
-                        className=""
-                        onChange={(e) =>
-                            searchContentSet((p) => ({
-                                ...p,
-                                search: e.target.value,
-                            }))
-                        }
-                    />
+            <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
+                <div className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5">
+                    <h3 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h3>
+                    <div className="flex flex-col space-y-1">
+                        <Input
+                            type="text"
+                            placeholder="Includes phrase..."
+                            value={searchContent.search}
+                            className=""
+                            onChange={(e) =>
+                                searchContentSet((p) => ({
+                                    ...p,
+                                    search: e.target.value,
+                                }))
+                            }
+                        />
+                    </div>
+                    <div className="flex flex-col space-y-1">
+                        <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
+                        <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} onValueChange={(value) => searchContentSet((p) => ({
+                            ...p,
+                            tags: value
+                        }))} value={searchContent.tags}>
+                            {
+                                tagsList.map((tag) => (
+                                    <ToggleGroupItem value={tag.name} key={tag.name} className={cn("flex items-center p-4 !flex-0")} disabled={tag.count <= 0}>
+                                        <p className="flex items-center gap-2">{tag.name} <span className="text-xs text-secondary-800">({tag.count})</span></p>
+                                    </ToggleGroupItem>
+                                ))
+                            }
+                        </ToggleGroup>
+                    </div>
+                    {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
+                        <Checkbox id="only-liked" checked={showOnlyLiked} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
+                    </Label>}
                 </div>
-                <div className="flex flex-col space-y-1">
-                    <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
-                    <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} onValueChange={(value) => searchContentSet((p) => ({
-                        ...p,
-                        tags: value
-                    }))} value={searchContent.tags}>
-                        {
-                            tagsList.map((tag) => (
-                                <ToggleGroupItem value={tag.name} key={tag.name} className={cn("flex items-center p-4 !flex-0")} disabled={tag.count <= 0}>
-                                    <p className="flex items-center gap-2">{tag.name} <span className="text-xs text-secondary-800">({tag.count})</span></p>
-                                </ToggleGroupItem>
-                            ))
-                        }
-                    </ToggleGroup>
-                </div>
-                {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
-                    <Checkbox id="only-liked" checked={showOnlyLiked} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
-                </Label>}
+                <Container className="bg-gradient-to-tr to-secondary-500/80 from-background-300 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
+                    <div className="flex flex-col items-center">
+                        <HeartPlus size={36} />
+                        <h1 className="font-semibold text-xl">Make <u>openshorts</u> Go Global!</h1>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap justify-center">
+                        <a href="https://github.com/floyare" target="_blank"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
+                        <a href="https://buymeacoffee.com/floyare" target="_blank"><Button variant={"secondary"}><Coffee size={20} /> Buy me a coffee!</Button></a>
+                    </div>
+                </Container>
             </aside>
             <Container
                 className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
