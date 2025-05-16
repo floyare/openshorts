@@ -6,6 +6,7 @@ import WebsiteBrowser from "@/components/website-browser";
 import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import type { User } from "better-auth";
+import { getWebsitesRecommendation } from "@/lib/ai.core";
 
 // TODO: font https://fonts.google.com/specimen/Dongle
 
@@ -15,6 +16,11 @@ const websites = await searchWebsites({
 });
 
 debugLog("INFO", "Session", Astro.locals.user);
+
+// const b = await getWebsitesRecommendation({
+//     content: "i want websites simmilar to facebook",
+// });
+// debugLog("SUCCESS", "ai:", b);
 ---
 
 <Layout subtitle="Browse websites">
