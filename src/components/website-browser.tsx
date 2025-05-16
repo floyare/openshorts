@@ -214,7 +214,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 </div>}
                 <div className="bg-white border-background-900 border-[1px] rounded-sm sm:absolute sm:top-4 sm:right-4 relative">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
-                        <SelectTrigger size="default" className="text-lg w-full" type="button" name="Sort by">
+                        <SelectTrigger size="default" className="text-lg w-full" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
                             <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
                         </SelectTrigger>
                         <SelectContent>
