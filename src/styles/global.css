@@ -7,7 +7,29 @@ html body[data-scroll-locked] {
     overflow: visible !important;
     margin-right: 0 !important;
     /* padding: unset !important; */
+}
 
+.shimmer-background {
+    background: linear-gradient(-45deg,
+            var(--color-primary-500) 40%,
+            var(--color-primary-600) 50%,
+            var(--color-primary-500) 60%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+
+    &:hover {
+        opacity: 0.80;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 @theme {

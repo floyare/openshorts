@@ -1,9 +1,11 @@
 import { uploadSchema } from '@/helpers/upload.helper';
+import { getWebsitesRecommendation } from '@/lib/ai.core';
 import { debugLog } from '@/lib/log';
 import { getBestUploads, getProfileStats } from '@/lib/profile.core';
 import { validateLimit } from '@/lib/ratelimiter';
 import { uploadWebsite } from '@/lib/upload.core';
 import { doesWebsiteExists, getMyUploads, removeWebsite, searchWebsites, toggleLikeWebsite, updateWebsitePreview } from '@/lib/websites.core';
+import type { WebsiteType } from '@/types/website';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 
@@ -109,6 +111,16 @@ export const server = {
             const limit = await validateLimit(ctx.clientAddress)
             if (!limit.success) throw new Error("Ratelimited!")
             return await updateWebsitePreview({ headers: ctx.request.headers, url: input.url })
+        }
+    }),
+    getWebsitesRecommendation: defineAction({
+        input: z.object({
+            content: z.string()
+        }),
+        handler: async (input, ctx) => {
+            const limit = await validateLimit(ctx.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+            return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers }) as WebsiteType[]
         }
     })
 }

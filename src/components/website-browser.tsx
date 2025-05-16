@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, HeartPlus, LoaderCircle, Search, Tags } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, HeartPlus, LoaderCircle, Search, Sparkles, Tags } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
@@ -19,6 +19,8 @@ import type { User } from "better-auth";
 import { toast } from "sonner";
 import SkewedHighlight from "./skewed-highlight";
 import { Button } from "./ui/button";
+import { useDialogManager } from "easy-dialogs";
+import { dialogs } from "@/lib/dialogs";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -53,6 +55,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
 
     const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({ searchContent: null, showOnlyLiked })
     const didMount = useRef(false);
+
+    const { callDialog } = useDialogManager(dialogs)
 
     useEffect(() => {
         const isSearchTheSame = JSON.stringify(previousSearch.current) === JSON.stringify({ searchContent, showOnlyLiked })
@@ -155,6 +159,12 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
                 <div className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5">
                     <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
+                    {/* <div className="border-[2px] flex flex-col justify-center items-center border-secondary-600 px-6 py-2 rounded-sm shadow-xl shadow-primary-500/30">
+                        <h3 className="flex items-center gap-2"><Sparkles className="text-primary-600 drop-shadow-lg drop-shadow-secondary-700/40" /> Try the <b className="text-secondary-500 font-semibold drop-shadow-lg drop-shadow-secondary-700/40">AI Search</b></h3>
+                    </div> */}
+                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 text-xl shimmer-background" onClick={() => callDialog("ai-search")}>
+                        <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40" /> Try the <b className="text-accent-600 font-semibold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
+                    </Button>
                     <div className="flex flex-col space-y-1">
                         <Input
                             type="text"

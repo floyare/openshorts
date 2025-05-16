@@ -2,24 +2,41 @@ import { GoogleGenAI } from "@google/genai"
 import getPrismaInstance from "./prisma"
 import { getLikeCountsForWebsites } from "./websites.core"
 import { debugLog } from "./log"
+import { auth } from "./auth"
 
 
-export const getWebsitesRecommendation = async ({ content }: { content: string }) => {
+export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
     const websites = await getPrismaInstance().websites.findMany({
         select: {
             id: true,
-            url: true,
+            name: true,
             description: true,
-            tags: true
+            url: true,
+            image: true,
+            tags: true,
+            created_by: true
         }
     })
 
     const websiteLikes = await getLikeCountsForWebsites(getPrismaInstance(), websites.map((w) => w.id))
 
+    const currentUser = await auth.api.getSession({
+        headers: headers
+    })
+
+    const userLikes = currentUser ? await getPrismaInstance().user_likes.findMany({
+        where: {
+            user_id: currentUser.user.id,
+            website_id: { in: websites.map((w) => w.id) }
+        },
+        select: { website_id: true }
+    }) : []
+
     const fullWebsites = websites.map((web) => {
         return {
             ...web,
-            likes: websiteLikes[web.id] ?? 0
+            isLiked: userLikes.map((l) => l.website_id).includes(web.id),
+            likesCount: websiteLikes[web.id] ?? 0
         }
     })
 
@@ -44,6 +61,8 @@ export const getWebsitesRecommendation = async ({ content }: { content: string }
             content
         ]
     })
+
+    debugLog("WARN", response.text)
 
     const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
     return JSON.parse(extractedJson ?? [])
