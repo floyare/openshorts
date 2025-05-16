@@ -1,5 +1,4 @@
 import { UTApi, UTFile } from "uploadthing/server";
-import { uuidv7 } from "uuidv7";
 import getPrismaInstance from "./prisma";
 import { getWebsiteScreen } from "./screen.core";
 import { capitalizeFirstLetter, tryCatch } from "./utils";

@@ -2,10 +2,45 @@
 export const prerender = false;
 import UploadForm from "@/components/upload/upload-form";
 import Layout from "./layout.astro";
+import { auth } from "@/lib/auth";
+import JoinUs from "../assets/join_us.svg";
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { LogIn } from "lucide-react";
+
+const currentUser = await auth.api.getSession({
+    headers: Astro.request.headers,
+});
 ---
 
 <Layout subtitle="Upload website">
     <main class="flex flex-col items-center gap-8">
-        <UploadForm client:idle />
+        {
+            currentUser ? (
+                <UploadForm client:idle />
+            ) : (
+                <Container className="bg-neutral-50 flex flex-col gap-8 items-center px-8 py-6">
+                    <JoinUs width={500} height={350} />
+                    <div class="text-center">
+                        <h1 class="text-3xl">
+                            Join the <b class="text-primary-500">openshorts.</b>{" "}
+                            Right now!
+                        </h1>
+                        <p class="text-neutral-800 text-balance">
+                            Share your goodies with others and explore what
+                            others shared just for you!
+                        </p>
+                    </div>
+                    <a href="/signin">
+                        <Button
+                            variant={"primary"}
+                            className="!px-6 !py-6 text-xl"
+                        >
+                            <LogIn /> Sign in
+                        </Button>
+                    </a>
+                </Container>
+            )
+        }
     </main>
 </Layout>
