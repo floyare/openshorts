@@ -53,5 +53,13 @@ const DESCRIPTION =
         <AnalyticsProvider client:idle>
             <slot />
         </AnalyticsProvider>
+        <footer
+            class="text-sm text-text-500 flex justify-center items-center divide-x divide-current"
+        >
+            <p class="px-2">
+                openshorts. {new Date().getFullYear()}
+            </p>
+            <a href="/tos" class="px-2"> Terms of Service </a>
+        </footer>
     </body>
 </html>
