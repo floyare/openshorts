@@ -69,11 +69,11 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     return (
         <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full">
-                <div className="flex flex-col gap-2 w-full bg-blue-400">
+                <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} target="_blank" className="flex items-center gap-4 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
-                        <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full bg-orange-500">
-                            <span className="truncate inline-block 2xl:!max-w-[7.5vw] !max-w-[12rem] bg-red-500">{highlight(name)}</span>
+                        <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full">
+                            <span className="truncate inline-block 2xl:!max-w-[7.5vw] !max-w-[12rem]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                     </a>
@@ -96,8 +96,8 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-end gap-2 sm:w-max w-full bg-green-300">
-                    <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full" size={{ width: 120, height: 200 }} />
+                <div className="flex flex-col items-end gap-2 sm:w-max w-full">
+                    <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
                     <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
                         {
                             likeActionPending ? <LoaderCircle className="animate-spin" /> :

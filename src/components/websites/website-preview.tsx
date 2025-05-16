@@ -68,7 +68,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                         alt={alt}
                         width={size.width}
                         height={size.height}
-                        className={`sm:object-contain object-cover ${loading ? "hidden" : "block"} w-full h-full cursor-zoom-in`}
+                        className={`sm:object-contain object-cover ${loading ? "hidden" : "block"} w-full h-full cursor-zoom-in overflow-hidden rounded-sm`}
                         onLoad={() => setLoading(false)}
                         onError={() => {
                             setLoading(false);
