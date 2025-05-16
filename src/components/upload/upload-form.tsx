@@ -90,6 +90,7 @@ const UploadForm = () => {
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>
                         </div>
                     )}
+                    <p className="text-sm text-center text-neutral-700">By clicking "Upload" button, you agree with our <a href="/tos" className="font-bold underline">Terms of Service</a>.</p>
                     <Button type="submit" variant={"primary"} disabled={isSubmitting}>{isSubmitting ? <><LoaderCircle className="animate-spin" /> Uploading...</> : <><UploadCloud /> Upload</>}</Button>
                 </form>
             </FormProvider>
