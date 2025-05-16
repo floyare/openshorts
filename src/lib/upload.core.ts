@@ -7,6 +7,7 @@ import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
 import { debugLog } from "./log";
+import { isUserBanned } from "./user.core";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -60,6 +61,9 @@ export const uploadWebsite = async ({
 
     if (!currentUser?.user) throw new Error("User not logged in")
 
+    const isBanned = await isUserBanned({ currentUser: currentUser.user })
+    if (!!isBanned) throw new Error("Your account is banned.")
+
     // await new Promise(resolve => setTimeout(resolve, 2000));
     // throw new Error("test")
 
@@ -87,7 +91,7 @@ export const uploadWebsite = async ({
     debugLog("DEBUG", "(uploadWebsite) Website does not exists, working...")
 
     debugLog("DEBUG", "(uploadWebsite) Getting website screen...")
-    const websiteScreen = await tryCatch(getWebsiteScreen(url)); // TODO: optimize getWebsiteScreen to work faster
+    const websiteScreen = await tryCatch(getWebsiteScreen(url));
     if (!websiteScreen.data || websiteScreen.error) {
         debugLog("ERROR", 'Failed while getting website screen: ' + (websiteScreen.error?.message ?? "data empty"));
     }

@@ -10,6 +10,7 @@ import { differenceInHours } from "date-fns"
 import { getWebsiteScreen } from "./screen.core";
 import { uploadFile } from "./upload.core";
 import { UTApi } from "uploadthing/server";
+import { isUserBanned } from "./user.core";
 
 export const toggleLikeWebsite = async ({ websiteId, context }: { websiteId: string, context: ActionAPIContext }) => {
     debugLog("ACTION", 'Executing like action', websiteId)
@@ -84,6 +85,9 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
     })
 
     if (!currentUser) throw new Error("User not logged in")
+
+    const isBanned = await isUserBanned({ currentUser: currentUser.user })
+    if (!!isBanned) throw new Error("Your account is banned.")
 
     const result = await getPrismaInstance().websites.findFirst({
         where: {

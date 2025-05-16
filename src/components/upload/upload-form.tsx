@@ -84,7 +84,7 @@ const UploadForm = () => {
                         {errors.tags && <span className="text-red-500">{errors.tags.message}</span>}
                     </div>
 
-                    {errors.root && <span className="text-red-500">{errors.root.message}. Wait a while and try again!</span>}
+                    {errors.root && <span className="text-red-500">{errors.root.message}</span>}
                     {isSubmitSuccessful && !errors.root && (
                         <div className="text-green-700 bg-green-300/70 p-3 rounded-md border-[1px] border-green-500">
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>

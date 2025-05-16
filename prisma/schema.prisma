@@ -18,23 +18,25 @@ model websites {
   created_at          DateTime     @default(now()) @db.Timestamp(6)
   created_by          String
   last_preview_update DateTime     @default(now()) @db.Timestamp(6)
+  hidden              Boolean      @default(false)
   user_likes          user_likes[]
   user                User         @relation(fields: [created_by], references: [name], onDelete: Cascade, map: "created_by_key")
 }
 
 model User {
-  id            String       @id
-  name          String       @unique
-  email         String       @unique
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  role          user_role    @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-  user_likes    user_likes[]
-  websites      websites[]
+  id             String       @id
+  name           String       @unique
+  email          String       @unique
+  emailVerified  Boolean
+  image          String?
+  createdAt      DateTime
+  updatedAt      DateTime
+  role           user_role    @default(USER)
+  banned_details Json         @default("[]") @db.Json
+  accounts       Account[]
+  sessions       Session[]
+  user_likes     user_likes[]
+  websites       websites[]
 
   @@map("user")
 }
