@@ -1,10 +1,17 @@
+//import { doesWebsiteExists } from './../lib/websites.core';
 import { debugLog } from "@/lib/log";
 import { z } from "astro/zod";
 import { actions } from "astro:actions";
 
 let currentUploadUrl = { url: "", available: true }
 
+let doesWebsiteExists: undefined | ((url: string) => Promise<boolean>)
+
 export const MAX_TAGS_PER_UPLOAD = 4
+
+if (import.meta.env.SSR) {
+    doesWebsiteExists = (await import("@/lib/websites.core")).doesWebsiteExists;
+}
 
 export const uploadSchema = z.object({
     url: z.string().url({ message: "Invalid URL" })
@@ -19,10 +26,9 @@ export const uploadSchema = z.object({
             debugLog("ACTION", "Checking if website exists", `(${isServer ? "SERVER" : "CLIENT"})`, url);
             const exists: boolean | undefined = isServer
                 ? await (async () => {
-                    // TODO: fix because even importing like that is causing that website.core is being bundled into client
-                    //const { doesWebsiteExists } = await import("@/lib/websites.core")
-                    //return await doesWebsiteExists(url)
-                    return false
+                    debugLog("WARN", 'Running doesWebsiteExists on the server!')
+                    if (!doesWebsiteExists) throw new Error('Cannot call server logic on client');
+                    return await doesWebsiteExists(url)
                 })()
                 : (await actions.doesWebsiteExists({ url })).data;
 
