@@ -118,7 +118,7 @@ export const server = {
             content: z.string()
         }),
         handler: async (input, ctx) => {
-            const limit = await validateLimit(ctx.clientAddress)
+            const limit = await validateLimit(ctx.clientAddress, 4)
             if (!limit.success) throw new Error("Ratelimited!")
             return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers }) as WebsiteType[]
         }

@@ -4,7 +4,7 @@ import { getLikeCountsForWebsites } from "./websites.core"
 import { debugLog } from "./log"
 import { auth } from "./auth"
 
-
+// TODO: add daily limit
 export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
     const websites = await getPrismaInstance().websites.findMany({
         select: {

@@ -7,4 +7,4 @@ const ratelimit = new Ratelimit({
     prefix: "ops-ratelimit",
 });
 
-export const validateLimit = async (address: string) => await ratelimit.limit(address)
+export const validateLimit = async (address: string, rate: number = 1) => await ratelimit.limit(address, { rate: rate })

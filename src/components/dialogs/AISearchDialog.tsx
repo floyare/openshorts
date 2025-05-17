@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import WebsiteItem from "../websites/website-item"
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Dialog, DialogContent } from "../ui/dialog"
+import { debugLog } from "@/lib/log"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -38,7 +39,9 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
 
         searchingTransitionSet(async () => {
             const result = await actions.getWebsitesRecommendation({ content: debouncedSearch })
+            debugLog("ACTION", result)
             if (result.error) {
+                debugLog("ERROR", result)
                 searchErrorSet(result.error.message)
                 websitesResultSet([])
                 return
@@ -73,7 +76,7 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                         {isSearching && <div className="absolute inset-0 z-10 w-[100%] h-[100%] bg-background-700/60 animate-pulse" ref={animationParent} />}
 
                         {!isSearching && websitesResult.length <= 0 ? (
-                            debouncedSearch.length > 0 ? (
+                            debouncedSearch.length > 0 && !searchError ? (
                                 <div className="flex justify-center">
                                     <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><CircleHelp /> No results! Try changing your requirements.</p>
                                 </div>
