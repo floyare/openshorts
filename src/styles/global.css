@@ -35,6 +35,7 @@ html body[data-scroll-locked] {
 
 @theme {
     --animate-fadein: fadeIn 1s ease-in-out forwards;
+    --animate-levitate: levitate 2s ease-in-out infinite;
 
     @keyframes fadeIn {
         0% {
@@ -45,6 +46,19 @@ html body[data-scroll-locked] {
             opacity: 1;
         }
     }
+
+    @keyframes levitate {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
 
     --color-text-50: rgb(9, 2, 23);
     --color-text-100: rgb(19, 5, 46);

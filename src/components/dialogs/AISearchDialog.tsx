@@ -1,4 +1,4 @@
-import { LoaderCircle, Search, Sparkles, X } from "lucide-react"
+import { Bug, CircleHelp, List, LoaderCircle, Search, Sparkles, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
@@ -22,14 +22,28 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     const [searchInput, searchInputSet] = useState("")
     const debouncedSearch = useDebounce(searchInput, 1000)
 
-    const [websitesResult, websitesResultSet] = useState<WebsiteType[]>([])
+    const [websitesResult, websitesResultSet] = useState<WebsiteType[]>([
+        /*{ "id": "f1822ee9-ee6b-4fb6-ae0f-9a7b25c0b040", "name": "Cleanup", "description": "Use cleanup.pictures to remove unwanted objects, people, or defects. ", "url": "https://cleanup.pictures/", "image": null, "tags": ["AI", "TOOLS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
+        { "id": "ef3cfd64-96f0-4cd3-aac9-19e517ef6667", "name": "Wp", "description": "wupekczek2", "url": "https://wp.pl", "image": null, "tags": ["ASSETS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
+        { "id": "874baa09-ab85-4f36-a19b-a4c56e4402c8", "name": "Devshorts.vercel", "description": "devshorts21203", "url": "https://devshorts.vercel.app", "image": "https://0gua24aj2l.ufs.sh/f/a4haveHUkL0rrmhkeqR16NyhMJbBcmZFYvs8nOekIxERXVQt", "tags": ["ASSETS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
+        { "id": "43838e9e-8077-4c8a-b3f3-a16c8fc5bc16", "name": "Videezy", "description": "Free HD Stock Video Footage", "url": "https://videezy.com/", "image": "https://0gua24aj2l.ufs.sh/f/a4haveHUkL0rtSoOI4vuQrnwoTbgE9GLR5MvWdXNePClpVk0", "tags": ["LIBRARIES", "ASSETS", "VIDEO"], "created_by": "floyare", "isLiked": false, "likesCount": 0 }
+        */
+    ])
     const [isSearching, searchingTransitionSet] = useTransition()
+    const [searchError, searchErrorSet] = useState<string | null>(null)
 
     useEffect(() => {
         if (debouncedSearch.length <= 0) return
+        searchErrorSet(null)
 
         searchingTransitionSet(async () => {
             const result = await actions.getWebsitesRecommendation({ content: debouncedSearch })
+            if (result.error) {
+                searchErrorSet(result.error.message)
+                websitesResultSet([])
+                return
+            }
+
             websitesResultSet(result.data ?? [])
         })
     }, [debouncedSearch])
@@ -39,38 +53,46 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     return (
         <Dialog open onOpenChange={onClose}>
             {/* // <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[1001] grid place-items-center-safe transition-all"> */}
-            <DialogContent>
-                <Container className="!bg-background-950 overflow-hidden px-6 m-4 h-fit">
+            <DialogContent className="">
+                <Container className="!bg-background-950 overflow-hidden px-6 h-fit relative">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>
                         <div>
-                            <h2 className="text-3xl text-white font-bold mt-2 flex flex-col items-center gap-1"><Sparkles size={42} className="relative text-accent-500" /> Try searching with AI</h2>
+                            <h2 className="text-3xl text-white font-bold mt-2 flex flex-col items-center gap-1"><Sparkles size={42} className="relative text-accent-500 animate-levitate" /> Try searching with AI</h2>
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>
 
                         <Input disabled={isSearching} className={cn(isSearching ? "animate-pulse" : "", "max-w-lg drop-shadow-xl drop-shadow-black/20")} placeholder="Find website with free image assets..." value={searchInput} onChange={(e) => searchInputSet(e.target.value)} />
                     </div>
-                    <div className={cn("flex flex-col items-center gap-2 mt-4 py-2 relative overflow-y-auto max-h-[70vh]")}>
-                        {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
+                    <div className={cn("flex flex-col items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto max-h-[70vh]")}>
+                        {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
                             <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                             <h2 className="text-xl">Thinking...</h2>
                         </div>}
 
-                        {isSearching && <div className="absolute top-0 left-0 -my-4 -mx-6 z-10 w-[120%] h-[120%] bg-background-700/60 animate-pulse" ref={animationParent} />}
+                        {isSearching && <div className="absolute inset-0 z-10 w-[100%] h-[100%] bg-background-700/60 animate-pulse" ref={animationParent} />}
 
                         {!isSearching && websitesResult.length <= 0 ? (
                             debouncedSearch.length > 0 ? (
                                 <div className="flex justify-center">
-                                    <p className="text-sm text-neutral-500">No results! Try changing your requirements.</p>
+                                    <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><CircleHelp /> No results! Try changing your requirements.</p>
                                 </div>
                             ) : (
-                                <div className="flex justify-center">
-                                    <p className="text-sm text-neutral-500 flex items-center gap-1"><Search /> Try searching anything that you want!</p>
-                                </div>)
+                                searchError ? (
+                                    <div className="flex justify-center flex-col items-center gap-1">
+                                        <p className="text-base text-red-500 flex items-center gap-1 flex-col"><Bug /> Failed while searching recommendations!</p>
+                                        <p className="text-xs text-neutral-500 text-balance break-words max-w-xl text-center">{searchError}</p>
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-center">
+                                        <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Search /> Try searching anything that you want!</p>
+                                    </div>
+                                )
+                            )
                         ) : (
-                            <div className="flex flex-col gap-2 ">
-                                {/* {websitesResult.length > 0 && <h3 className="text-xl font-semibold">Here it is what I found!</h3>} */}
-                                <div className="grid lg:grid-cols-2 grid-cols-1 gap-2" ref={animationParent}>
+                            <div className="flex flex-col gap-2">
+                                {websitesResult.length > 0 && <p className="text-sm text-neutral-500 flex items-center gap-1">Found {websitesResult.length} websites!</p>}
+                                <div className="grid xl:grid-cols-2 grid-cols-1 gap-2" ref={animationParent}>
                                     {
                                         websitesResult.map((website) => (
                                             <WebsiteItem website={website} />
@@ -100,8 +122,8 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                         </div>} */}
                     </div>
                 </Container>
-            </DialogContent>
-        </Dialog>
+            </DialogContent >
+        </Dialog >
         // </div>
     );
 }

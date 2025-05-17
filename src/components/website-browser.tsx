@@ -199,9 +199,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                     </Label>}
                 </div>
                 <Container className="bg-gradient-to-tr to-secondary-500/80 from-background-300 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center justify-center">
                         <HeartPlus size={36} />
-                        <h1 className="font-semibold text-xl">Make <u>openshorts</u> Go Global!</h1>
+                        <h1 className="font-semibold text-xl text-center">Make <u>openshorts</u> Go Global!</h1>
                     </div>
                     <div className="flex items-center gap-2 flex-wrap justify-center">
                         <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
