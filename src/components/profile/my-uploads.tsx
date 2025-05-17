@@ -97,7 +97,7 @@ const MyUploads = ({ name }: { name: string }) => {
                         <li className="hover:!bg-primary-950 nth-[even]:bg-primary-950/60 px-4 py-1.5 rounded-md flex items-center gap-2 w-full">
                             <div className="flex flex-col gap-0">
                                 <p className="inline-block truncate max-w-3xs">{website.url}</p>
-                                <p className="flex items-center gap-1"><Heart size={14} className="text-red-400" /> {website.likes ?? 0}</p>
+                                <p className="flex items-center gap-1"><Heart size={14} className="text-primary-400 fill-primary-500" /> {website.likes ?? 0}</p>
                             </div>
                             <Button variant={"secondary"} className="ml-auto" onClick={async () => {
                                 const result = await callDialog("edit-website", { url: website.url })
