@@ -50,8 +50,8 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
 
                         <Input disabled={isSearching} className={cn(isSearching ? "animate-pulse" : "", "max-w-lg drop-shadow-xl drop-shadow-black/20")} placeholder="Find website with free image assets..." value={searchInput} onChange={(e) => searchInputSet(e.target.value)} />
                     </div>
-                    <div className={cn("flex flex-col gap-2 mt-4 py-2 relative overflow-y-auto max-h-[70vh]")}>
-                        {isSearching && <div className="bg-white p-4 z-20 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300" ref={animationParent}>
+                    <div className={cn("flex flex-col items-center gap-2 mt-4 py-2 relative overflow-y-auto max-h-[70vh]")}>
+                        {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
                             <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                             <h2 className="text-xl">Thinking...</h2>
                         </div>}
