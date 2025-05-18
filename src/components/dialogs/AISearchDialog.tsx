@@ -1,8 +1,8 @@
-import { Bug, CircleHelp, List, LoaderCircle, Search, Sparkles, X } from "lucide-react"
+import { Bug, CircleHelp, List, LoaderCircle, Lock, LogIn, Search, Sparkles, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
-import { useEffect, useState, useTransition } from "react"
+import { useEffect, useMemo, useState, useTransition } from "react"
 import useDebounce from "@/hooks/useDebounce"
 import type { WebsiteType } from "@/types/website"
 import { actions } from "astro:actions"
@@ -12,6 +12,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Dialog, DialogContent } from "../ui/dialog"
 import { debugLog } from "@/lib/log"
 import { MAX_PROMPT_LENGTH } from "@/helpers/ai.helper"
+import { authClient } from "@/lib/auth-client"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -33,6 +34,9 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     ])
     const [isSearching, searchingTransitionSet] = useTransition()
     const [searchError, searchErrorSet] = useState<string | null>(null)
+    const { data: user, isPending } = authClient.useSession()
+
+    const userLoggedIn = useMemo(() => user, [user])
 
     useEffect(() => {
         if (debouncedSearch.length <= 0) return
@@ -66,14 +70,22 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>
 
-                        <Input
-                            disabled={isSearching}
-                            className={cn(isSearching ? "animate-pulse" : "", "max-w-lg drop-shadow-xl drop-shadow-black/20")}
-                            placeholder="Find website with free image assets..."
-                            value={searchInput}
-                            onChange={(e) => searchInputSet(e.target.value)}
-                            maxLength={MAX_PROMPT_LENGTH}
-                        />
+                        <div className="max-w-lg w-full relative overflow-hidden rounded-md">
+                            {!userLoggedIn && (
+                                <div className="absolute top-0 left-0 w-full h-full grid place-items-center bg-background-200/10 z-10">
+                                    <Lock size={28} className="text-primary-600 bg-background-950 p-1 rounded-md" />
+                                </div>
+                            )
+                            }
+                            <Input
+                                disabled={isSearching || !userLoggedIn}
+                                className={cn(isSearching ? "animate-pulse" : "", "w-full drop-shadow-xl drop-shadow-black/20")}
+                                placeholder="Find website with free image assets..."
+                                value={searchInput}
+                                onChange={(e) => searchInputSet(e.target.value)}
+                                maxLength={MAX_PROMPT_LENGTH}
+                            />
+                        </div>
                     </div>
                     <div className={cn("flex flex-col items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto max-h-[70vh]")}>
                         {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
@@ -95,9 +107,16 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                                         <p className="text-xs text-neutral-500 text-balance break-words max-w-xl text-center">{searchError}</p>
                                     </div>
                                 ) : (
-                                    <div className="flex justify-center">
-                                        <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Search /> Try searching anything that you want!</p>
-                                    </div>
+                                    userLoggedIn ? (
+                                        <div className="flex justify-center">
+                                            <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Search /> Try searching anything that you want!</p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col justify-center items-center gap-2">
+                                            <div className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Lock /> <p>You must be logged in to use <b>AI Search</b> feature!</p></div>
+                                            <a href="/signin"><Button variant={"primary"}><LogIn /> Sign in</Button></a>
+                                        </div>
+                                    )
                                 )
                             )
                         ) : (

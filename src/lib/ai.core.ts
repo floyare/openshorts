@@ -6,6 +6,12 @@ import { auth } from "./auth"
 
 // TODO: add daily limit
 export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
+    const currentUser = await auth.api.getSession({
+        headers: headers
+    })
+
+    if (!currentUser) throw new Error("You must be logged in to perform this action")
+
     const websites = await getPrismaInstance().websites.findMany({
         select: {
             id: true,
@@ -19,10 +25,6 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     })
 
     const websiteLikes = await getLikeCountsForWebsites(getPrismaInstance(), websites.map((w) => w.id))
-
-    const currentUser = await auth.api.getSession({
-        headers: headers
-    })
 
     const userLikes = currentUser ? await getPrismaInstance().user_likes.findMany({
         where: {
