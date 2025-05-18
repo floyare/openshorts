@@ -11,6 +11,7 @@ import WebsiteItem from "../websites/website-item"
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Dialog, DialogContent } from "../ui/dialog"
 import { debugLog } from "@/lib/log"
+import { MAX_PROMPT_LENGTH } from "@/helpers/ai.helper"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -65,7 +66,14 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>
 
-                        <Input disabled={isSearching} className={cn(isSearching ? "animate-pulse" : "", "max-w-lg drop-shadow-xl drop-shadow-black/20")} placeholder="Find website with free image assets..." value={searchInput} onChange={(e) => searchInputSet(e.target.value)} />
+                        <Input
+                            disabled={isSearching}
+                            className={cn(isSearching ? "animate-pulse" : "", "max-w-lg drop-shadow-xl drop-shadow-black/20")}
+                            placeholder="Find website with free image assets..."
+                            value={searchInput}
+                            onChange={(e) => searchInputSet(e.target.value)}
+                            maxLength={MAX_PROMPT_LENGTH}
+                        />
                     </div>
                     <div className={cn("flex flex-col items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto max-h-[70vh]")}>
                         {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>

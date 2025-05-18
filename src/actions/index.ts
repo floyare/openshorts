@@ -1,3 +1,4 @@
+import { MAX_PROMPT_LENGTH } from '@/helpers/ai.helper';
 import { uploadSchema } from '@/helpers/upload.helper';
 import { getWebsitesRecommendation } from '@/lib/ai.core';
 import { debugLog } from '@/lib/log';
@@ -115,7 +116,7 @@ export const server = {
     }),
     getWebsitesRecommendation: defineAction({
         input: z.object({
-            content: z.string()
+            content: z.string().max(MAX_PROMPT_LENGTH)
         }),
         handler: async (input, ctx) => {
             const limit = await validateLimit(ctx.clientAddress, 4)
