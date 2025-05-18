@@ -15,6 +15,7 @@ import { CLIENT_AI_USAGE_STORAGE_KEY, MAX_AI_USAGES_PER_DAY, MAX_PROMPT_LENGTH }
 import { authClient } from "@/lib/auth-client"
 import { useLocalStorage } from "@uidotdev/usehooks";
 import type { AIUsageType } from "@/types/user"
+import { toast } from "sonner"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -25,7 +26,7 @@ type AISearchDialogProps = {
 
 const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     const [searchInput, searchInputSet] = useState("")
-    const debouncedSearch = useDebounce(searchInput, 1000)
+    const debouncedSearch = useDebounce(searchInput, 1300)
     const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(CLIENT_AI_USAGE_STORAGE_KEY, null)
 
     const [websitesResult, websitesResultSet] = useState<WebsiteType[]>([
@@ -64,6 +65,9 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
             }
 
             aiUsageSet(result.data.usage)
+            if (result.data.usage.used >= MAX_AI_USAGES_PER_DAY) {
+                toast.info("You've reached maximum AI Search for today. See you again tommorow!")
+            }
 
             websitesResultSet(result.data.response ?? [])
         })
@@ -123,7 +127,7 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                                     userLoggedIn ? (
                                         aiNoUsagesLeft ? (
                                             <div className="flex justify-center">
-                                                <div className="text-sm text-red-500 flex items-center gap-1 flex-col"><ShieldMinus /> <p className="max-w-xs text-center">You've reached maximum <b>AI Search</b> usages! Try again tommorow.</p></div>
+                                                <div className="text-sm text-red-500 flex items-center gap-1 flex-col"><ShieldMinus /> <p className="max-w-xs text-center">You've reached maximum <b>AI Search</b> usage! Try again tommorow.</p></div>
                                             </div>
                                         ) : (
                                             <div className="flex justify-center">

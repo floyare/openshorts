@@ -1,7 +1,7 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 
 export const PAGE_SIZE = 12
-export const DEBUG_ALLOW_LIKE_OWN_WEBSITES = true
+export const DEBUG_ALLOW_LIKE_OWN_WEBSITES = false
 
 export const DEFINED_TAGS = [
     "AI",
