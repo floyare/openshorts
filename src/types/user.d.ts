@@ -4,3 +4,8 @@ export type BannedDetailsType = {
     reason: string,
     unban_date: Date
 }
+
+export type AIUsageType = {
+    date: Date,
+    used: number
+}

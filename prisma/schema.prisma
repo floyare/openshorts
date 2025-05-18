@@ -33,6 +33,7 @@ model User {
   updatedAt      DateTime
   role           user_role    @default(USER)
   banned_details Json         @default("[]") @db.Json
+  ai_usage       Json?        @db.Json
   accounts       Account[]
   sessions       Session[]
   user_likes     user_likes[]

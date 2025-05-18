@@ -1,4 +1,4 @@
-import { Bug, CircleHelp, List, LoaderCircle, Lock, LogIn, Search, Sparkles, X } from "lucide-react"
+import { Bug, CircleHelp, List, LoaderCircle, Lock, LogIn, Search, ShieldMinus, Sparkles, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
@@ -11,8 +11,10 @@ import WebsiteItem from "../websites/website-item"
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Dialog, DialogContent } from "../ui/dialog"
 import { debugLog } from "@/lib/log"
-import { MAX_PROMPT_LENGTH } from "@/helpers/ai.helper"
+import { CLIENT_AI_USAGE_STORAGE_KEY, MAX_AI_USAGES_PER_DAY, MAX_PROMPT_LENGTH } from "@/helpers/ai.helper"
 import { authClient } from "@/lib/auth-client"
+import { useLocalStorage } from "@uidotdev/usehooks";
+import type { AIUsageType } from "@/types/user"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -24,6 +26,7 @@ type AISearchDialogProps = {
 const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     const [searchInput, searchInputSet] = useState("")
     const debouncedSearch = useDebounce(searchInput, 1000)
+    const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(CLIENT_AI_USAGE_STORAGE_KEY, null)
 
     const [websitesResult, websitesResultSet] = useState<WebsiteType[]>([
         /*{ "id": "f1822ee9-ee6b-4fb6-ae0f-9a7b25c0b040", "name": "Cleanup", "description": "Use cleanup.pictures to remove unwanted objects, people, or defects. ", "url": "https://cleanup.pictures/", "image": null, "tags": ["AI", "TOOLS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
@@ -37,6 +40,7 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     const { data: user, isPending } = authClient.useSession()
 
     const userLoggedIn = useMemo(() => user, [user])
+    const aiNoUsagesLeft = useMemo(() => (aiUsage && aiUsage?.used >= MAX_AI_USAGES_PER_DAY) ?? false, [aiUsage])
 
     useEffect(() => {
         if (debouncedSearch.length <= 0) return
@@ -45,14 +49,23 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
         searchingTransitionSet(async () => {
             const result = await actions.getWebsitesRecommendation({ content: debouncedSearch })
             debugLog("ACTION", result)
+
             if (result.error) {
+                // not cool of making this but idk how for now
+                // TODO: make this check better
+                if (result.error.message === "You've reached maximum daily usage of Search AI. Try again tommorow.") {
+                    aiUsageSet({ date: new Date, used: MAX_AI_USAGES_PER_DAY })
+                }
+
                 debugLog("ERROR", result)
                 searchErrorSet(result.error.message)
                 websitesResultSet([])
                 return
             }
 
-            websitesResultSet(result.data ?? [])
+            aiUsageSet(result.data.usage)
+
+            websitesResultSet(result.data.response ?? [])
         })
     }, [debouncedSearch])
 
@@ -71,14 +84,14 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                         </div>
 
                         <div className="max-w-lg w-full relative overflow-hidden rounded-md">
-                            {!userLoggedIn && (
+                            {(!userLoggedIn || aiNoUsagesLeft) && (
                                 <div className="absolute top-0 left-0 w-full h-full grid place-items-center bg-background-200/10 z-10">
-                                    <Lock size={28} className="text-primary-600 bg-background-950 p-1 rounded-md" />
+                                    <Lock size={28} className="text-primary-600 bg-white border-[1px] border-primary-400 p-1 rounded-sm" />
                                 </div>
                             )
                             }
                             <Input
-                                disabled={isSearching || !userLoggedIn}
+                                disabled={isSearching || !userLoggedIn || aiNoUsagesLeft}
                                 className={cn(isSearching ? "animate-pulse" : "", "w-full drop-shadow-xl drop-shadow-black/20")}
                                 placeholder="Find website with free image assets..."
                                 value={searchInput}
@@ -108,9 +121,15 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
                                     </div>
                                 ) : (
                                     userLoggedIn ? (
-                                        <div className="flex justify-center">
-                                            <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Search /> Try searching anything that you want!</p>
-                                        </div>
+                                        aiNoUsagesLeft ? (
+                                            <div className="flex justify-center">
+                                                <div className="text-sm text-red-500 flex items-center gap-1 flex-col"><ShieldMinus /> <p className="max-w-xs text-center">You've reached maximum <b>AI Search</b> usages! Try again tommorow.</p></div>
+                                            </div>
+                                        ) : (
+                                            <div className="flex justify-center">
+                                                <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Search /> Try searching anything that you want!</p>
+                                            </div>
+                                        )
                                     ) : (
                                         <div className="flex flex-col justify-center items-center gap-2">
                                             <div className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Lock /> <p>You must be logged in to use <b>AI Search</b> feature!</p></div>

@@ -3,14 +3,19 @@ import getPrismaInstance from "./prisma"
 import { getLikeCountsForWebsites } from "./websites.core"
 import { debugLog } from "./log"
 import { auth } from "./auth"
+import type { AIUsageType } from "@/types/user"
+import { isToday } from "date-fns"
+import { MAX_AI_USAGES_PER_DAY } from "@/helpers/ai.helper"
 
-// TODO: add daily limit
 export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
     const currentUser = await auth.api.getSession({
         headers: headers
     })
 
     if (!currentUser) throw new Error("You must be logged in to perform this action")
+
+    const aiUsage: AIUsageType | null = currentUser.user.ai_usage as AIUsageType | null
+    if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of Search AI. Try again tommorow.")
 
     const websites = await getPrismaInstance().websites.findMany({
         select: {
@@ -66,6 +71,23 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
 
     debugLog("WARN", response.text)
 
+    const updatedUsage: AIUsageType = (!aiUsage || (!isToday(aiUsage.date)) ? {
+        date: new Date(),
+        used: 1
+    } : {
+        date: aiUsage.date,
+        used: aiUsage.used + 1
+    })
+
+    await getPrismaInstance().user.update({
+        where: {
+            id: currentUser.user.id
+        },
+        data: {
+            ai_usage: updatedUsage
+        }
+    })
+
     const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
-    return JSON.parse(extractedJson ?? [])
+    return { response: JSON.parse(extractedJson ?? []), usage: updatedUsage }
 }
