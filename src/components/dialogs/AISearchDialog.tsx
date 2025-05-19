@@ -16,6 +16,7 @@ import { authClient } from "@/lib/auth-client"
 import { useLocalStorage } from "@uidotdev/usehooks";
 import type { AIUsageType } from "@/types/user"
 import { toast } from "sonner"
+import { isToday } from "date-fns"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -41,7 +42,7 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     const { data: user, isPending } = authClient.useSession()
 
     const userLoggedIn = useMemo(() => user, [user])
-    const aiNoUsagesLeft = useMemo(() => (aiUsage && aiUsage?.used >= MAX_AI_USAGES_PER_DAY) ?? false, [aiUsage])
+    const aiNoUsagesLeft = useMemo(() => (aiUsage && isToday(aiUsage.date) && aiUsage?.used >= MAX_AI_USAGES_PER_DAY) ?? false, [aiUsage])
 
     useEffect(() => {
         if (debouncedSearch.length <= 0) return

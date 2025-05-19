@@ -120,7 +120,7 @@ export const server = {
             content: z.string().max(MAX_PROMPT_LENGTH)
         }),
         handler: async (input, ctx) => {
-            const limit = await validateLimit(ctx.clientAddress, 4)
+            const limit = await validateLimit(ctx.clientAddress, 3)
             if (!limit.success) throw new Error("Ratelimited!")
             return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers }) as { response: WebsiteType[], usage: AIUsageType }
         }
