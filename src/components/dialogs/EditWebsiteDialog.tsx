@@ -19,6 +19,8 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
     const [removingPending, setRemovingTransition] = useTransition()
     const [updatingPending, setUpdatingransition] = useTransition()
 
+    //const [animationParent] = useAutoAnimate()
+
     const handlePreviewUpdate = () => {
         setUpdatingransition(async () => {
             const result = await actions.updateWebsitePreview({ url: additionalProps.url })
@@ -49,21 +51,23 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
 
     return (
         <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[100] grid place-items-center-safe">
-            <Container className="!bg-background-950 min-w-2xs max-w-sm">
+            <Container className="!bg-background-950 min-w-2xs max-w-md">
                 <div className="flex gap-2 items-center">
                     <h1 className="font-bold">Edit website</h1>
                     <Button variant={"ghost"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>
                 </div>
                 <div className="flex flex-col gap-2 my-4">
-                    <p>Currently editing: {additionalProps.url}</p>
-                    <Button onClick={handlePreviewUpdate} disabled={updatingPending}>{
-                        updatingPending ? <><LoaderCircle className="animate-spin" /> Updating...</> : <><RefreshCcw /> Update website's preview</>
-                    }</Button>
-                    <Button variant={"destructive"} onClick={() => deleteConfirmationShownSet(true)} disabled={deleteConfirmationShown}><Trash /> Remove website</Button>
+                    <p>Currently editing: <b className="text-text-500">{additionalProps.url}</b></p>
+                    <div className="flex gap-2">
+                        <Button onClick={handlePreviewUpdate} disabled={updatingPending}>{
+                            updatingPending ? <><LoaderCircle className="animate-spin" /> Updating...</> : <><RefreshCcw /> Update the preview</>
+                        }</Button>
+                        <Button variant={"destructive"} onClick={() => deleteConfirmationShownSet(true)} disabled={deleteConfirmationShown}><Trash /> Remove website</Button>
+                    </div>
 
-                    {deleteConfirmationShown && <div className="space-y-3 mt-6 border-[1px] border-red-500 p-3 rounded-sm">
+                    {deleteConfirmationShown && <div className="space-y-3 mt-2 border-[1px] border-red-500 p-3 rounded-sm bg-red-400/20 animate-in">
                         <p className="text-red-500 w-full text-balance">Are you sure you want to remove this website? This action is irreversible!</p>
-                        <Input placeholder="Enter full website url..." onChange={(e) => e.target.value === additionalProps.url ? canRemoveWebsiteSet(true) : canRemoveWebsiteSet(false)} />
+                        <Input className="bg-white" placeholder="Enter full website url..." onChange={(e) => e.target.value === additionalProps.url ? canRemoveWebsiteSet(true) : canRemoveWebsiteSet(false)} />
                         <div className="flex gap-2 items-center">
                             <Button variant={"ghost"} onClick={() => deleteConfirmationShownSet(false)}>Cancel</Button>
                             <Button variant={"destructive"} disabled={!canRemoveWebsite || removingPending} onClick={handleRemove}>{
