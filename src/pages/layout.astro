@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
+import { Schema } from "astro-seo-schema";
 
 const TITLE = "openshorts.";
 const DESCRIPTION =
@@ -16,6 +17,29 @@ const DESCRIPTION =
 
 <html lang="en">
     <head>
+        <Schema
+            item={{
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "openshorts",
+                url: "https://openshorts.vercel.app/",
+                description: DESCRIPTION,
+                publisher: {
+                    "@type": "Organization",
+                    name: "openshorts.",
+                    logo: {
+                        "@type": "ImageObject",
+                        url: "https://openshorts.vercel.app/favicon.png",
+                    },
+                },
+                // potentialAction: {
+                //     "@type": "SearchAction",
+                //     target: "https://openshorts.vercel.app/search?q={search_term_string}",
+                //     "query-input": "required name=search_term_string",
+                // },
+            }}
+        />
+
         <meta charset="utf-8" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <meta name="viewport" content="width=device-width" />
