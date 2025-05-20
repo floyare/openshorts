@@ -13,11 +13,12 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
 
     const canAddMore = useMemo(() => selectedTags.length < MAX_TAGS_PER_UPLOAD, [selectedTags])
 
-    const TagElement = memo(({ tag }: { tag: string }) => {
+    const TagElement = memo(({ tag, index }: { tag: string, index: number }) => {
         const isSelected = selectedTags.includes(tag)
         return (
             <span
                 key={tag}
+                tabIndex={index}
                 className={`px-4 py-2 group flex items-center gap-1 cursor-pointer rounded-full transition-colors ${selectedTags.includes(tag) ? "bg-background-500 text-white hover:bg-background-700" : "bg-background-950 text-text-100 hover:bg-background-700/50"}`}
                 onClick={() => {
                     const newTags = isSelected ? selectedTags.filter((t) => t !== tag) : (canAddMore ? [...selectedTags, tag] : selectedTags);
@@ -35,9 +36,9 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
     return (
         <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 flex-wrap">
-                {selectedTags.map((tag) => {
+                {selectedTags.map((tag, idx) => {
                     return (
-                        <TagElement tag={tag} />
+                        <TagElement tag={tag} index={idx} />
                     )
                 })}
             </div>
@@ -47,8 +48,8 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
             )}>
                 {DEFINED_TAGS
                     .filter((tag) => !selectedTags.includes(tag))
-                    .map((tag) => (
-                        <TagElement tag={tag} />
+                    .map((tag, idx) => (
+                        <TagElement tag={tag} index={idx} />
                     ))}
             </div>
         </div>
