@@ -1,4 +1,4 @@
-import { ExternalLink, Heart, LoaderCircle, LoaderIcon } from "lucide-react";
+import { ExternalLink, Heart, LoaderCircle, LoaderIcon, MessageSquareText } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
@@ -98,13 +98,19 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                 </div>
                 <div className="flex flex-col items-end gap-2 sm:w-max w-full">
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
-                    <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
-                        {
-                            likeActionPending ? <LoaderCircle className="animate-spin" /> :
-                                <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} size={34} />
-                        }
-                        <p className="font-semibold text-xl">{likes}</p>
-                    </Button>
+                    <div className="flex items-center gap-1">
+                        <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
+                            {
+                                likeActionPending ? <LoaderCircle className="animate-spin" /> :
+                                    <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} size={34} />
+                            }
+                            <p className="font-semibold text-xl">{likes}</p>
+                        </Button>
+                        <Button variant={"secondary"} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
+                            <MessageSquareText className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80 transition-colors" />
+                            <p className="font-semibold text-xl">{0}</p>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>

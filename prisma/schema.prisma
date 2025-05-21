@@ -19,6 +19,7 @@ model websites {
   created_by          String
   last_preview_update DateTime     @default(now()) @db.Timestamp(6)
   hidden              Boolean      @default(false)
+  comment             comment[]
   user_likes          user_likes[]
   user                User         @relation(fields: [created_by], references: [name], onDelete: Cascade, map: "created_by_key")
 }
@@ -35,6 +36,7 @@ model User {
   banned_details Json         @default("[]") @db.Json
   ai_usage       Json?        @db.Json
   accounts       Account[]
+  comment        comment[]
   sessions       Session[]
   user_likes     user_likes[]
   websites       websites[]
@@ -94,6 +96,19 @@ model user_likes {
   websites   websites @relation(fields: [website_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([user_id, website_id])
+}
+
+model comment {
+  id          String   @id @default(dbgenerated("gen_random_uuid()"))
+  website_url String
+  created_by  String
+  content     String
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  user        User     @relation(fields: [created_by], references: [name], onDelete: Cascade, onUpdate: NoAction, map: "created_by_key")
+  websites    websites @relation(fields: [website_url], references: [url], onDelete: Cascade, onUpdate: NoAction, map: "website_url")
+
+  @@index([created_by], map: "created_by")
+  @@index([website_url], map: "website")
 }
 
 enum categories {
