@@ -10,6 +10,8 @@ import { toast } from "sonner";
 import { debugLog } from "@/lib/log";
 import { authClient } from "@/lib/auth-client";
 import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
+import { useDialogManager } from "easy-dialogs";
+import { dialogs } from "@/lib/dialogs";
 
 interface WebsiteItemProps extends React.HTMLAttributes<HTMLDivElement> {
     website: WebsiteType,
@@ -24,6 +26,8 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     const [likes, likesSet] = useState(website.likesCount ?? 0)
     const { name, url, description, image, isLiked } = website;
     const { data } = authClient.useSession()
+
+    const { callDialog } = useDialogManager(dialogs)
 
     const canBeLiked = useMemo(() => DEBUG_ALLOW_LIKE_OWN_WEBSITES ?? data?.user.image !== website.name, [data?.user])
 
@@ -106,7 +110,11 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             }
                             <p className="font-semibold text-xl">{likes}</p>
                         </Button>
-                        <Button variant={"secondary"} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
+                        <Button
+                            variant={"secondary"}
+                            className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500"
+                            onClick={async () => await callDialog("website-details", { website })}
+                        >
                             <MessageSquareText className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80 transition-colors" />
                             <p className="font-semibold text-xl">{0}</p>
                         </Button>

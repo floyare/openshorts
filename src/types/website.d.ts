@@ -1,5 +1,9 @@
-import type { categories, websites } from "@prisma/client"
+import type { categories, comment, websites } from "@prisma/client"
+import type { string } from "astro:schema"
 
+export interface WebsiteComment extends comment {
+
+}
 
 export interface WebsiteType extends websites {
     id: string,
