@@ -12,6 +12,12 @@ import { actions } from "astro:actions"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { useState, type FormEvent } from "react"
 import { cn } from "@/lib/utils"
+import { Textarea } from "../ui/textarea"
+import { commentSchema, MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from "@/helpers/websites.helper"
+import Alert from "../ui/alert"
+import { useFormState, useFormStatus } from "react-dom"
+import { FormProvider, useForm, type SubmitHandler } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 type WebsiteDetailsDialogProps = {
     onClose: (val: boolean) => void
@@ -21,34 +27,9 @@ type WebsiteDetailsDialogProps = {
     }
 }
 
-async function simulate() {
-    await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(true);
-        }, 2000);
-    });
-
-    return [
-        {
-            id: "1",
-            content: "Ullamco eiusmod incididunt mollit enim reprehenderit aute Lorem officia labore nostrud. Occaecat sit et voluptate ut tempor excepteur eiusmod eu laborum duis nulla qui. Culpa dolore qui quis laboris non occaecat. Id minim sint labore magna fugiat dolore ex laboris elit excepteur Lorem voluptate. Mollit minim Lorem pariatur adipisicing aliqua dolor ullamco commodo labore ut pariatur ut ea labore. Consectetur et sunt ea sit. Non anim sunt cupidatat aute ullamco sint Lorem deserunt.",
-            created_by: "testuser",
-            created_at: new Date(),
-            website_url: "test.com",
-        }, {
-            id: "2",
-            content: "fajna strona 123 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-            created_by: "testuser123",
-            created_at: new Date(),
-            website_url: "test.com",
-        }, {
-            id: "3",
-            content: "fajna strona 123 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.",
-            created_by: "testuser123",
-            created_at: new Date(),
-            website_url: "test.com",
-        }
-    ]
+type CommentFormInputs = {
+    content: string,
+    url: string
 }
 
 export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetailsDialogProps) => {
@@ -58,7 +39,7 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
             return data;
         });
 
-    const { data: comments, error, isLoading, mutate } = useSWR(`comments-fetch-"${additionalProps.website.id}"`, () => /*simulate()*/fetcher(additionalProps.website.url), {
+    const { data: comments, error, isLoading, mutate } = useSWR(`comments-fetch-"${additionalProps.website.id}"`, () => fetcher(additionalProps.website.url), {
         revalidateOnFocus: false,
         revalidateOnMount: true,
         revalidateOnReconnect: false,
@@ -67,14 +48,21 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
         refreshInterval: 0
     });
 
-    const [postResult, postResultSet] = useState<{ type: "success" | "error", content: string } | null>(null)
     const [animationParent] = useAutoAnimate()
+    const [postResult, postResultSet] = useState<{ type: "success" | "error", content: string } | null>(null)
+    const methods = useForm<CommentFormInputs>({
+        defaultValues: {
+            content: "",
+            url: additionalProps.website.url
+        },
+        resolver: zodResolver(commentSchema),
+        mode: "onBlur"
+    })
 
-    const postCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError, reset } = methods
 
-        const formData = new FormData(e.currentTarget);
-        const content = formData.get("content") as string
+    const onSubmit: SubmitHandler<CommentFormInputs> = async (data) => {
+        const { url, content } = data;
 
         if (!content) return
 
@@ -102,39 +90,54 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
                 name: additionalProps.currentUser?.name ?? "Unknown"
             }
         }])
+
+        reset()
     }
 
     if (error) {
         return (
-            <p className="text-red-500 max-w-3xs break-words text-balance">
-                Failed to obtain comments: {error.message}
-            </p>
+            <Alert variant="error" className="max-w-3xs">
+                <p className="break-words text-balance">
+                    Failed to obtain comments: {error.message}
+                </p>
+            </Alert>
         );
     }
 
     return (
         <Dialog open onOpenChange={onClose}>
-            <DialogContent className="flex flex-col gap-2">
+            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6">
                 <div className="flex gap-2 items-center">
                     <Button variant={"outline"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>
                 </div>
-                <div className="flex flex-wrap gap-2 items-start">
+                <div className="flex flex-wrap gap-2 items-start justify-center">
                     <WebsiteItem website={additionalProps.website} className="w-fit" />
                     <Container className="!bg-background-950 overflow-hidden px-6 relative space-y-4 grow h-full">
                         <p className="flex items-center gap-1"><MessageSquareText /> Comments ({comments?.length ?? 0})</p>
-                        <div className="flex flex-col gap-2">
-                            <form className="flex items-center gap-2" onSubmit={postCommentSubmit}>
-                                <Input name="content" placeholder="Write a comment..." className="w-fit bg-white" />
-                                <Button variant={"default"} className="w-fit">Comment</Button>
-                            </form>
-                            {postResult && <div className={cn(postResult.type === "success" ? "text-green-600" : "text-red-600")}>{postResult.content}</div>}
-                            {isLoading ? (<div>
-                                <LoaderCircle className="animate-spin" />
+                        <div className="flex flex-col gap-4">
+                            <FormProvider {...methods}>
+                                <form onSubmit={handleSubmit(onSubmit)} className={cn(
+                                    "flex flex-col items-center gap-2 relative min-w-3xs max-w-2xs",
+                                )}>
+                                    <Textarea placeholder="Write a comment..." className="w-full max-h-38 max-w-2xs bg-white" maxLength={MAX_COMMENT_LENGTH} minLength={MIN_COMMENT_LENGTH} {...register("content", { required: true })} />
+                                    {errors.content && <span className="text-red-500">{errors.content.message}</span>}
+                                    <Button variant={"default"} disabled={isSubmitting} type="submit" className="w-full">{
+                                        isSubmitting ? <><LoaderCircle className="animate-spin" /> Posting...</> : <><MessageSquareText /> Post comment</>
+                                    }</Button>
+                                </form>
+                            </FormProvider>
+
+                            {postResult && <Alert className="!max-w-2xs" variant={postResult.type === "success" ? "success" : "error"}>{postResult.content}</Alert>}
+                            <div className="w-full h-[1px] bg-neutral-600" />
+                            {isLoading ? (<div className="space-y-2 max-h-84 overflow-y-auto">
+                                <div className="w-full h-16 bg-gray-400 animate-pulse" />
+                                <div className="w-full h-16 bg-gray-400 animate-pulse" />
+                                <div className="w-full h-16 bg-gray-400 animate-pulse" />
                             </div>) : (
                                 error ? (<p className="text-red-500 max-w-3xs break-words text-balance">
                                     Failed to obtain comments: {error.message}
                                 </p>) : (
-                                    !comments ? <p className="text-text-500">No comments yet</p> : (
+                                    !comments || comments?.length <= 0 ? <p className="text-text-500">No comments yet</p> : (
                                         <div className="space-y-2 max-h-84 overflow-y-auto" ref={animationParent}>
                                             {
                                                 comments?.map((comment, index) => {
@@ -143,7 +146,7 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
                                                             <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
                                                             <div>
                                                                 <p className="text-black max-w-2xs overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:4] [-webkit-box-orient:vertical] break-words text-balance" title={formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}>{comment.content}</p>
-                                                                <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600">• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
+                                                                <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs">• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
                                                             </div>
                                                         </div>
                                                     )

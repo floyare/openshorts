@@ -1,7 +1,18 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
+import { z } from "astro/zod";
 
 export const PAGE_SIZE = 12
 export const DEBUG_ALLOW_LIKE_OWN_WEBSITES = false
+
+export const MIN_COMMENT_LENGTH = 3
+export const MAX_COMMENT_LENGTH = 100
+
+export const commentSchema = z.object({
+    url: z.string().url({ message: "Invalid URL" }),
+    content: z.string()
+        .min(MIN_COMMENT_LENGTH, { message: `Comment must be at least ${MIN_COMMENT_LENGTH} characters long` })
+        .max(MAX_COMMENT_LENGTH, { message: `Comment must be at most ${MAX_COMMENT_LENGTH} characters long` })
+})
 
 export const DEFINED_TAGS = [
     "AI",

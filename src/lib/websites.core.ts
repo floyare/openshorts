@@ -154,7 +154,8 @@ export const fetchWebsiteComments = async ({ url }: { url: string }) => {
                     image: true,
                 }
             }
-        }
+        },
+        orderBy: { created_at: "desc" }
     });
 }
 

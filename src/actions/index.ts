@@ -1,5 +1,6 @@
 import { MAX_PROMPT_LENGTH } from '@/helpers/ai.helper';
 import { uploadSchema } from '@/helpers/upload.helper';
+import { commentSchema, MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from '@/helpers/websites.helper';
 import { getWebsitesRecommendation } from '@/lib/ai.core';
 import { debugLog } from '@/lib/log';
 import { getBestUploads, getProfileStats } from '@/lib/profile.core';
@@ -136,10 +137,7 @@ export const server = {
         }
     }),
     postWebsiteComment: defineAction({
-        input: z.object({
-            url: z.string(),
-            content: z.string()
-        }),
+        input: commentSchema,
         handler: async (input, ctx) => {
             const limit = await validateLimit(ctx.clientAddress)
             if (!limit.success) throw new Error("Ratelimited!")
