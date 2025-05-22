@@ -116,7 +116,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             onClick={async () => await callDialog("website-details", { website })}
                         >
                             <MessageSquareText className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80 transition-colors" />
-                            <p className="font-semibold text-xl">{0}</p>
+                            <p className="font-semibold text-xl">{website.commentsCount}</p>
                         </Button>
                     </div>
                 </div>

@@ -13,6 +13,7 @@ export interface WebsiteType extends websites {
     image: string | null,
     category: categories,
     tags: string[],
+    commentsCount?: number,
     isLiked?: boolean,
     likesCount?: number
 }

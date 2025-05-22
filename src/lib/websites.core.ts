@@ -146,7 +146,43 @@ export const fetchWebsiteComments = async ({ url }: { url: string }) => {
     const prisma = getPrismaInstance();
     return await prisma.comment.findMany({
         where: { website_url: url },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                }
+            }
+        }
+    });
+}
+
+export const postWebsiteComment = async ({ url, comment, headers }: { url: string, comment: string, headers: Headers }) => {
+    const currentUser = await auth.api.getSession({
+        headers: headers
     })
+
+    if (!currentUser) throw new Error("User not logged in")
+
+    const isBanned = await isUserBanned({ currentUser: currentUser.user })
+    if (!!isBanned) throw new Error("Your account is banned.")
+
+    const prisma = getPrismaInstance();
+    const result = await tryCatch(prisma.comment.create({
+        data: {
+            content: comment,
+            website_url: url,
+            created_by: currentUser.user.name
+        }
+    }))
+
+    if (result.error) {
+        debugLog("ERROR", "Failed while posting comment: ", result.error)
+        throw new Error("Failed while posting comment")
+    }
+
+    return result.data
 }
 
 export const removeWebsite = async ({ headers, url }: { headers: Headers, url: string }) => {
@@ -248,7 +284,12 @@ export const searchWebsites = async ({
             where,
             take: pageSize,
             skip: (page - 1) * pageSize,
-            orderBy
+            orderBy,
+            include: {
+                comment: {
+                    select: { id: true }
+                }
+            }
         })
     );
 
@@ -292,6 +333,7 @@ export const searchWebsites = async ({
 
     const websitesWithIsLiked = websites.data.map(w => ({
         ...w,
+        commentsCount: w.comment.length,
         isLiked: likedWebsiteIds.includes(w.id),
         likesCount: likeCounts[w.id]
     }))
