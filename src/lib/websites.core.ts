@@ -142,6 +142,13 @@ export const fetchWebsiteTags = async () => {
     );
 };
 
+export const fetchWebsiteComments = async ({ url }: { url: string }) => {
+    const prisma = getPrismaInstance();
+    return await prisma.comment.findMany({
+        where: { website_url: url },
+    })
+}
+
 export const removeWebsite = async ({ headers, url }: { headers: Headers, url: string }) => {
     const currentUser = await auth.api.getSession({
         headers: headers
