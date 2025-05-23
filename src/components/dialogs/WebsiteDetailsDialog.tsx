@@ -10,7 +10,7 @@ import { formatDistanceToNow } from "date-fns"
 import useSWR from "swr"
 import { actions } from "astro:actions"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { useState, type FormEvent } from "react"
+import { memo, useState, type FormEvent } from "react"
 import { cn } from "@/lib/utils"
 import { Textarea } from "../ui/textarea"
 import { commentSchema, MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from "@/helpers/websites.helper"
@@ -18,6 +18,7 @@ import Alert from "../ui/alert"
 import { useFormState, useFormStatus } from "react-dom"
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination"
 
 type WebsiteDetailsDialogProps = {
     onClose: (val: boolean) => void
@@ -104,6 +105,48 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
         );
     }
 
+    const [page, setPage] = useState(1)
+    const MAX_COMMENTS_VIEW = 6
+    const totalComments = comments?.length ? Math.ceil(comments?.length / MAX_COMMENTS_VIEW) : 0
+    const slicedComments = comments?.slice((page * MAX_COMMENTS_VIEW) - MAX_COMMENTS_VIEW, page * MAX_COMMENTS_VIEW)
+
+    const PaginationControls = memo(() => {
+        if (totalComments <= MAX_COMMENTS_VIEW) return null
+        return (
+            <Pagination className={cn("transition-all bg-white text-text-50 px-4 py-1 sm:w-fit w-full rounded-md")}>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            onClick={() => setPage((p) => Math.max(1, p - 1))}
+                            isDisabled={page <= 1}
+                            aria-label="Previous page"
+                            title="Previous page"
+                        />
+                    </PaginationItem>
+                    {Array.from({ length: totalComments }, (_, i) => (
+                        <PaginationItem key={i + 1}>
+                            <PaginationLink
+                                isActive={page === i + 1}
+                                onClick={() => setPage(i + 1)}
+                                isDisabled={false}
+                                className="!text-xl"
+                            >
+                                {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                        <PaginationNext
+                            onClick={() => setPage((p) => Math.min(totalComments, p + 1))}
+                            isDisabled={page >= totalComments}
+                            aria-label="Next page"
+                            title="Next page"
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        )
+    })
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6">
@@ -139,21 +182,24 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
                                     Failed to obtain comments: {error.message}
                                 </p>) : (
                                     !comments || comments?.length <= 0 ? <p className="text-text-500">No comments yet</p> : (
-                                        <div className="space-y-2 max-h-84 overflow-y-auto px-2" ref={animationParent}>
-                                            {
-                                                comments?.map((comment, index) => {
-                                                    return (
-                                                        <div key={index} className="flex items-start gap-2 bg-white py-3 px-4 rounded-md">
-                                                            <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
-                                                            <div>
-                                                                <p className="text-black max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance" title={formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}>{comment.content}</p>
-                                                                <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs">• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
+                                        <>
+                                            <div className="space-y-2 max-h-84 overflow-y-auto px-2" ref={animationParent}>
+                                                {
+                                                    slicedComments?.map((comment, index) => {
+                                                        return (
+                                                            <div key={index} className="flex items-start gap-2 bg-white py-3 px-4 rounded-md">
+                                                                <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
+                                                                <div>
+                                                                    <p className="text-black max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance" title={formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}>{comment.content}</p>
+                                                                    <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs">• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                            <PaginationControls />
+                                        </>
                                     )
                                 )
                             )}
