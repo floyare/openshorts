@@ -112,7 +112,7 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
                 </div>
                 <div className="flex flex-wrap gap-2 items-start justify-center">
                     <WebsiteItem website={additionalProps.website} className="w-fit" />
-                    <Container className="!bg-background-950 overflow-hidden px-6 relative space-y-4 grow h-full">
+                    <Container className="!bg-background-950 overflow-hidden px-6 relative space-y-4 grow h-full max-w-md">
                         <p className="flex items-center gap-1"><MessageSquareText /> Comments ({comments?.length ?? 0})</p>
                         <div className="flex flex-col gap-4">
                             <FormProvider {...methods}>
@@ -130,22 +130,23 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
                             {postResult && <Alert className="!max-w-2xs" variant={postResult.type === "success" ? "success" : "error"}>{postResult.content}</Alert>}
                             <div className="w-full h-[1px] bg-neutral-600" />
                             {isLoading ? (<div className="space-y-2 max-h-84 overflow-y-auto">
-                                <div className="w-full h-16 bg-gray-400 animate-pulse" />
-                                <div className="w-full h-16 bg-gray-400 animate-pulse" />
-                                <div className="w-full h-16 bg-gray-400 animate-pulse" />
+                                <div className="w-full h-18 bg-background-800 animate-pulse rounded-md" />
+                                <div className="w-full h-18 bg-background-800 animate-pulse rounded-md" />
+                                <div className="w-full h-18 bg-background-800 animate-pulse rounded-md" />
+                                <div className="w-full h-18 bg-background-800 animate-pulse rounded-md" />
                             </div>) : (
                                 error ? (<p className="text-red-500 max-w-3xs break-words text-balance">
                                     Failed to obtain comments: {error.message}
                                 </p>) : (
                                     !comments || comments?.length <= 0 ? <p className="text-text-500">No comments yet</p> : (
-                                        <div className="space-y-2 max-h-84 overflow-y-auto" ref={animationParent}>
+                                        <div className="space-y-2 max-h-84 overflow-y-auto px-2" ref={animationParent}>
                                             {
                                                 comments?.map((comment, index) => {
                                                     return (
-                                                        <div key={index} className="flex items-center gap-2 bg-white py-3 px-4 rounded-md">
+                                                        <div key={index} className="flex items-start gap-2 bg-white py-3 px-4 rounded-md">
                                                             <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
                                                             <div>
-                                                                <p className="text-black max-w-2xs overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:4] [-webkit-box-orient:vertical] break-words text-balance" title={formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}>{comment.content}</p>
+                                                                <p className="text-black max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance" title={formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}>{comment.content}</p>
                                                                 <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs">• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
                                                             </div>
                                                         </div>
