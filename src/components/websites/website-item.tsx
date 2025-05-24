@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { debugLog } from "@/lib/log";
 import { authClient } from "@/lib/auth-client";
 import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
-import { useDialogManager } from "easy-dialogs";
+import { useDialogManager, getActiveDialogs } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
 
 interface WebsiteItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -114,6 +114,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             variant={"secondary"}
                             className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500"
                             onClick={async () => await callDialog("website-details", { website })}
+                            disabled={getActiveDialogs().some((p) => p.component.name === "WebsiteDetailsDialog")}
                         >
                             <MessageSquareText className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80 transition-colors" />
                             <p className="font-semibold text-xl">{website.commentsCount}</p>
