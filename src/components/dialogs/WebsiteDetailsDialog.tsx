@@ -190,8 +190,8 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
                                                             <div key={index} className="flex items-start gap-2 bg-white py-3 px-4 rounded-md">
                                                                 <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
                                                                 <div>
-                                                                    <p className="text-black max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance" title={formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}>{comment.content}</p>
-                                                                    <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs">• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
+                                                                    <p className="text-black max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">{comment.content}</p>
+                                                                    <p className="text-text-400 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs" title={comment.created_at.toString()}>• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
                                                                 </div>
                                                             </div>
                                                         )

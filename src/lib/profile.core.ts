@@ -32,6 +32,11 @@ export async function getBestUploads(name: string, ctx: ActionAPIContext) {
         where: {
             created_by: name
         },
+        include: {
+            comment: {
+                select: { id: true }
+            }
+        },
         take: 3,
         orderBy: { user_likes: { _count: "desc" } },
     });
@@ -64,6 +69,7 @@ export async function getBestUploads(name: string, ctx: ActionAPIContext) {
         return {
             ...w,
             isLiked: likedWebsiteIds.includes(w.id),
+            commentsCount: w.comment.length,
             likesCount: likeCounts[w.id]
         }
     }) as WebsiteType[]
