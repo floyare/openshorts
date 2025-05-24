@@ -63,6 +63,7 @@ export const getMyUploads = async ({ headers }: { headers: Headers }) => {
 
     const result = await getPrismaInstance().websites.findMany({
         where: {
+            hidden: false,
             created_by: currentUser.user.name
         }
     })
@@ -91,6 +92,7 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
 
     const result = await getPrismaInstance().websites.findFirst({
         where: {
+            hidden: false,
             url: url,
             created_by: currentUser.user.name
         }
@@ -113,6 +115,7 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
 
     await getPrismaInstance().websites.update({
         where: {
+            hidden: false,
             url: url,
             created_by: currentUser.user.name
         },
@@ -137,6 +140,7 @@ export const fetchWebsiteTags = async () => {
     const prisma = getPrismaInstance();
     return await tryCatch(
         prisma.websites.findMany({
+            where: { hidden: false },
             select: { tags: true }
         })
     );
@@ -260,6 +264,7 @@ export const searchWebsites = async ({
     }) : null;
 
     const whereConditions: Prisma.websitesWhereInput[] = [
+        ...[{ hidden: false }],
         ...(search ? [
             {
                 OR: [

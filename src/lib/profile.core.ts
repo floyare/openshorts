@@ -9,6 +9,7 @@ export async function getProfileStats(name: string) {
     const prisma = getPrismaInstance();
     const websitesUploaded = await prisma.websites.count({
         where: {
+            hidden: false,
             created_by: name
         }
     });
@@ -30,7 +31,8 @@ export async function getBestUploads(name: string, ctx: ActionAPIContext) {
 
     const websites = await prisma.websites.findMany({
         where: {
-            created_by: name
+            created_by: name,
+            hidden: false
         },
         include: {
             comment: {

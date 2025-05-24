@@ -80,6 +80,7 @@ export const uploadWebsite = async ({
     const prisma = getPrismaInstance();
     const existingWebsite = await prisma.websites.findUnique({
         where: {
+            hidden: false,
             url
         },
     });
