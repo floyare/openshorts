@@ -13,7 +13,7 @@ type EditDialogWebsiteProps = {
     }
 }
 
-const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps) => {
+const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebsiteProps) => {
     const [deleteConfirmationShown, deleteConfirmationShownSet] = useState(false)
     const [canRemoveWebsite, canRemoveWebsiteSet] = useState(false)
     const [removingPending, setRemovingTransition] = useTransition()
@@ -50,7 +50,7 @@ const EditDialogWebsite = ({ onClose, additionalProps }: EditDialogWebsiteProps)
     }
 
     return (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[100] grid place-items-center-safe">
+        <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[100] grid place-items-center-safe animate-fadein data-[state=closed]:animate-fadeout" {...rest}>
             <Container className="!bg-background-950 min-w-2xs max-w-md">
                 <div className="flex gap-2 items-center">
                     <h1 className="font-bold">Edit website</h1>

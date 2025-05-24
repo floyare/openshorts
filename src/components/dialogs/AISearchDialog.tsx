@@ -25,7 +25,7 @@ type AISearchDialogProps = {
     }
 }
 
-const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
+const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogProps) => {
     const [searchInput, searchInputSet] = useState("")
     const debouncedSearch = useDebounce(searchInput, 1300)
     const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(CLIENT_AI_USAGE_STORAGE_KEY, null)
@@ -79,7 +79,7 @@ const AISearchDialog = ({ onClose, additionalProps }: AISearchDialogProps) => {
     return (
         <Dialog open onOpenChange={onClose}>
             {/* // <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[1001] grid place-items-center-safe transition-all"> */}
-            <DialogContent className="">
+            <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
                 <Container className="!bg-background-950 overflow-hidden px-6 h-fit relative">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>

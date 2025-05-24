@@ -34,7 +34,8 @@ html body[data-scroll-locked] {
 }
 
 @theme {
-    --animate-fadein: fadeIn 1s ease-in-out forwards;
+    --animate-fadein: fadeIn 0.3s ease-in-out forwards;
+    --animate-fadeout: fadeOut 0.3s ease-in-out forwards;
     --animate-levitate: levitate 2s ease-in-out infinite;
 
     @keyframes fadeIn {
@@ -44,6 +45,16 @@ html body[data-scroll-locked] {
 
         100% {
             opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
         }
     }
 
