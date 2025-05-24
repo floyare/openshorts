@@ -38,7 +38,7 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
             <div className="flex items-center gap-2 flex-wrap">
                 {selectedTags.map((tag, idx) => {
                     return (
-                        <TagElement tag={tag} index={idx} />
+                        <TagElement key={idx} tag={tag} index={idx} />
                     )
                 })}
             </div>
@@ -49,7 +49,7 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
                 {DEFINED_TAGS
                     .filter((tag) => !selectedTags.includes(tag))
                     .map((tag, idx) => (
-                        <TagElement tag={tag} index={idx} />
+                        <TagElement key={idx} tag={tag} index={idx} />
                     ))}
             </div>
         </div>
