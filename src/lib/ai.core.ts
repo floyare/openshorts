@@ -25,8 +25,11 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
             url: true,
             image: true,
             tags: true,
-            created_by: true
-        }
+            created_by: true,
+            comment: {
+                select: { id: true }
+            }
+        },
     })
 
     const websiteLikes = await getLikeCountsForWebsites(getPrismaInstance(), websites.map((w) => w.id))
@@ -42,6 +45,7 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     const fullWebsites = websites.map((web) => {
         return {
             ...web,
+            commentsCount: web.comment.length,
             isLiked: userLikes.map((l) => l.website_id).includes(web.id),
             likesCount: websiteLikes[web.id] ?? 0
         }
