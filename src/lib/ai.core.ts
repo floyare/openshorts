@@ -6,6 +6,7 @@ import { auth } from "./auth"
 import type { AIUsageType } from "@/types/user"
 import { isToday } from "date-fns"
 import { MAX_AI_USAGES_PER_DAY } from "@/helpers/ai.helper"
+import { isUserBanned } from "./user.core"
 
 export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
     const currentUser = await auth.api.getSession({
@@ -13,6 +14,9 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     })
 
     if (!currentUser) throw new Error("You must be logged in to perform this action")
+
+    const isBanned = await isUserBanned({ currentUser: currentUser.user })
+    if (isBanned) throw new Error("You are banned from using this feature.")
 
     const aiUsage: AIUsageType | null = currentUser.user.ai_usage as AIUsageType | null
     if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of Search AI. Try again tommorow.")
