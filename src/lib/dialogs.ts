@@ -1,9 +1,13 @@
 import AISearchDialog from "@/components/dialogs/AISearchDialog";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog";
 import EditDialogWebsite from "@/components/dialogs/EditWebsiteDialog";
+import UserBanDialog from "@/components/dialogs/UserBanDialog";
 import { WebsiteDetailsDialog } from "@/components/dialogs/WebsiteDetailsDialog";
 
 export const dialogs = [
     { id: "edit-website", component: EditDialogWebsite, useExitAnimation: true },
     { id: "ai-search", component: AISearchDialog, useExitAnimation: true },
     { id: "website-details", component: WebsiteDetailsDialog, useExitAnimation: true },
+    { id: "confirmation-dialog", component: ConfirmationDialog, useExitAnimation: true },
+    { id: "userban-dialog", component: UserBanDialog, useExitAnimation: true }
 ] as const
