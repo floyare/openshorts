@@ -33,7 +33,7 @@ type CommentFormInputs = {
     url: string
 }
 
-export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetailsDialogProps) => {
+export const WebsiteDetailsDialog = ({ onClose, additionalProps, ...rest }: WebsiteDetailsDialogProps) => {
     const fetcher = (url: string) =>
         actions.fetchWebsiteComments({ url }).then(({ data, error }) => {
             if (error) throw error;
@@ -149,7 +149,7 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps }: WebsiteDetail
     })
     return (
         <Dialog open onOpenChange={onClose}>
-            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6">
+            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 !z-[1001] data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
                 <div className="flex gap-2 items-center">
                     <Button variant={"outline"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>
                 </div>

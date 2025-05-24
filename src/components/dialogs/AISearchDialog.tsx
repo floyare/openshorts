@@ -31,11 +31,10 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
     const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(CLIENT_AI_USAGE_STORAGE_KEY, null)
 
     const [websitesResult, websitesResultSet] = useState<WebsiteType[]>([
-        /*{ "id": "f1822ee9-ee6b-4fb6-ae0f-9a7b25c0b040", "name": "Cleanup", "description": "Use cleanup.pictures to remove unwanted objects, people, or defects. ", "url": "https://cleanup.pictures/", "image": null, "tags": ["AI", "TOOLS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
-        { "id": "ef3cfd64-96f0-4cd3-aac9-19e517ef6667", "name": "Wp", "description": "wupekczek2", "url": "https://wp.pl", "image": null, "tags": ["ASSETS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
-        { "id": "874baa09-ab85-4f36-a19b-a4c56e4402c8", "name": "Devshorts.vercel", "description": "devshorts21203", "url": "https://devshorts.vercel.app", "image": "https://0gua24aj2l.ufs.sh/f/a4haveHUkL0rrmhkeqR16NyhMJbBcmZFYvs8nOekIxERXVQt", "tags": ["ASSETS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
-        { "id": "43838e9e-8077-4c8a-b3f3-a16c8fc5bc16", "name": "Videezy", "description": "Free HD Stock Video Footage", "url": "https://videezy.com/", "image": "https://0gua24aj2l.ufs.sh/f/a4haveHUkL0rtSoOI4vuQrnwoTbgE9GLR5MvWdXNePClpVk0", "tags": ["LIBRARIES", "ASSETS", "VIDEO"], "created_by": "floyare", "isLiked": false, "likesCount": 0 }
-        */
+        // { "id": "f1822ee9-ee6b-4fb6-ae0f-9a7b25c0b040", "name": "Cleanup", "description": "Use cleanup.pictures to remove unwanted objects, people, or defects. ", "url": "https://cleanup.pictures/", "image": null, "tags": ["AI", "TOOLS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
+        // { "id": "ef3cfd64-96f0-4cd3-aac9-19e517ef6667", "name": "Wp", "description": "wupekczek2", "url": "https://wp.pl", "image": null, "tags": ["ASSETS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
+        // { "id": "874baa09-ab85-4f36-a19b-a4c56e4402c8", "name": "Devshorts.vercel", "description": "devshorts21203", "url": "https://devshorts.vercel.app", "image": "https://0gua24aj2l.ufs.sh/f/a4haveHUkL0rrmhkeqR16NyhMJbBcmZFYvs8nOekIxERXVQt", "tags": ["ASSETS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
+        // { "id": "43838e9e-8077-4c8a-b3f3-a16c8fc5bc16", "name": "Videezy", "description": "Free HD Stock Video Footage", "url": "https://videezy.com/", "image": "https://0gua24aj2l.ufs.sh/f/a4haveHUkL0rtSoOI4vuQrnwoTbgE9GLR5MvWdXNePClpVk0", "tags": ["LIBRARIES", "ASSETS", "VIDEO"], "created_by": "floyare", "isLiked": false, "likesCount": 0 }
     ])
     const [isSearching, searchingTransitionSet] = useTransition()
     const [searchError, searchErrorSet] = useState<string | null>(null)
@@ -79,7 +78,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
     return (
         <Dialog open onOpenChange={onClose}>
             {/* // <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[1001] grid place-items-center-safe transition-all"> */}
-            <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
+            <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein !z-[1001]" {...rest}>
                 <Container className="!bg-background-950 overflow-hidden px-6 h-fit relative">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>
