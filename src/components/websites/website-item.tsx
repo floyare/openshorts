@@ -74,17 +74,17 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
         <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full">
                 <div className="flex flex-col gap-2 w-full">
-                    <a href={website.url} target="_blank" className="bg-green-400 flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
+                    <a href={website.url} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
-                        <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full bg-red-400">
-                            <span className="truncate inline-block 2xl:!max-w-[6.3vw] !max-w-[38.5vw] bg-orange-400">{highlight(name)}</span>
+                        <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full">
+                            <span className="truncate inline-block 2xl:!max-w-[6.3vw] !max-w-[38.5vw]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                     </a>
-                    <p className="bg-blue-500 w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
+                    <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
                         {description ? highlight(description) : "No description"}
                     </p>
-                    <div className="mt-auto flex flex-col gap-2 bg-purple-500">
+                    <div className="mt-auto flex flex-col gap-2">
                         <div className="flex items-center gap-1 flex-wrap">
                             {
                                 website.tags.slice(0, MAX_TAGS_TO_DISPLAY).map((tag, index) => (
@@ -95,14 +95,14 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             }
                             {website.tags.length > MAX_TAGS_TO_DISPLAY && <span className="text-secondary-700 text-sm font-semibold">+{website.tags.length - MAX_TAGS_TO_DISPLAY}</span>}
                         </div>
-                        <div className="bg-pink-500">
+                        <div className="">
                             <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-end gap-2 sm:w-max w-full bg-amber-600">
+                <div className="flex flex-col items-end gap-2 sm:w-max w-full">
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
-                    <div className="flex items-center gap-1 bg-yellow-400">
+                    <div className="flex items-center gap-1">
                         <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
                             {
                                 likeActionPending ? <LoaderCircle className="animate-spin" /> :
