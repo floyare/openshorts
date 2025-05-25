@@ -1,0 +1,63 @@
+---
+export const prerender = true;
+import getPrismaInstance from "@/lib/prisma";
+import Layout from "../layout.astro";
+import WebsiteItem from "@/components/websites/website-item";
+import WebsiteComments from "@/components/websites/website-comments";
+
+export async function getStaticPaths() {
+    const websites = await getPrismaInstance().websites.findMany({
+        select: { name: true },
+    });
+
+    return websites.map((website) => ({
+        params: { name: website.name.toLowerCase() },
+    }));
+}
+
+const website = await getPrismaInstance().websites.findFirst({
+    where: {
+        name: {
+            equals: Astro.params.name,
+            mode: "insensitive",
+        },
+    },
+    include: {
+        user: {
+            select: {
+                id: true,
+                name: true,
+                image: true,
+            },
+        },
+        user_likes: true,
+        comment: true,
+    },
+});
+
+if (!website) {
+    return Astro.redirect("/404?error=website-not-found");
+}
+---
+
+<Layout subtitle={website.name} description={website.description}>
+    <section class="flex gap-6 justify-center items-start flex-wrap">
+        <WebsiteItem
+            website={{
+                ...website,
+                likesCount: website.user_likes.length,
+                commentsCount: website.comment.length,
+                isLiked: website.user_likes.some(
+                    (like) => like.user_id === Astro.locals.user?.id,
+                ),
+            }}
+            disableCommentsDialog
+            client:idle
+        />
+        <WebsiteComments
+            website={website}
+            currentUser={Astro.locals.user}
+            client:idle
+        />
+    </section>
+</Layout>

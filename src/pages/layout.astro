@@ -1,18 +1,24 @@
 ---
 export const prerender = false;
+
+const TITLE = "🪄 openshorts";
+const DESCRIPTION =
+    "Discover and share the best online tools and websites. Explore curated resources and contribute your favorites to our growing community.";
+
 import "../styles/global.css";
 import { AnalyticsProvider } from "shibuitracker-client/client";
 import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
 import { Toaster } from "@/components/ui/sonner";
-const { subtitle = "", class: className, ...props } = Astro.props;
+const {
+    subtitle = "",
+    description = DESCRIPTION,
+    class: className,
+    ...props
+} = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
 import { Schema } from "astro-seo-schema";
-
-const TITLE = "openshorts.";
-const DESCRIPTION =
-    "Discover and share the best online tools and websites. Explore curated resources and contribute your favorites to our growing community.";
 ---
 
 <html lang="en">
@@ -44,23 +50,29 @@ const DESCRIPTION =
         <link rel="icon" type="image/png" href="/favicon.png" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        <title>🪄 openshorts {subtitle ? ` - ${subtitle}` : ""}</title>
-        <meta name="description" content={DESCRIPTION} />
+        <title>{TITLE} {subtitle ? ` - ${subtitle}` : ""}</title>
+        <meta name="description" content={Astro.props.description} />
         <link rel="canonical" href={Astro.url} />
         <meta name="theme-color" content="#501be4" />
         <Font cssVariable="--font" preload />
 
         <link rel="sitemap" href="/sitemap-index.xml" />
 
-        <meta property="og:title" content={TITLE} />
-        <meta property="og:description" content={DESCRIPTION} />
+        <meta
+            property="og:title"
+            content={`${TITLE} ${subtitle ? ` - ${subtitle}` : ""}`}
+        />
+        <meta property="og:description" content={Astro.props.description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url} />
         <meta property="og:image" content="/og-bc.webp" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={TITLE} />
-        <meta name="twitter:description" content={DESCRIPTION} />
+        <meta
+            name="twitter:title"
+            content={`${TITLE} ${subtitle ? ` - ${subtitle}` : ""}`}
+        />
+        <meta name="twitter:description" content={Astro.props.description} />
         <meta name="twitter:image" content="/og-bc.webp" />
     </head>
     <body

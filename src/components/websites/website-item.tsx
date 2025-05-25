@@ -1,4 +1,4 @@
-import { ExternalLink, Heart, LoaderCircle, LoaderIcon, MessageSquareText } from "lucide-react";
+import { ExternalLink, Heart, LoaderCircle, MessageSquareText } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
@@ -15,7 +15,8 @@ import { dialogs } from "@/lib/dialogs";
 
 interface WebsiteItemProps extends React.HTMLAttributes<HTMLDivElement> {
     website: WebsiteType,
-    highlightedText?: string[]
+    highlightedText?: string[],
+    disableCommentsDialog?: boolean
 }
 
 const MAX_TAGS_TO_DISPLAY = 3;
@@ -114,7 +115,9 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             variant={"secondary"}
                             className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500"
                             onClick={async () => await callDialog("website-details", { website })}
-                            disabled={getActiveDialogs().some((p) => p.component.name === "WebsiteDetailsDialog")}
+                            disabled={
+                                getActiveDialogs().some((p) => p.component.name === "WebsiteDetailsDialog") || props.disableCommentsDialog
+                            }
                         >
                             <MessageSquareText className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80 transition-colors" />
                             <p className="font-semibold text-xl">{website.commentsCount}</p>
