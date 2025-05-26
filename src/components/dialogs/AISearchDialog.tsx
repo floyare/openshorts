@@ -1,4 +1,4 @@
-import { Bug, CircleHelp, List, LoaderCircle, Lock, LogIn, Search, ShieldMinus, Sparkles, X } from "lucide-react"
+import { Bug, CircleHelp, LoaderCircle, Lock, LogIn, Search, ShieldMinus, Sparkles, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"

@@ -46,9 +46,6 @@ export const admin = {
                 },
             })
 
-            // TODO: add websites hide on user ban
-            // TODO: add websites unhide if unban_date is passed
-
             if (!user) throw new Error("User does not exists")
 
             return await getPrismaInstance().user.update({

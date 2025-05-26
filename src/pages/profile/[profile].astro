@@ -5,14 +5,12 @@ import Layout from "../layout.astro";
 import getPrismaInstance from "@/lib/prisma";
 import { debugLog } from "@/lib/log";
 import Container from "@/components/container";
-import { Heart, Star, UploadCloud, User } from "lucide-react";
+import { Star, UploadCloud, User } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import BestUploads from "../../components/profile/best-uploads";
 import ProfileStats from "@/components/profile/profile-stats";
-import { getMyUploads } from "@/lib/websites.core";
 import MyUploads from "@/components/profile/my-uploads";
-import { Suspense } from "react";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
@@ -29,10 +27,6 @@ const profileData = await getPrismaInstance().user.findFirst({
 debugLog("DEBUG", "Profile data", profileData);
 
 if (!profileData) return Astro.redirect("/404?error=profile-not-found");
-
-// const myUploads = isOwnProfile
-//     ? await getMyUploads({ headers: Astro.request.headers })
-//     : [];
 ---
 
 <Layout

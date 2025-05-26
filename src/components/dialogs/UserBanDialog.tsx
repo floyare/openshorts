@@ -2,7 +2,6 @@ import type { User } from "@prisma/client";
 import Container from "../container";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent } from "../ui/dialog";
-import { useEffect, useState } from "react";
 
 type UserBanDialogProps = {
     onClose: (val: { description: string, unban_date: Date } | null) => void

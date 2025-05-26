@@ -1,4 +1,4 @@
-import { FileQuestion, Loader, LoaderCircle } from "lucide-react";
+import { FileQuestion, LoaderCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface WebsiteIconProps {
