@@ -1,0 +1,28 @@
+---
+import { LogIn, User } from "lucide-react";
+
+const url = Astro.url;
+---
+
+{
+    Astro.locals.user ? (
+        <a
+            href="/profile"
+            class:list={[
+                "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
+                url.pathname.includes("/profile")
+                    ? "text-text-400 font-bold"
+                    : "",
+            ]}
+        >
+            <User size={32} /> Profile
+        </a>
+    ) : (
+        <a
+            href="/signin"
+            class="flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center"
+        >
+            <LogIn size={32} /> Sign In
+        </a>
+    )
+}

@@ -1,6 +1,8 @@
 ---
-import { Compass, LogIn, UploadCloud, User } from "lucide-react";
+export const prerender = false;
+import { Compass, LoaderCircle, UploadCloud } from "lucide-react";
 import Logo from "./logo.astro";
+import NavigationState from "./navigation-state.astro";
 
 const url = Astro.url;
 ---
@@ -32,25 +34,19 @@ const url = Astro.url;
             </a>
 
             {
-                Astro.locals.user ? (
-                    <a
-                        href="/profile"
-                        class:list={[
-                            "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                            url.pathname.includes("/profile")
-                                ? "text-text-400 font-bold"
-                                : "",
-                        ]}
-                    >
-                        <User size={32} /> Profile
-                    </a>
+                Astro.isPrerendered ? (
+                    <NavigationState server:defer slot="auth">
+                        <a
+                            slot="fallback"
+                            href="/signin"
+                            class="flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center grayscale-100 pointer-events-none opacity-70"
+                        >
+                            <LoaderCircle size={32} className="animate-spin" />{" "}
+                            Loading...
+                        </a>
+                    </NavigationState>
                 ) : (
-                    <a
-                        href="/signin"
-                        class="flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center"
-                    >
-                        <LogIn size={32} /> Sign In
-                    </a>
+                    <NavigationState />
                 )
             }
         </div>
