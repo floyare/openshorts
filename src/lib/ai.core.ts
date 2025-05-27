@@ -20,7 +20,7 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     if (isBanned) throw new Error("You are banned from using this feature.")
 
     const aiUsage: AIUsageType | null = currentUser.user.ai_usage as AIUsageType | null
-    if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of Search AI. Try again tommorow.")
+    if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of AI Search. Try again tommorow.")
 
     const websites = await getPrismaInstance().websites.findMany({
         include: {
