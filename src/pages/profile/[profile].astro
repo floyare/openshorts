@@ -11,6 +11,7 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 import BestUploads from "../../components/profile/best-uploads";
 import ProfileStats from "@/components/profile/profile-stats";
 import MyUploads from "@/components/profile/my-uploads";
+import { isUserBanned } from "@/lib/user.core";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
@@ -21,12 +22,21 @@ const profileData = await getPrismaInstance().user.findFirst({
     where: {
         name: profile,
     },
-    select: { image: true, name: true, role: true, id: true },
+    select: {
+        image: true,
+        name: true,
+        role: true,
+        id: true,
+        banned_details: isOwnProfile,
+    },
 });
 
 debugLog("DEBUG", "Profile data", profileData);
 
 if (!profileData) return Astro.redirect("/404?error=profile-not-found");
+
+const banDetails =
+    isOwnProfile && currentUser ? await isUserBanned({ currentUser }) : null;
 ---
 
 <Layout
@@ -74,6 +84,30 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
                     </div>
                 </div>
             </Container>
+            {
+                isOwnProfile && banDetails && (
+                    <Container className="px-8 bg-red-500 border-red-600">
+                        <div class="text-white flex flex-col gap-1">
+                            You are banned from the platform.
+                            <div class="flex flex-col">
+                                <span class="font-semibold">
+                                    Reason: {banDetails.reason}
+                                </span>
+                                <span class="font-semibold">
+                                    Banned until:{" "}
+                                    {new Date(
+                                        banDetails.unban_date,
+                                    ).toLocaleDateString("en-US", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    })}
+                                </span>
+                            </div>
+                        </div>
+                    </Container>
+                )
+            }
             <Container className="px-8 flex items-center justify-around gap-12">
                 <ProfileStats name={profileData.name} client:load />
             </Container>
