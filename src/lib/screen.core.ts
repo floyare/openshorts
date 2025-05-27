@@ -55,7 +55,7 @@ export const getWebsiteScreen = async (url: string) => {
         await page.close();
 
         const file = new File(
-            [screenshot as Buffer],
+            [screenshot as unknown as Buffer],
             `${new URL(url).hostname}.webp`,
             { type: 'image/webp' }
         );

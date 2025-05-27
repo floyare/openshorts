@@ -1,9 +1,7 @@
 import type { BannedDetailsType } from "@/types/user"
-import { auth } from "./auth"
 import getPrismaInstance from "./prisma"
 import { isBefore } from "date-fns"
 import type { User } from "better-auth"
-import { debugLog } from "./log"
 
 export const isUserBanned = async ({ currentUser }: { currentUser: User }) => {
     if (!currentUser) throw new Error("User not logged in")

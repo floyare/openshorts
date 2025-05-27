@@ -115,7 +115,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                         {!isSearching && websitesResult.length <= 0 ? (
                             debouncedSearch.length > 0 && !searchError ? (
                                 <div className="flex justify-center">
-                                    <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><CircleHelp /> No results! Try changing your requirements.</p>
+                                    <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><CircleHelp /> No results! Try changing your prompt.</p>
                                 </div>
                             ) : (
                                 searchError ? (

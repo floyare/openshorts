@@ -1,7 +1,7 @@
 import type { WebsiteType } from "@/types/website";
 import getPrismaInstance from "./prisma";
 import { getLikeCountsForWebsites } from "./websites.core";
-import type { ActionAPIContext, AstroActionContext } from "astro:actions";
+import type { ActionAPIContext } from "astro:actions";
 import { auth } from "./auth";
 import { debugLog } from "./log";
 
