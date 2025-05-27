@@ -21,6 +21,7 @@ import SkewedHighlight from "./skewed-highlight";
 import { Button } from "./ui/button";
 import { useDialogManager } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
+import { useSearchParamState } from "@/hooks/useSearchParamState";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -29,6 +30,7 @@ type BrowserProps = {
     currentUser?: User
 }
 
+// TODO: maybe replace filtering using useSearchParamState hook to make search in url and add action in schema for seo
 const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: BrowserProps) => {
     const [page, setPage] = useState(1);
 
@@ -46,7 +48,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
         tags: []
     })
 
-    const [showOnlyLiked, showOnlyLikedSet] = useState(false)
+    const [showOnlyLiked, showOnlyLikedSet] = useSearchParamState<boolean>("liked", false);
+    //const [showOnlyLiked, showOnlyLikedSet] = useState(false)
 
     const [sortingSelected, sortingSelectedSet] = useState<SORTING_TYPE>("new")
 
