@@ -23,6 +23,15 @@ import { Schema } from "astro-seo-schema";
 
 <html lang="en">
     <head>
+        {
+            import.meta.env.DEV && (
+                <script
+                    is:inline
+                    crossorigin="anonymous"
+                    src="//unpkg.com/react-scan/dist/auto.global.js"
+                />
+            )
+        }
         <Schema
             item={{
                 "@context": "https://schema.org",
