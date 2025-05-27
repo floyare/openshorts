@@ -7,6 +7,7 @@ import type { AIUsageType } from "@/types/user"
 import { isToday } from "date-fns"
 import { MAX_AI_USAGES_PER_DAY } from "@/helpers/ai.helper"
 import { isUserBanned } from "./user.core"
+import type { WebsiteType } from "@/types/website"
 
 export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
     const currentUser = await auth.api.getSession({
@@ -22,17 +23,8 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of Search AI. Try again tommorow.")
 
     const websites = await getPrismaInstance().websites.findMany({
-        select: {
-            id: true,
-            name: true,
-            description: true,
-            url: true,
-            image: true,
-            tags: true,
-            created_by: true,
-            comment: {
-                select: { id: true }
-            }
+        include: {
+            comment: true
         },
         where: { hidden: false }
     })
@@ -60,15 +52,28 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
 
     const ai = new GoogleGenAI({ apiKey: import.meta.env.GEMINI_API_KEY })
     const predefinedStructure = [
-        "(YOUR JOB IS TO RECOMMEND WEBSITES BASED ON THE REQUEST, THE BEST 4 WEBSITES BASED ON USER'S REQUIREMENTS AND SORTING BY THE MOST LIKES)",
-        "(RETURN RECOMMENDED WEBSITES IN JSON ARRAY FORMAT, WITH THE SAME JSON OBJECT FORMAT I GAVE YOU THESE WEBSITES)",
-        "(IF YOU ARE NOT SURE OR DON'T FIND BEST MATCHES, THEN JUST RETURN AN EMPTY ARRAY, DO NOT WRITE ANY COMMENTS, JUST RETURN PLAIN JSON ARRAY, DON'T EVEN TYPE MARKDOWN FORMAT, RETURN PLAIN JSON)",
+        "(YOUR JOB IS TO RECOMMEND WEBSITES BASED ON THE REQUEST, THE BEST 4 WEBSITES BASED ON USER'S REQUIREMENTS, SORT THEM BY THE MOST 'LIKESCOUNT' BUT IF THE USERS REQUEST PROMPT BEST RESULT DOES NOT HAVE MOST LIKES THEN RETURN IT AS FIRST ANYWAYS, PICK ONLY BEST MATCHES BASED ON USER'S REQUEST)",
+        "(RETURN RECOMMENDED WEBSITES IN STRING ARRAY FORMAT WITH FULL ID'S ARRAY)",
+        "(IF YOU ARE NOT SURE OR DON'T FIND BEST MATCHES, THEN JUST RETURN AN EMPTY ARRAY, DO NOT WRITE ANY COMMENTS, JUST RETURN PLAIN STRING FULL ID'S ARRAY, DON'T EVEN TYPE MARKDOWN FORMAT, RETURN PLAIN ARRAY)",
         "(IF YOU CAN'T FIND 4 BEST MATCHES YOU CAN RETURN FEWER)",
         "(FOR PICKING THE BEST 4 WEBSITES, USE THE DESCRIPTION, TAGS AND GENERAL KNOWLEDGE ABOUT SPECIFIC URL)",
         "(HERE ARE WEBSITES ARRAY)",
-        JSON.stringify(fullWebsites),
+        JSON.stringify(fullWebsites.map((w) => ({
+            id: w.id,
+            name: w.name,
+            description: w.description,
+            url: w.url,
+            tags: w.tags,
+            likesCount: w.likesCount,
+            commentsCount: w.commentsCount
+        }))),
         "USER REQUEST CONTENT:"
     ]
+
+    debugLog("ACTION", "Generating with: ", [
+        ...predefinedStructure,
+        content
+    ].toString().length, " length prompt")
 
     const response = await ai.models.generateContent({
         model: "gemini-2.0-flash-001",
@@ -97,6 +102,10 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
         }
     })
 
-    const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
-    return { response: JSON.parse(extractedJson ?? []), usage: updatedUsage }
+    //const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
+    return {
+        response: (fullWebsites.filter((p) => {
+            return response.text?.includes(p.id)
+        }) ?? []) as WebsiteType[], usage: updatedUsage
+    }
 }
