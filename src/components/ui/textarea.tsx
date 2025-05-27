@@ -1,9 +1,8 @@
-import * as React from "react"
-
 import { cn } from "@/lib/utils"
+import { useState, type ComponentProps } from "react";
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
-    const [contentLength, contentLengthSet] = React.useState(
+function Textarea({ className, ...props }: ComponentProps<"textarea">) {
+    const [contentLength, contentLengthSet] = useState(
         props.defaultValue?.toString().length ?? 0,
     );
     return (
