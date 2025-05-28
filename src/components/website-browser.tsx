@@ -41,10 +41,12 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const [tagsList, tagsListSet] = useState(tags)
     const noEntries = useMemo(() => tagsList.every((p) => p.count === 0), [tagsList])
 
+    const [searchContentPhrase, searchContentPhraseSet] = useSearchParamState<string>("search", "");
+
     const [websitesLoading, startWebsitesLoading] = useTransition()
 
     const [searchContent, searchContentSet] = useState<SearchContentType>({
-        search: "",
+        search: searchContentPhrase,
         tags: []
     })
 
@@ -56,10 +58,20 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
-    const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({ searchContent: null, showOnlyLiked })
+    const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({
+        searchContent: {
+            search: searchContentPhrase, tags: []
+        },
+        showOnlyLiked
+    })
     const didMount = useRef(false);
 
     const { callDialog } = useDialogManager(dialogs)
+
+    useEffect(() => {
+        debugLog("ACTION", 'Setting phrase content', debouncedSearch)
+        searchContentPhraseSet(debouncedSearch)
+    }, [debouncedSearch])
 
     useEffect(() => {
         const isSearchTheSame = JSON.stringify(previousSearch.current) === JSON.stringify({ searchContent, showOnlyLiked })

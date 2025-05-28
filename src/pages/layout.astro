@@ -37,21 +37,21 @@ import { Schema } from "astro-seo-schema";
                 "@context": "https://schema.org",
                 "@type": "WebSite",
                 name: "openshorts",
-                url: "https://openshorts.vercel.app/",
+                url: "https://openshorts.dev/",
                 description: DESCRIPTION,
                 publisher: {
                     "@type": "Organization",
                     name: "openshorts.",
                     logo: {
                         "@type": "ImageObject",
-                        url: "https://openshorts.vercel.app/favicon.png",
+                        url: "https://openshorts.dev/favicon.png",
                     },
                 },
-                // potentialAction: {
-                //     "@type": "SearchAction",
-                //     target: "https://openshorts.vercel.app/search?q={search_term_string}",
-                //     "query-input": "required name=search_term_string",
-                // },
+                potentialAction: {
+                    "@type": "SearchAction",
+                    target: "https://openshorts.dev/?search={search_term_string}",
+                    "query-input": "required name=search_term_string",
+                },
             }}
         />
 
