@@ -30,7 +30,6 @@ type BrowserProps = {
     currentUser?: User
 }
 
-// TODO: maybe replace filtering using useSearchParamState hook to make search in url and add action in schema for seo
 const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: BrowserProps) => {
     const [page, setPage] = useState(1);
 
