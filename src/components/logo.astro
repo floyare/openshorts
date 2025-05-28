@@ -3,11 +3,11 @@ const { ...props } = Astro.props;
 ---
 
 <h1
-    {...props}
     class:list={[
-        "text-4xl font-bold flex items-center gap-4 select-none",
-        props.class,
+        "text-4xl font-bold flex items-center gap-4 select-none z-20",
+        props.className,
     ]}
+    {...props}
 >
     open
     <span class="text-text-950 relative">

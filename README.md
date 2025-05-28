@@ -8,3 +8,5 @@ todo:
 - [X] gemini ai rekomendacje po wpisaniu czego sie szuka i filtruje po największym matchu i ilosci like'ow
 - [ ] google adsy?
 - [X] komentarze
+- [X] dodac about us
+- [-] dodac keywordsy
