@@ -58,9 +58,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
     const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({
-        searchContent: {
+        searchContent: searchContentPhrase.length > 0 ? {
             search: searchContentPhrase, tags: []
-        },
+        } : null,
         showOnlyLiked
     })
     const didMount = useRef(false);
