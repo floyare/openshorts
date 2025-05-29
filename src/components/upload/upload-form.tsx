@@ -1,7 +1,6 @@
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form"
-import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { uploadSchema } from "@/helpers/upload.helper";
@@ -11,6 +10,9 @@ import { cn, tryCatch } from "@/lib/utils";
 import TagsSelector from "./tags-selector";
 import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
 import SkewedHighlight from "../skewed-highlight";
+import { lazy } from "react";
+
+const Textarea = lazy(() => import("../ui/textarea"));
 
 type UploadFormInputs = {
     url: string,

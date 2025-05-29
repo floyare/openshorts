@@ -97,7 +97,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             {website.tags.length > MAX_TAGS_TO_DISPLAY && <span className="text-secondary-700 text-sm font-semibold">+{website.tags.length - MAX_TAGS_TO_DISPLAY}</span>}
                         </div>
                         <div className="">
-                            <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
+                            <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
                         </div>
                     </div>
                 </div>

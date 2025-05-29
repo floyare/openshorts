@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { FileQuestion, LoaderCircle } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface WebsitePreviewProps extends React.HTMLAttributes<HTMLDivElement> {
     src: string;

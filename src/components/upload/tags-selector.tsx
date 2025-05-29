@@ -1,8 +1,8 @@
 import { MAX_TAGS_PER_UPLOAD } from "@/helpers/upload.helper";
 import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { cn } from "@/lib/utils";
-import { Plus, TrashIcon, X } from "lucide-react";
-import { memo, useEffect, useMemo, useState } from "react";
+import { Plus, X } from "lucide-react";
+import { memo, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type TagsSelectorProps = {}

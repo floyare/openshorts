@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { lazy, memo, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
 import { cn } from "@/lib/utils";
 import Alert from "../ui/alert";
@@ -12,9 +12,11 @@ import type { websites } from "@prisma/client";
 import Container from "../container";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+//import { Textarea } from "../ui/textarea";
 import { LoaderCircle, MessageSquareText } from "lucide-react";
 import type { User } from "better-auth/types";
+
+const Textarea = lazy(() => import("../ui/textarea"));
 
 type CommentsProps = {
     website: websites,

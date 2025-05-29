@@ -37,4 +37,4 @@ function Textarea({ className, ...props }: ComponentProps<"textarea">) {
     );
 }
 
-export { Textarea }
+export default Textarea
