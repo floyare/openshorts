@@ -73,6 +73,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     }, [debouncedSearch])
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const isSearchTheSame = JSON.stringify(previousSearch.current) === JSON.stringify({ searchContent, showOnlyLiked })
         debugLog("WARN", 'thesame', isSearchTheSame, JSON.stringify(previousSearch.current), JSON.stringify({ searchContent, showOnlyLiked }))
 
@@ -128,6 +131,10 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
         }
 
         startWebsitesLoading(() => fetchWebsites({}))
+
+        return () => {
+            controller.abort();
+        }
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
     const PaginationControls = memo(() => {
@@ -195,7 +202,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                     </div>
                     <div className="flex flex-col space-y-1">
                         <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
-                        <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} onValueChange={(value) => searchContentSet((p) => ({
+                        <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
                             ...p,
                             tags: value
                         }))} value={searchContent.tags}>
@@ -209,7 +216,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         </ToggleGroup>
                     </div>
                     {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
-                        <Checkbox id="only-liked" checked={showOnlyLiked} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
+                        <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
                 </div>
                 <Container className="bg-gradient-to-tr to-secondary-500/80 from-background-300 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
