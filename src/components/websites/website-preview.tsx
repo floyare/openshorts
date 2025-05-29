@@ -61,7 +61,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                     <LoaderCircle className="text-primary-600" />
                 </span>
             )}
-            {!error && (
+            {!error && src && src.trim() !== "" && (
                 <div className="relative w-full h-full">
                     <img
                         src={src}
