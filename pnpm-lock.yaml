@@ -123,8 +123,8 @@ importers:
         specifier: ^0.34.1
         version: 0.34.1
       shibuitracker-client:
-        specifier: ^0.1.1
-        version: 0.1.1(react@19.1.0)
+        specifier: ^0.1.2
+        version: 0.1.2(react@19.1.0)
       sonner:
         specifier: ^2.0.3
         version: 2.0.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -2975,8 +2975,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  shibuitracker-client@0.1.1:
-    resolution: {integrity: sha512-F/WuTfvHe3D1ZaeUJp/g88vEFaPrfD5qjBnNi/0ggvYa6LNjmL3tEPFXIkVo6nWPhPE+qf2ymt4ucP5rmdJbOA==}
+  shibuitracker-client@0.1.2:
+    resolution: {integrity: sha512-du57zoNoUkUctbv1Y+oqqMC0fXZ8A7PtioMh2hxq9jc76bhVL94GqjJT3GzUezQ/F21FIViRWls5mW9z6vTQoA==}
     peerDependencies:
       react: ^19.1.0
 
@@ -6609,7 +6609,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shibuitracker-client@0.1.1(react@19.1.0):
+  shibuitracker-client@0.1.2(react@19.1.0):
     dependencies:
       react: 19.1.0
 
