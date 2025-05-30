@@ -20,13 +20,30 @@ const WebsiteIcon: React.FC<WebsiteIconProps> = ({
     const sizeStyle = { width: size, height: size, fontSize: size };
 
     useEffect(() => {
-        if (!loading && !error) return;
+        setLoading(true);
+        setError(false);
+
         const img = new window.Image();
         img.src = src;
+
+        const handleLoad = () => setLoading(false);
+        const handleError = () => {
+            setLoading(false);
+            setError(true);
+        };
+
+        img.onload = handleLoad;
+        img.onerror = handleError;
+
         if (img.complete) {
             setLoading(false);
         }
-    }, [src, loading, error]);
+
+        return () => {
+            img.onload = null;
+            img.onerror = null;
+        };
+    }, [src]);
 
     return (
         <div
