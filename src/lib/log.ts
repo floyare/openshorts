@@ -55,14 +55,27 @@ export function debugLog(level: LogLevel, ...args: unknown[]): void {
     const now = new Date();
     const timestamp = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
 
+    let callerFunctionName = 'unknown';
+    const err = new Error();
+    if (err.stack) {
+        const stackLines = err.stack.split('\n');
+        if (stackLines.length >= 3) {
+            const callerLine = stackLines[2];
+            const match = callerLine.match(/at (\S+)/);
+            if (match) {
+                callerFunctionName = match[1];
+            }
+        }
+    }
+
     if (isBrowser()) {
         const timestampStyle = "color: gray;";
         const levelStyle = logLevelStyles[level] || "color: white;";
-        console.log(`%c[${timestamp}]%c [${level}]`, timestampStyle, levelStyle, ...args);
+        console.log(`%c[${timestamp}]%c [${level}] (${callerFunctionName})`, timestampStyle, levelStyle, ...args);
     } else {
         const color = logLevelColors[level] || COLORS.fg.white;
         const reset = COLORS.reset;
-        const prefix = `${COLORS.fg.gray}[${timestamp}]${reset} ${color}[${level}]${reset}`;
+        const prefix = `${COLORS.fg.gray}[${timestamp}]${reset} ${color}[${level}] (${callerFunctionName})${reset}`;
         console.log(prefix, ...args);
     }
 }
