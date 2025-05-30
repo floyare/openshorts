@@ -40,6 +40,8 @@ export const getWebsiteScreen = async (url: string) => {
             "Upgrade-Insecure-Requests": "1",
         });
 
+        await page.setJavaScriptEnabled(true)
+
         await page.setViewport({ width: 475, height: 812, isMobile: true });
 
         debugLog("DEBUG", "(getWebsiteScreen) Navigating into url...")
