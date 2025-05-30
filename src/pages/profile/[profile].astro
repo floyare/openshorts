@@ -16,6 +16,7 @@ import { isUserBanned } from "@/lib/user.core";
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
 
+// TODO: wymyśleć coś innego bo jak bedzie inny oauth provider to bedzie problem jak bedzie duplikat
 const isOwnProfile = profile === currentUser?.name;
 
 const profileData = await getPrismaInstance().user.findFirst({
