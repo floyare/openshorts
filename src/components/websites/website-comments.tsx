@@ -1,4 +1,4 @@
-import { lazy, memo, useState } from "react";
+import { lazy, memo, useMemo, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
 import { cn } from "@/lib/utils";
 import Alert from "../ui/alert";
@@ -13,8 +13,9 @@ import Container from "../container";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
 //import { Textarea } from "../ui/textarea";
-import { LoaderCircle, MessageSquareText } from "lucide-react";
+import { LoaderCircle, Lock, MessageSquareText } from "lucide-react";
 import type { User } from "better-auth/types";
+import { authClient } from "@/lib/auth-client";
 
 const Textarea = lazy(() => import("../ui/textarea"));
 
@@ -34,6 +35,9 @@ const WebsiteComments = (props: CommentsProps) => {
             if (error) throw error;
             return data;
         });
+
+    const { data: user, isPending } = authClient.useSession()
+    const userLoggedIn = useMemo(() => user, [user])
 
     const { data: comments, error, isLoading, mutate } = useSWR(`comments-fetch-"${props.website.id}"`, () => fetcher(props.website.url), {
         revalidateOnFocus: false,
@@ -59,6 +63,11 @@ const WebsiteComments = (props: CommentsProps) => {
 
     const onSubmit: SubmitHandler<CommentFormInputs> = async (data) => {
         const { url, content } = data;
+
+        if (!userLoggedIn) {
+            postResultSet({ type: "error", content: "You must be logged in to post a comment." });
+            return;
+        }
 
         if (!content) return
 
@@ -151,10 +160,10 @@ const WebsiteComments = (props: CommentsProps) => {
                     <form onSubmit={handleSubmit(onSubmit)} className={cn(
                         "flex flex-col items-center gap-2 relative min-w-3xs max-w-2xs",
                     )}>
-                        <Textarea placeholder="Write a comment..." className="w-full max-h-38 max-w-2xs bg-white" maxLength={MAX_COMMENT_LENGTH} minLength={MIN_COMMENT_LENGTH} {...register("content", { required: true })} />
+                        <Textarea disabled={!userLoggedIn} placeholder="Write a comment..." className="w-full max-h-38 max-w-2xs bg-white" maxLength={MAX_COMMENT_LENGTH} minLength={MIN_COMMENT_LENGTH} {...register("content", { required: true })} />
                         {errors.content && <span className="text-red-500">{errors.content.message}</span>}
-                        <Button variant={"default"} disabled={isSubmitting} type="submit" className="w-full">{
-                            isSubmitting ? <><LoaderCircle className="animate-spin" /> Posting...</> : <><MessageSquareText /> Post comment</>
+                        <Button variant={"default"} disabled={isSubmitting || !userLoggedIn} type="submit" className="w-full">{
+                            !userLoggedIn ? <><Lock /> You must be logged in</> : isSubmitting ? <><LoaderCircle className="animate-spin" /> Posting...</> : <><MessageSquareText /> Post comment</>
                         }</Button>
                     </form>
                 </FormProvider>
