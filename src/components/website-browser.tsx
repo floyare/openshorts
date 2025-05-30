@@ -12,7 +12,7 @@ import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
+import { MAX_PAGES_TO_LOAD, PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
 import type { User } from "better-auth";
@@ -150,18 +150,65 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                             title="Previous page"
                         />
                     </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                        <PaginationItem key={i + 1}>
-                            <PaginationLink
-                                isActive={page === i + 1}
-                                onClick={() => setPage(i + 1)}
-                                isDisabled={websitesLoading}
-                                className="!text-xl"
-                            >
-                                {i + 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                    ))}
+                    {(() => {
+                        const totalGroups = Math.ceil(totalPages / MAX_PAGES_TO_LOAD);
+                        const [currentGroup, setCurrentGroup] = useState(0);
+
+                        useEffect(() => {
+                            const newGroup = Math.floor((page - 1) / MAX_PAGES_TO_LOAD);
+                            setCurrentGroup(newGroup);
+                        }, [page, MAX_PAGES_TO_LOAD]);
+
+                        const startPage = currentGroup * MAX_PAGES_TO_LOAD + 1;
+                        const endPage = Math.min(startPage + MAX_PAGES_TO_LOAD - 1, totalPages);
+
+                        const items = [];
+
+                        if (currentGroup > 0) {
+                            items.push(
+                                <PaginationItem key="ellipsis-prev">
+                                    <PaginationLink
+                                        isActive={false}
+                                        onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
+                                        isDisabled={websitesLoading}
+                                    >
+                                        ...
+                                    </PaginationLink>
+                                </PaginationItem>
+                            );
+                        }
+
+                        for (let i = startPage; i <= endPage; i++) {
+                            items.push(
+                                <PaginationItem key={i}>
+                                    <PaginationLink
+                                        isActive={page === i}
+                                        onClick={() => setPage(i)}
+                                        isDisabled={websitesLoading}
+                                        className="!text-xl"
+                                    >
+                                        {i}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            );
+                        }
+
+                        if (currentGroup < totalGroups - 1) {
+                            items.push(
+                                <PaginationItem key="ellipsis-next">
+                                    <PaginationLink
+                                        isActive={false}
+                                        onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
+                                        isDisabled={websitesLoading}
+                                    >
+                                        ...
+                                    </PaginationLink>
+                                </PaginationItem>
+                            );
+                        }
+
+                        return items;
+                    })()}
                     <PaginationItem>
                         <PaginationNext
                             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
