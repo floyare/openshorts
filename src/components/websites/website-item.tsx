@@ -76,7 +76,10 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
-                        <WebsiteIcon src={`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`} alt={`${name} favicon`} size={48} />
+                        <WebsiteIcon src={
+                            //`https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`
+                            `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`
+                        } alt={`${name} favicon`} size={48} />
                         <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full">
                             <span className="truncate inline-block 2xl:!max-w-[6.3vw] !max-w-[38.5vw]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
