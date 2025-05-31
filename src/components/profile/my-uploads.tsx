@@ -37,7 +37,7 @@ const MyUploads = ({ name }: { name: string }) => {
     }
 
     if (!uploads?.length && !isLoading) return (
-        <p className="text-text-500">
+        <p className="text-text-500 max-w-sm break-words text-balance">
             {
                 `You haven't uploaded any websites yet.`
             }
