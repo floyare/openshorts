@@ -3,24 +3,21 @@ export const prerender = false;
 import SignInProviders from "@/components/signin/SignInProviders";
 import Layout from "./layout.astro";
 import Container from "@/components/container";
-
-// const result = await auth.api.signInSocial({
-//     body: {
-//         provider: "github",
-//     },
-// });
-
-// return Astro.redirect(result.url);
+import { LogIn } from "lucide-react";
 ---
 
 <Layout subtitle="Sign in">
-    <section class="grid place-items-center gap-2 my-6">
-        <Container className="bg-white px-8">
-            <h2 class="text-3xl font-semibold">
-                Sign in using your favourite platform!
-            </h2>
+    <section class="grid place-items-center gap-4 my-6">
+        <h2 class="text-3xl font-semibold flex items-center gap-2">
+            <LogIn className="text-primary-600" strokeWidth={3} size={32} /> Sign
+            in using your <span
+                class="underline decoration-[6px] decoration-primary-600"
+                >favourite platform!</span
+            >
+        </h2>
+        <Container className="bg-white">
+            <SignInProviders client:idle />
         </Container>
-        <SignInProviders client:idle />
     </section>
 </Layout>
 
