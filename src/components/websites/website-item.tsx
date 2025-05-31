@@ -30,7 +30,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
 
     const { callDialog } = useDialogManager(dialogs)
 
-    const canBeLiked = useMemo(() => DEBUG_ALLOW_LIKE_OWN_WEBSITES ?? data?.user.image !== website.name, [data?.user])
+    const canBeLiked = useMemo(() => DEBUG_ALLOW_LIKE_OWN_WEBSITES || data?.user.name !== website.created_by, [data?.user])
 
     useEffect(() => {
         isWebsiteLikedSet(isLiked)
