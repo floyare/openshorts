@@ -7,8 +7,6 @@ import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import type { User } from "better-auth";
 
-// TODO: font https://fonts.google.com/specimen/Dongle
-
 const websites = await searchWebsites({
     sorting: "new",
     headers: Astro.request.headers,
