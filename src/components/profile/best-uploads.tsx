@@ -33,7 +33,7 @@ export default function BestUploads({ name }: Props) {
     if (!uploads?.length && !isLoading) return (
         <p className="text-text-500">
             {
-                `${name} has not uploaded any files yet.`
+                `${name} has not uploaded any websites yet.`
             }
         </p>
     );
