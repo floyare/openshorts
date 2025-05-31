@@ -1,14 +1,27 @@
 ---
 export const prerender = false;
-import { auth } from "@/lib/auth";
+import SignInProviders from "@/components/signin/SignInProviders";
+import Layout from "./layout.astro";
+import Container from "@/components/container";
 
-const result = await auth.api.signInSocial({
-    body: {
-        provider: "github",
-    },
-});
+// const result = await auth.api.signInSocial({
+//     body: {
+//         provider: "github",
+//     },
+// });
 
-return Astro.redirect(result.url);
+// return Astro.redirect(result.url);
 ---
 
-<p>If you haven't been redirected, <a href={result.url}>click here!</a></p>
+<Layout subtitle="Sign in">
+    <section class="grid place-items-center gap-2 my-6">
+        <Container className="bg-white px-8">
+            <h2 class="text-3xl font-semibold">
+                Sign in using your favourite platform!
+            </h2>
+        </Container>
+        <SignInProviders client:idle />
+    </section>
+</Layout>
+
+<!-- <p>If you haven't been redirected, <a href={result.url}>click here!</a></p> -->

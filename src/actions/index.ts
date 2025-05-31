@@ -12,11 +12,13 @@ import type { WebsiteType } from '@/types/website';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import { admin } from './admin';
+import { user } from './user';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
 export const server = {
     admin,
+    user,
     searchWebsites: defineAction({
         input: z.object({
             search: z.string().optional(),

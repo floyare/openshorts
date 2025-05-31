@@ -14,7 +14,7 @@ export const isUserBanned = async ({ currentUser }: { currentUser: User }) => {
 
     if (!result) throw new Error("User not found")
 
-    const bannedDetails = JSON.parse(result.banned_details?.toString() ?? "[]") as unknown as BannedDetailsType[]
+    const bannedDetails = (typeof result.banned_details === "string" ? JSON.parse(result.banned_details) : result.banned_details) as unknown as BannedDetailsType[]
     const isBanActive = bannedDetails.find((ban) => isBefore(new Date(), ban.unban_date))
 
     return isBanActive ?? null

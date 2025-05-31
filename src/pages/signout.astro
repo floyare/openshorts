@@ -1,0 +1,10 @@
+---
+export const prerender = false;
+import { auth } from "@/lib/auth";
+
+await auth.api.signOut({
+    headers: Astro.request.headers,
+});
+
+return await Astro.redirect("/");
+---

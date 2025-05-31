@@ -25,21 +25,22 @@ model websites {
 }
 
 model User {
-  id             String       @id
-  name           String       @unique
-  email          String       @unique
-  emailVerified  Boolean
-  image          String?
-  createdAt      DateTime
-  updatedAt      DateTime
-  role           user_role    @default(USER)
-  banned_details Json         @default("[]") @db.Json
-  ai_usage       Json?        @db.Json
-  accounts       Account[]
-  comment        comment[]
-  sessions       Session[]
-  user_likes     user_likes[]
-  websites       websites[]
+  id                    String       @id
+  name                  String       @unique
+  email                 String       @unique
+  emailVerified         Boolean
+  image                 String?
+  createdAt             DateTime
+  updatedAt             DateTime
+  role                  user_role    @default(USER)
+  banned_details        Json         @default("[]") @db.Json
+  ai_usage              Json?        @db.Json
+  name_change_available Boolean      @default(false)
+  accounts              Account[]
+  comment               comment[]
+  sessions              Session[]
+  user_likes            user_likes[]
+  websites              websites[]
 
   @@map("user")
 }
@@ -104,7 +105,7 @@ model comment {
   created_by  String
   content     String
   created_at  DateTime @default(now()) @db.Timestamp(6)
-  user        User     @relation(fields: [created_by], references: [name], onDelete: Cascade, onUpdate: NoAction, map: "created_by_key")
+  user        User     @relation(fields: [created_by], references: [name], onDelete: Cascade, map: "created_by_key")
   websites    websites @relation(fields: [website_url], references: [url], onDelete: Cascade, onUpdate: NoAction, map: "website_url")
 
   @@index([created_by], map: "created_by")

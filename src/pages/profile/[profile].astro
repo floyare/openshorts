@@ -5,13 +5,16 @@ import Layout from "../layout.astro";
 import getPrismaInstance from "@/lib/prisma";
 import { debugLog } from "@/lib/log";
 import Container from "@/components/container";
-import { Star, UploadCloud, User } from "lucide-react";
+import { LogOut, Star, UploadCloud, User } from "lucide-react";
 import SkewedHighlight from "@/components/skewed-highlight";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import BestUploads from "../../components/profile/best-uploads";
 import ProfileStats from "@/components/profile/profile-stats";
 import MyUploads from "@/components/profile/my-uploads";
 import { isUserBanned } from "@/lib/user.core";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import ProfileNameUpdate from "@/components/profile/profile-name-update";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
@@ -29,6 +32,7 @@ const profileData = await getPrismaInstance().user.findFirst({
         role: true,
         id: true,
         banned_details: isOwnProfile,
+        name_change_available: isOwnProfile,
     },
 });
 
@@ -82,9 +86,31 @@ const banDetails =
                                 )
                             }
                         </p>
+                        {
+                            isOwnProfile && (
+                                <div class="mt-2">
+                                    <a href="/signout">
+                                        <Button size={"sm"}>
+                                            <LogOut size={18} /> Logout
+                                        </Button>
+                                    </a>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </Container>
+            {
+                isOwnProfile && profileData.name_change_available && (
+                    <Container className="px-8 bg-blue-500 border-blue-600 max-w-lg space-y-4">
+                        <div class="text-white text-balance">
+                            Your profile name <b>can be changed</b> because your
+                            original username is <b>already taken.</b>
+                        </div>
+                        <ProfileNameUpdate client:idle />
+                    </Container>
+                )
+            }
             {
                 isOwnProfile && banDetails && (
                     <Container className="px-8 bg-red-500 border-red-600">
