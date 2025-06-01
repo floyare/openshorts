@@ -46,7 +46,7 @@ export const getWebsiteScreen = async (url: string) => {
 
         debugLog("DEBUG", "(getWebsiteScreen) Navigating into url...")
 
-        await page.goto(url, { waitUntil: 'networkidle2' });
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
 
         const delay = 1000 + Math.floor(Math.random() * 1000)
         debugLog("DEBUG", "(getWebsiteScreen) Waiting for " + delay + "ms")
