@@ -166,15 +166,27 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
 
                         if (currentGroup > 0) {
                             items.push(
-                                <PaginationItem key="ellipsis-prev">
-                                    <PaginationLink
-                                        isActive={false}
-                                        onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
-                                        isDisabled={websitesLoading}
-                                    >
-                                        ...
-                                    </PaginationLink>
-                                </PaginationItem>
+                                <>
+                                    <PaginationItem key={1}>
+                                        <PaginationLink
+                                            isActive={page === 1}
+                                            onClick={() => setPage(1)}
+                                            isDisabled={websitesLoading}
+                                            className="!text-xl"
+                                        >
+                                            {1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem key="ellipsis-prev">
+                                        <PaginationLink
+                                            isActive={false}
+                                            onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
+                                            isDisabled={websitesLoading}
+                                        >
+                                            ...
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                </>
                             );
                         }
 
@@ -195,15 +207,27 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
 
                         if (currentGroup < totalGroups - 1) {
                             items.push(
-                                <PaginationItem key="ellipsis-next">
-                                    <PaginationLink
-                                        isActive={false}
-                                        onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
-                                        isDisabled={websitesLoading}
-                                    >
-                                        ...
-                                    </PaginationLink>
-                                </PaginationItem>
+                                <>
+                                    <PaginationItem key="ellipsis-next">
+                                        <PaginationLink
+                                            isActive={false}
+                                            onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
+                                            isDisabled={websitesLoading}
+                                        >
+                                            ...
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem key={totalPages}>
+                                        <PaginationLink
+                                            isActive={page === totalPages}
+                                            onClick={() => setPage(totalPages)}
+                                            isDisabled={websitesLoading}
+                                            className="!text-xl"
+                                        >
+                                            {totalPages}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                </>
                             );
                         }
 

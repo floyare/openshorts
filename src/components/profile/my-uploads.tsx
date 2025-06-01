@@ -44,7 +44,7 @@ const MyUploads = ({ name }: { name: string }) => {
         </p>
     );
 
-    const MAX_UPLOADS_VIEW = 6
+    const MAX_UPLOADS_VIEW = 4
     const totalPages = uploads?.length ? Math.ceil(uploads?.length / MAX_UPLOADS_VIEW) : 0
     const slicedUploads = uploads?.slice((page * MAX_UPLOADS_VIEW) - MAX_UPLOADS_VIEW, page * MAX_UPLOADS_VIEW)
 
@@ -77,15 +77,27 @@ const MyUploads = ({ name }: { name: string }) => {
 
                         if (currentGroup > 0) {
                             items.push(
-                                <PaginationItem key="ellipsis-prev">
-                                    <PaginationLink
-                                        isActive={false}
-                                        onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
-                                        isDisabled={false}
-                                    >
-                                        ...
-                                    </PaginationLink>
-                                </PaginationItem>
+                                <>
+                                    <PaginationItem key={1}>
+                                        <PaginationLink
+                                            isActive={page === 1}
+                                            onClick={() => setPage(1)}
+                                            className="!text-xl"
+                                            isDisabled={false}
+                                        >
+                                            {1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem key="ellipsis-prev">
+                                        <PaginationLink
+                                            isActive={false}
+                                            onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
+                                            isDisabled={false}
+                                        >
+                                            ...
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                </>
                             );
                         }
 
@@ -106,15 +118,27 @@ const MyUploads = ({ name }: { name: string }) => {
 
                         if (currentGroup < totalGroups - 1) {
                             items.push(
-                                <PaginationItem key="ellipsis-next">
-                                    <PaginationLink
-                                        isActive={false}
-                                        onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
-                                        isDisabled={false}
-                                    >
-                                        ...
-                                    </PaginationLink>
-                                </PaginationItem>
+                                <>
+                                    <PaginationItem key="ellipsis-next">
+                                        <PaginationLink
+                                            isActive={false}
+                                            onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
+                                            isDisabled={false}
+                                        >
+                                            ...
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem key={totalPages}>
+                                        <PaginationLink
+                                            isActive={page === totalPages}
+                                            onClick={() => setPage(totalPages)}
+                                            className="!text-xl"
+                                            isDisabled={false}
+                                        >
+                                            {totalPages}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                </>
                             );
                         }
 
