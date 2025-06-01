@@ -7,6 +7,9 @@ import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
 
 import sitemap from '@astrojs/sitemap';
+//import getPrismaInstance from '@/lib/prisma';
+
+//const customPages = await fetch("https://example.com").then(users => { return ["https://openshorts.dev/XD"] });
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +18,8 @@ export default defineConfig({
   },
   site: "https://openshorts.dev",
   integrations: [react(), sitemap({
-    filter: (page) => !page.includes('/admin') && !page.includes('/layout')
+    filter: (page) => !page.includes('/admin') && !page.includes('/layout') && !page.includes('/signout') && !page.endsWith("/profile/"),
+    //customPages: customPages
   })],
 
   adapter: vercel(),//node({mode: "standalone"}),
