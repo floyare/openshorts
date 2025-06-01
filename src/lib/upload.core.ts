@@ -8,6 +8,7 @@ import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
 import { debugLog } from "./log";
 import { isUserBanned } from "./user.core";
+import axios from "axios";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -47,13 +48,23 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
 }
 
 export const uploadWebsite = async ({
-    url, description, tags, context
-}: { url: string, description: string, tags: string[], context: ActionAPIContext }) => {
+    url, description, tags, captcha, context
+}: { url: string, description: string, tags: string[], captcha: string, context: ActionAPIContext }) => {
     if (!tags.every(tag => DEFINED_TAGS.includes(tag))) {
         throw new Error("Invalid tags provided");
     }
 
     debugLog("DEBUG", "(uploadWebsite) Started uploading: ", { url, description, tags })
+
+    const captchaVerify = import.meta.env.PROD ? await tryCatch(axios.post(`https://challenges.cloudflare.com/turnstile/v0/siteverify`, {
+        secret: import.meta.env.TURNSTILE_SECRET,
+        response: captcha
+    })) : null
+
+    if (import.meta.env.PROD && (captchaVerify?.data?.data.success !== true || captchaVerify.error)) {
+        debugLog("ERROR", "(uploadWebsite) Captcha verification failed: ", captchaVerify?.error?.message || "Unknown error");
+        throw new Error("Failed to verify captcha. Please try again.");
+    }
 
     const currentUser = await auth.api.getSession({
         headers: context.request.headers

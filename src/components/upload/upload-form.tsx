@@ -10,7 +10,8 @@ import { cn, tryCatch } from "@/lib/utils";
 import TagsSelector from "./tags-selector";
 import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
 import SkewedHighlight from "../skewed-highlight";
-import { lazy } from "react";
+import { lazy, useRef } from "react";
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
 const Textarea = lazy(() => import("../ui/textarea"));
 
@@ -18,28 +19,32 @@ type UploadFormInputs = {
     url: string,
     description: string,
     tags: string[],
+    captcha: string
 }
 
 const UploadForm = () => {
     const methods = useForm<UploadFormInputs>({
         defaultValues: {
-            tags: []
+            tags: [],
+            captcha: ""
         },
         resolver: zodResolver(uploadSchema),
         mode: "onBlur"
     })
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError } = methods
+    const recaptchaRef = useRef<TurnstileInstance>(null);
 
     const onSubmit: SubmitHandler<UploadFormInputs> = async (data) => {
         const { url, description, tags } = data;
         const uploadData = {
             url,
             description,
-            tags
+            tags,
+            captcha: recaptchaRef.current?.getResponse() || ""
         };
 
-        console.log('uploading', uploadData);
+        debugLog("ACTION", 'Submiting...', uploadData)
 
         if (tags.length <= 0) {
             setError("tags", { type: "manual", message: "Minimum 1 tag is required!" });
@@ -51,6 +56,8 @@ const UploadForm = () => {
         if (result.error) {
             setError("root", { type: "manual", message: result.error.message || "Upload failed" });
         }
+
+        recaptchaRef.current?.reset()
     }
 
     return (
@@ -85,6 +92,13 @@ const UploadForm = () => {
                         <TagsSelector />
                         {errors.tags && <span className="text-red-500">{errors.tags.message}</span>}
                     </div>
+
+                    {import.meta.env.PROD && <div className="space-y-2 flex items-center justify-center">
+                        <Turnstile
+                            siteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}
+                            ref={recaptchaRef}
+                        />
+                    </div>}
 
                     {errors.root && <span className="text-red-500">{errors.root.message}</span>}
                     {isSubmitSuccessful && !errors.root && (

@@ -45,6 +45,7 @@ export const server = {
                 url: input.url,
                 description: input.description,
                 tags: input.tags,
+                captcha: input.captcha,
                 context: context
             })
         }

@@ -37,4 +37,5 @@ export const uploadSchema = z.object({
         }, { message: "Website already exists" }),
     description: z.string().min(10).max(200),
     tags: z.string({ message: "Minimum 1 tag is required!" }).array().max(MAX_TAGS_PER_UPLOAD).min(1),
+    captcha: z.string()
 })
