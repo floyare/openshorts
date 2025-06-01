@@ -73,7 +73,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
 
     return (
         <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative", className)}>
-            <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full">
+            <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full h-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={

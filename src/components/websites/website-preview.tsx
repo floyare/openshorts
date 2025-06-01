@@ -62,7 +62,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                 </span>
             )}
             {!error && src && src.trim() !== "" && (
-                <div className="relative w-full h-full">
+                <div className="relative w-full h-full flex justify-center items-center">
                     <img
                         src={src}
                         alt={alt}
