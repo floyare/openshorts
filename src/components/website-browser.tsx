@@ -151,23 +151,39 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         />
                     </PaginationItem>
                     {(() => {
-                        const totalGroups = Math.ceil(totalPages / MAX_PAGES_TO_LOAD);
+                        const [maxItems, setMaxItems] = useState(MAX_PAGES_TO_LOAD);
+                        const totalGroups = Math.ceil(totalPages / maxItems);
                         const [currentGroup, setCurrentGroup] = useState(0);
 
                         useEffect(() => {
-                            const newGroup = Math.floor((page - 1) / MAX_PAGES_TO_LOAD);
+                            const newGroup = Math.floor((page - 1) / maxItems);
                             setCurrentGroup(newGroup);
-                        }, [page, MAX_PAGES_TO_LOAD]);
+                        }, [page, maxItems]);
 
-                        const startPage = currentGroup * MAX_PAGES_TO_LOAD + 1;
-                        const endPage = Math.min(startPage + MAX_PAGES_TO_LOAD - 1, totalPages);
+                        useEffect(() => {
+                            const handleResize = () => {
+                                if (window.innerWidth < 640) {
+                                    setMaxItems(3);
+                                } else if (window.innerWidth < 1024) {
+                                    setMaxItems(5);
+                                } else {
+                                    setMaxItems(MAX_PAGES_TO_LOAD);
+                                }
+                            };
+                            handleResize();
+                            window.addEventListener("resize", handleResize);
+                            return () => window.removeEventListener("resize", handleResize);
+                        }, []);
+
+                        const startPage = currentGroup * maxItems + 1;
+                        const endPage = Math.min(startPage + maxItems - 1, totalPages);
 
                         const items = [];
 
                         if (currentGroup > 0) {
                             items.push(
                                 <>
-                                    <PaginationItem key={1}>
+                                    {maxItems > 3 && <PaginationItem key={1}>
                                         <PaginationLink
                                             isActive={page === 1}
                                             onClick={() => setPage(1)}
@@ -176,11 +192,11 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                                         >
                                             {1}
                                         </PaginationLink>
-                                    </PaginationItem>
+                                    </PaginationItem>}
                                     <PaginationItem key="ellipsis-prev">
                                         <PaginationLink
                                             isActive={false}
-                                            onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
+                                            onClick={() => setPage((p) => (currentGroup) * maxItems)}
                                             isDisabled={websitesLoading}
                                         >
                                             ...
@@ -211,13 +227,13 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                                     <PaginationItem key="ellipsis-next">
                                         <PaginationLink
                                             isActive={false}
-                                            onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
+                                            onClick={() => setPage((p) => (currentGroup + 1) * maxItems + 1)}
                                             isDisabled={websitesLoading}
                                         >
                                             ...
                                         </PaginationLink>
                                     </PaginationItem>
-                                    <PaginationItem key={totalPages}>
+                                    {maxItems > 3 && <PaginationItem key={totalPages}>
                                         <PaginationLink
                                             isActive={page === totalPages}
                                             onClick={() => setPage(totalPages)}
@@ -226,7 +242,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                                         >
                                             {totalPages}
                                         </PaginationLink>
-                                    </PaginationItem>
+                                    </PaginationItem>}
                                 </>
                             );
                         }
@@ -314,7 +330,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
                     <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                 </div>}
-                <div className="bg-white border-background-900 border-[1px] rounded-sm sm:absolute sm:top-4 sm:right-4 relative">
+                <div className="bg-white border-background-900 border-[1px] rounded-sm md:absolute md:top-4 md:right-4 relative">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
                         <SelectTrigger size="default" className="text-lg w-full" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
                             <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />

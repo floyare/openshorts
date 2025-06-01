@@ -2,7 +2,7 @@ import type { JsonValue } from "@prisma/client/runtime/library";
 import { z } from "astro/zod";
 
 export const PAGE_SIZE = 12
-export const MAX_PAGES_TO_LOAD = 7
+export const MAX_PAGES_TO_LOAD = 6
 export const DEBUG_ALLOW_LIKE_OWN_WEBSITES = false
 
 export const MIN_COMMENT_LENGTH = 3
