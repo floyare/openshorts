@@ -2,36 +2,65 @@
 import Container from "@/components/container";
 import Layout from "./layout.astro";
 import { Image } from "astro:assets";
+import { Compass, Share, Share2 } from "lucide-react";
 ---
 
 <Layout
     subtitle="About project"
     description="OpenShorts is a platform where people can share and discover useful websites and online tools."
 >
-    <section class="flex flex-col items-center gap-8">
-        <Container className="flex items-start gap-6 max-w-2xl !py-6 !px-12">
-            <Image
-                src="/favicon.png"
-                alt="About openshorts"
-                class=""
-                width={100}
-                height={100}
-                format="webp"
-                quality={50}
-            />
-            <div class="flex flex-col items-start gap-2">
-                <h1 class="text-3xl font-bold flex items-center">
-                    About open<span class="text-text-500">shorts</span>.
-                </h1>
-                <p class="text-lg text-gray-700">
-                    OpenShorts is a platform where people can share and discover
-                    useful websites and online tools. Users can upload their own
-                    finds, explore what others have shared, and interact by
-                    liking and commenting on the content. It's designed to be
-                    easy to use and encourages a community of developers,
-                    designers, and digital creators to connect and collaborate.
-                </p>
+    <section class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-8 w-fit">
+            <Container
+                className="flex items-start gap-6 max-w-2xl !py-6 !px-12"
+            >
+                <Image
+                    src="/favicon.png"
+                    alt="About openshorts"
+                    class=""
+                    width={100}
+                    height={100}
+                    format="webp"
+                    quality={50}
+                />
+                <div class="flex flex-col items-start gap-2">
+                    <h1 class="text-3xl font-bold flex items-center">
+                        About open<span class="text-text-500">shorts</span>.
+                    </h1>
+                    <p class="text-lg text-gray-700">
+                        OpenShorts is a platform where people can share and
+                        discover useful websites and online tools. Users can
+                        upload their own finds, explore what others have shared,
+                        and interact by liking and commenting on the content.
+                        It's designed to be easy to use and encourages a
+                        community of developers, designers, and digital creators
+                        to connect and collaborate.
+                    </p>
+                </div>
+            </Container>
+            <div class="flex items-center gap-6 w-full">
+                <a
+                    href="/"
+                    class="bg-secondary-500 border-[1px] border-secondary-400 cursor-pointer hover:bg-secondary-600 rounded-md transition-colors text-white w-full px-6 py-4 flex items-center justify-center gap-2 text-2xl"
+                >
+                    <span
+                        class="drop-shadow-[2px_2px_1px_rgba(0,0,0,.28)] flex items-center gap-2"
+                    >
+                        <Compass size={28} /> Discover
+                    </span>
+                </a>
+                <p class="text-2xl">and</p>
+                <a
+                    href="/upload"
+                    class="bg-accent-500 border-[1px] border-accent-400 cursor-pointer text-white hover:bg-accent-600 rounded-md transition-colors w-full px-6 py-4 flex items-center justify-center gap-2 text-2xl"
+                >
+                    <span
+                        class="drop-shadow-[2px_2px_1px_rgba(0,0,0,.38)] flex items-center gap-2"
+                    >
+                        <Share2 /> Share
+                    </span>
+                </a>
             </div>
-        </Container>
+        </div>
     </section>
 </Layout>
