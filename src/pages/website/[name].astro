@@ -40,7 +40,14 @@ if (!website) {
 }
 ---
 
-<Layout subtitle={website.name} description={website.description}>
+<Layout
+    subtitle={website.name}
+    description={website.description +
+        " - " +
+        website.url +
+        " @ openshorts.dev " +
+        new Date().getFullYear()}
+>
     <section class="flex gap-6 justify-center items-start flex-wrap">
         <WebsiteItem
             website={{
