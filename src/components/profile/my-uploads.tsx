@@ -62,23 +62,39 @@ const MyUploads = ({ name }: { name: string }) => {
                     </PaginationItem>
                     {(() => {
                         const MAX_PAGES_TO_LOAD = 5;
-                        const totalGroups = Math.ceil(totalPages / MAX_PAGES_TO_LOAD);
+                        const [maxItems, setMaxItems] = useState(MAX_PAGES_TO_LOAD);
+                        useEffect(() => {
+                            const handleResize = () => {
+                                if (window.innerWidth < 640) {
+                                    setMaxItems(3);
+                                } else if (window.innerWidth < 1024) {
+                                    setMaxItems(5);
+                                } else {
+                                    setMaxItems(MAX_PAGES_TO_LOAD);
+                                }
+                            };
+                            handleResize();
+                            window.addEventListener("resize", handleResize);
+                            return () => window.removeEventListener("resize", handleResize);
+                        }, []);
+
+                        const totalGroups = Math.ceil(totalPages / maxItems);
                         const [currentGroup, setCurrentGroup] = useState(0);
 
                         useEffect(() => {
-                            const newGroup = Math.floor((page - 1) / MAX_PAGES_TO_LOAD);
+                            const newGroup = Math.floor((page - 1) / maxItems);
                             setCurrentGroup(newGroup);
-                        }, [page, MAX_PAGES_TO_LOAD]);
+                        }, [page, maxItems]);
 
-                        const startPage = currentGroup * MAX_PAGES_TO_LOAD + 1;
-                        const endPage = Math.min(startPage + MAX_PAGES_TO_LOAD - 1, totalPages);
+                        const startPage = currentGroup * maxItems + 1;
+                        const endPage = Math.min(startPage + maxItems - 1, totalPages);
 
                         const items = [];
 
                         if (currentGroup > 0) {
                             items.push(
                                 <>
-                                    <PaginationItem key={1}>
+                                    {maxItems > 3 && <PaginationItem key={1}>
                                         <PaginationLink
                                             isActive={page === 1}
                                             onClick={() => setPage(1)}
@@ -87,11 +103,11 @@ const MyUploads = ({ name }: { name: string }) => {
                                         >
                                             {1}
                                         </PaginationLink>
-                                    </PaginationItem>
+                                    </PaginationItem>}
                                     <PaginationItem key="ellipsis-prev">
                                         <PaginationLink
                                             isActive={false}
-                                            onClick={() => setPage((p) => (currentGroup) * MAX_PAGES_TO_LOAD)}
+                                            onClick={() => setPage((p) => (currentGroup) * maxItems)}
                                             isDisabled={false}
                                         >
                                             ...
@@ -122,13 +138,13 @@ const MyUploads = ({ name }: { name: string }) => {
                                     <PaginationItem key="ellipsis-next">
                                         <PaginationLink
                                             isActive={false}
-                                            onClick={() => setPage((p) => (currentGroup + 1) * MAX_PAGES_TO_LOAD + 1)}
+                                            onClick={() => setPage((p) => (currentGroup + 1) * maxItems + 1)}
                                             isDisabled={false}
                                         >
                                             ...
                                         </PaginationLink>
                                     </PaginationItem>
-                                    <PaginationItem key={totalPages}>
+                                    {maxItems > 3 && <PaginationItem key={totalPages}>
                                         <PaginationLink
                                             isActive={page === totalPages}
                                             onClick={() => setPage(totalPages)}
@@ -137,7 +153,7 @@ const MyUploads = ({ name }: { name: string }) => {
                                         >
                                             {totalPages}
                                         </PaginationLink>
-                                    </PaginationItem>
+                                    </PaginationItem>}
                                 </>
                             );
                         }
