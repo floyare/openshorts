@@ -353,7 +353,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 <PaginationControls />
 
                 {noEntries && (
-                    <div className="flex flex-col items-center space-y-1.5">
+                    <div className="flex flex-col items-center space-y-1.5 md:mb-0 mb-4">
                         <FileQuestion className="text-primary-500" size={48} />
                         <div className="text-center">
                             <h3 className="text-lg font-semibold">No websites found!</h3>
