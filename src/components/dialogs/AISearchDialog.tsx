@@ -82,7 +82,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                 <Container className="!bg-background-950 overflow-hidden px-6 h-fit relative">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>
-                        <div>
+                        <div className="text-center">
                             <h2 className="text-3xl text-white font-bold mt-2 flex flex-col items-center gap-1"><Sparkles size={42} className="relative text-accent-500 animate-levitate" /> Try searching with AI</h2>
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>

@@ -176,9 +176,9 @@ const MyUploads = ({ name }: { name: string }) => {
     return (
         <ul className="flex flex-col gap-2">
             {isLoading ? <>
-                <div className="w-xs h-16 bg-gray-400 animate-pulse" />
-                <div className="w-xs h-16 bg-gray-400 animate-pulse" />
-                <div className="w-xs h-16 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-16 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-16 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-16 bg-gray-400 animate-pulse" />
             </> :
                 <>
                     {slicedUploads?.map((website, idx) => (

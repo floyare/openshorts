@@ -4,6 +4,7 @@ import getPrismaInstance from "./prisma";
 import { randomBytes } from "crypto";
 
 export const auth = betterAuth({
+    trustedOrigins: ["http://192.168.0.107:4321"],
     databaseHooks: {
         user: {
             create: {

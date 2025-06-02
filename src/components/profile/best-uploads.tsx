@@ -41,9 +41,9 @@ export default function BestUploads({ name }: Props) {
     return (
         <div className="flex flex-col gap-2">
             {isLoading ? <>
-                <div className="w-sm h-56 bg-gray-400 animate-pulse" />
-                <div className="w-sm h-56 bg-gray-400 animate-pulse" />
-                <div className="w-sm h-56 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-56 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-56 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-56 bg-gray-400 animate-pulse" />
             </> : uploads?.map((website, idx) => (
                 <WebsiteItem website={website} key={idx} className="!max-w-lg" />
             ))}

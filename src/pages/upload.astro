@@ -19,9 +19,13 @@ const currentUser = await auth.api.getSession({
             currentUser ? (
                 <UploadForm client:idle />
             ) : (
-                <Container className="bg-neutral-50 flex flex-col gap-8 items-center px-8 py-6">
-                    <JoinUs width={500} height={350} />
-                    <div class="text-center">
+                <Container className="bg-neutral-50 flex flex-col gap-8 items-center md:px-8 px-4 md:py-6 py-5">
+                    <JoinUs
+                        width={500}
+                        height={350}
+                        class={"md:max-w-fit max-w-3xs md:max-h-max max-h-48"}
+                    />
+                    <div class="text-center md:space-y-0 space-y-4">
                         <h1 class="text-3xl">
                             Join the <b class="text-primary-500">openshorts.</b>{" "}
                             Right now!

@@ -7,11 +7,13 @@ import { LogIn } from "lucide-react";
 ---
 
 <Layout subtitle="Sign in">
-    <section class="grid place-items-center gap-4 my-6">
-        <h2 class="text-3xl font-semibold flex items-center gap-2">
+    <section class="grid place-items-center md:gap-4 gap-8 my-6">
+        <h2
+            class="text-3xl font-semibold flex items-center gap-2 md:flex-row flex-col"
+        >
             <LogIn className="text-primary-600" strokeWidth={3} size={32} /> Sign
-            in using your <span
-                class="underline decoration-[6px] decoration-primary-600"
+            in using your
+            <span class="underline decoration-[6px] decoration-primary-600"
                 >favourite platform!</span
             >
         </h2>
