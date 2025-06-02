@@ -267,10 +267,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
                 <div className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5">
                     <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
-                    {/* <div className="border-[2px] flex flex-col justify-center items-center border-secondary-600 px-6 py-2 rounded-sm shadow-xl shadow-primary-500/30">
-                        <h3 className="flex items-center gap-2"><Sparkles className="text-primary-600 drop-shadow-lg drop-shadow-secondary-700/40" /> Try the <b className="text-secondary-500 font-semibold drop-shadow-lg drop-shadow-secondary-700/40">AI Search</b></h3>
-                    </div> */}
-                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-sm shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
+                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-base shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
                         <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-semibold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
                     </Button>
                     <div className="flex flex-col space-y-1">
