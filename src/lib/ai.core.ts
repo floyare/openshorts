@@ -1,3 +1,4 @@
+import { tryCatch } from '@/lib/utils';
 import { GoogleGenAI } from "@google/genai"
 import getPrismaInstance from "./prisma"
 import { getLikeCountsForWebsites } from "./websites.core"
@@ -75,15 +76,20 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
         content
     ].toString().length, " length prompt")
 
-    const response = await ai.models.generateContent({
+    const response = await tryCatch(ai.models.generateContent({
         model: "gemini-2.0-flash-001",
         contents: [
             ...predefinedStructure,
             content
         ]
-    })
+    }))
 
-    debugLog("WARN", response.text)
+    if (response.error) {
+        debugLog("ERROR", "AI Generation failed: ", response.error.message)
+        throw new Error("Failed while generating AI response. Try again later!")
+    }
+
+    debugLog("WARN", response.data?.text)
 
     const updatedUsage: AIUsageType = (!aiUsage || (!isToday(aiUsage.date)) ? {
         date: new Date(),
@@ -105,7 +111,7 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     //const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
     return {
         response: (fullWebsites.filter((p) => {
-            return response.text?.includes(p.id)
+            return response.data?.text?.includes(p.id)
         }) ?? []) as WebsiteType[], usage: updatedUsage
     }
 }
