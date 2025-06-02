@@ -68,15 +68,23 @@ export function debugLog(level: LogLevel, ...args: unknown[]): void {
         }
     }
 
+    const logFn =
+        level === "ERROR"
+            ? console.error
+            : level === "WARN"
+                ? console.warn
+                : console.log;
+
     if (isBrowser()) {
         const timestampStyle = "color: gray;";
         const levelStyle = logLevelStyles[level] || "color: white;";
-        console.log(`%c[${timestamp}]%c [${level}] (${callerFunctionName})`, timestampStyle, levelStyle, ...args);
+        logFn(`%c[${timestamp}]%c [${level}] (${callerFunctionName})`, timestampStyle, levelStyle, ...args);
     } else {
         const color = logLevelColors[level] || COLORS.fg.white;
         const reset = COLORS.reset;
         const prefix = `${COLORS.fg.gray}[${timestamp}]${reset} ${color}[${level}] (${callerFunctionName})${reset}`;
-        console.log(prefix, ...args);
+        logFn(prefix, ...args);
     }
 }
+
 
