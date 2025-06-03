@@ -20,6 +20,7 @@ model websites {
   last_preview_update DateTime     @default(now()) @db.Timestamp(6)
   hidden              Boolean      @default(false)
   comment             comment[]
+  report              report[]
   user_likes          user_likes[]
   user                User         @relation(fields: [created_by], references: [name], onDelete: Cascade, map: "created_by_key")
 }
@@ -38,6 +39,7 @@ model User {
   name_change_available Boolean      @default(false)
   accounts              Account[]
   comment               comment[]
+  report                report[]
   sessions              Session[]
   user_likes            user_likes[]
   websites              websites[]
@@ -110,6 +112,17 @@ model comment {
 
   @@index([created_by], map: "created_by")
   @@index([website_url], map: "website")
+}
+
+model report {
+  id         Int      @id @default(autoincrement())
+  type       String
+  created_by String
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  content    String
+  url        String
+  user       User     @relation(fields: [created_by], references: [name], onDelete: NoAction, onUpdate: NoAction, map: "created_by_key")
+  websites   websites @relation(fields: [url], references: [url], onDelete: Cascade, map: "website_url_key")
 }
 
 enum categories {

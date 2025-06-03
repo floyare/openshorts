@@ -1,12 +1,12 @@
 import { MAX_PROMPT_LENGTH } from '@/helpers/ai.helper';
 import { uploadSchema } from '@/helpers/upload.helper';
-import { commentSchema } from '@/helpers/websites.helper';
+import { commentSchema, reportSchema } from '@/helpers/websites.helper';
 import { getWebsitesRecommendation } from '@/lib/ai.core';
 import { debugLog } from '@/lib/log';
 import { getBestUploads, getProfileStats } from '@/lib/profile.core';
 import { validateLimit } from '@/lib/ratelimiter';
 import { uploadWebsite } from '@/lib/upload.core';
-import { doesWebsiteExists, fetchWebsiteComments, getMyUploads, postWebsiteComment, removeWebsite, searchWebsites, toggleLikeWebsite, updateWebsitePreview } from '@/lib/websites.core';
+import { doesWebsiteExists, fetchWebsiteComments, getMyUploads, postWebsiteComment, removeWebsite, reportWebsite, searchWebsites, toggleLikeWebsite, updateWebsitePreview } from '@/lib/websites.core';
 import type { AIUsageType } from '@/types/user';
 import type { WebsiteType } from '@/types/website';
 import { defineAction } from 'astro:actions';
@@ -147,6 +147,16 @@ export const server = {
             const limit = await validateLimit(ctx.clientAddress)
             if (!limit.success) throw new Error("Ratelimited!")
             return await postWebsiteComment({ url: input.url, comment: input.content, headers: ctx.request.headers })
+        }
+    }),
+    reportWebsite: defineAction({
+        input: reportSchema.extend({
+            url: z.string().url()
+        }),
+        handler: async (input, ctx) => {
+            const limit = await validateLimit(ctx.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+            return await reportWebsite({ url: input.url, content: { type: input.type, text: input.text }, context: ctx })
         }
     })
 }

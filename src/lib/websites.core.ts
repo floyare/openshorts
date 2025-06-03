@@ -3,7 +3,7 @@ import getPrismaInstance from "./prisma"
 import { tryCatch } from "./utils"
 import type { Prisma } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
-import { formatTagsWithCount, PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
+import { formatTagsWithCount, PAGE_SIZE, type ReportOption, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
 import { differenceInHours } from "date-fns"
@@ -11,6 +11,25 @@ import { getWebsiteScreen } from "./screen.core";
 import { uploadFile } from "./upload.core";
 import { UTApi } from "uploadthing/server";
 import { isUserBanned } from "./user.core";
+
+export const reportWebsite = async ({ url, content, context }: { url: string, content: ReportOption, context: ActionAPIContext }) => {
+    const currentUser = await auth.api.getSession({
+        headers: context.request.headers
+    })
+
+    if (!currentUser?.user) throw new Error("User not logged in")
+
+    const prisma = getPrismaInstance();
+
+    await prisma.report.create({
+        data: {
+            created_by: currentUser.user.name,
+            type: content.type,
+            content: content.text,
+            url: url
+        }
+    })
+}
 
 export const toggleLikeWebsite = async ({ websiteId, context }: { websiteId: string, context: ActionAPIContext }) => {
     debugLog("ACTION", 'Executing like action', websiteId)
