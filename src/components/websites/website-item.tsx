@@ -1,4 +1,4 @@
-import { ExternalLink, Heart, LoaderCircle, MessageSquareText } from "lucide-react";
+import { ExternalLink, Flag, Heart, LoaderCircle, MessageSquareText } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
@@ -26,11 +26,11 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     const [isWebsiteLiked, isWebsiteLikedSet] = useState(website.isLiked)
     const [likes, likesSet] = useState(website.likesCount ?? 0)
     const { name, url, description, image, isLiked } = website;
-    const { data } = authClient.useSession()
+    const { data: currentUser } = authClient.useSession()
 
     const { callDialog } = useDialogManager(dialogs)
 
-    const canBeLiked = useMemo(() => DEBUG_ALLOW_LIKE_OWN_WEBSITES || data?.user.name !== website.created_by, [data?.user])
+    const canBeLiked = useMemo(() => DEBUG_ALLOW_LIKE_OWN_WEBSITES ?? currentUser?.user.name !== website.created_by, [currentUser?.user])
 
     useEffect(() => {
         isWebsiteLikedSet(isLiked)
@@ -99,15 +99,16 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             }
                             {website.tags.length > MAX_TAGS_TO_DISPLAY && <span className="text-secondary-700 text-sm font-semibold">+{website.tags.length - MAX_TAGS_TO_DISPLAY}</span>}
                         </div>
-                        <div className="">
+                        <div className="flex md:items-end items-center gap-1">
                             <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
+                            <Button size={"icon"} variant={"ghost"} title="Report a problem with this website"><Flag className="text-red-400" size={24} /></Button>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2 sm:w-max w-full">
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
                     <div className="flex items-center gap-1">
-                        <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked} onClick={() => likeActionPendingSet(handleLike)} className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500">
+                        <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer")}>
                             {
                                 likeActionPending ? <LoaderCircle className="animate-spin" /> :
                                     <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-500 group-hover:fill-text-900" : "")} />
