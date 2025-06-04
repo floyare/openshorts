@@ -102,8 +102,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       easy-dialogs:
-        specifier: ^0.1.6
-        version: 0.1.6(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^0.1.7
+        version: 0.1.7(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       lucide-react:
         specifier: ^0.501.0
         version: 0.501.0(react@19.1.0)
@@ -1987,8 +1987,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  easy-dialogs@0.1.6:
-    resolution: {integrity: sha512-iZHfd5dagZBUaxBlO0kOZvnl/x1ogl4EcZtXpCCbbUVmmJQ92ku7HsdVgmpJJyf1hsoqAZN9SjIlKRGohQhxwg==}
+  easy-dialogs@0.1.7:
+    resolution: {integrity: sha512-nVy1F6cGDQOXvUjvXL6x6Ye7M4RhUusqX5aHIx0CQil3QzT94Sq3Vr3C8/Xp9B2NrrgLkNyacj9CcLK7U9AafA==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0
       react-dom: ^17.0.0 || ^18.0.0
@@ -5393,7 +5393,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  easy-dialogs@0.1.6(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  easy-dialogs@0.1.7(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       jotai: 2.12.3(@types/react@19.1.2)(react@19.1.0)
       react: 19.1.0
