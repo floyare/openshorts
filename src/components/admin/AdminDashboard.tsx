@@ -356,7 +356,7 @@ const AdminDashboard = ({ websites, users, reports }: { websites: websites[], us
                                     <TableCell>{u.id}</TableCell>
                                     <TableCell><a href={`/website/${u.url}`} target="_blank" className="text-primary-600">{u.url}</a></TableCell>
                                     <TableCell>{u.type}</TableCell>
-                                    <TableCell>{u.content}</TableCell>
+                                    <TableCell><p className="max-w-xs break-words text-balance">{u.content}</p></TableCell>
                                     <TableCell>{format(u.created_at, "dd.MM.yyyy HH:mm")}</TableCell>
                                     <TableCell><a href={`/profile/${u.created_by}`} target="_blank" className="text-primary-600">{u.created_by}</a></TableCell>
                                 </TableRow>
