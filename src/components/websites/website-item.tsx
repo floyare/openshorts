@@ -122,7 +122,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500"
                             onClick={async () => await callDialog("website-details", { website })}
                             disabled={
-                                getActiveDialogs().some((p) => p.component.name === "WebsiteDetailsDialog") || props.disableCommentsDialog
+                                getActiveDialogs().some((p) => p.dialogKeyId === "website-details") || props.disableCommentsDialog
                             }
                         >
                             <MessageSquareText className="text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80 transition-colors" />
