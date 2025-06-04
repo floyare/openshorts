@@ -85,7 +85,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             <ExternalLink className="text-text-600" size={18} />
                         </h2>
                     </a>
-                    <p className="w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
+                    <p className="w-full max-w-3xs overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
                         {description ? highlight(description) : "No description"}
                     </p>
                     <div className="mt-auto flex flex-col gap-2">
