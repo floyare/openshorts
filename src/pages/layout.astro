@@ -10,12 +10,7 @@ import { AnalyticsProvider } from "shibuitracker-client/client";
 import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
 import { Toaster } from "@/components/ui/sonner";
-const {
-    subtitle = "",
-    description = DESCRIPTION,
-    class: className,
-    ...props
-} = Astro.props;
+const { subtitle = "", description, class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
 import { Schema } from "astro-seo-schema";
@@ -65,7 +60,10 @@ debugLog("DEBUG", "user", Astro.locals.user);
         <meta name="robots" content="index,follow" />
         <meta name="author" content="floyare" />
         <title>{TITLE} {subtitle ? ` - ${subtitle}` : ""}</title>
-        <meta name="description" content={Astro.props.description} />
+        <meta
+            name="description"
+            content={Astro.props.description || DESCRIPTION}
+        />
         <link rel="canonical" href={Astro.url} />
         <meta name="theme-color" content="#501be4" />
         <Font cssVariable="--font" preload />
