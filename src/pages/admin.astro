@@ -19,10 +19,20 @@ const websitesFetch = getPrismaInstance().websites.findMany({
         user: true,
     },
 });
+const reportsFetch = getPrismaInstance().report.findMany({});
 
-const [users, websites] = await Promise.all([usersFetch, websitesFetch]);
+const [users, websites, reports] = await Promise.all([
+    usersFetch,
+    websitesFetch,
+    reportsFetch,
+]);
 ---
 
 <Layout subtitle="Admin Dashboard">
-    <AdminDashboard users={users} websites={websites} client:idle />
+    <AdminDashboard
+        users={users}
+        websites={websites}
+        reports={reports}
+        client:idle
+    />
 </Layout>

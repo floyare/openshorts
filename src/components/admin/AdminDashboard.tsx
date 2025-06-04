@@ -1,4 +1,4 @@
-import type { User, websites } from "@prisma/client";
+import type { report, User, websites } from "@prisma/client";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -14,12 +14,15 @@ import type { BannedDetailsType } from "@/types/user";
 
 const PAGE_SIZE = 5;
 
-const AdminDashboard = ({ websites, users }: { websites: websites[], users: User[] }) => {
+const AdminDashboard = ({ websites, users, reports }: { websites: websites[], users: User[], reports: report[] }) => {
     const [localWebsites, localWebsitesSet] = useState<websites[]>(websites)
     const [localUsers, localUsersSet] = useState<User[]>(users)
+    const [localReports, localReportsSet] = useState<report[]>(reports)
 
     const [websiteSearch, setWebsiteSearch] = useState("");
     const [userSearch, setUserSearch] = useState("");
+    const [reportSearch, setReportSearch] = useState("");
+    const [reportPage, setReportPage] = useState(1);
     const [websitePage, setWebsitePage] = useState(1);
     const [userPage, setUserPage] = useState(1);
 
@@ -29,11 +32,20 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
             w.name?.toLowerCase().includes(websiteSearch.toLowerCase())
         )
     );
+
     const [filteredUsers, setFilteredUsers] = useState(() =>
         users.filter((u) =>
             (u.name || u.email)
                 ?.toLowerCase()
                 .includes(userSearch.toLowerCase())
+        )
+    );
+
+    const [filteredReport, setFilteredReports] = useState(() =>
+        reports.filter((u) =>
+            (u.content || u.type)
+                ?.toLowerCase()
+                .includes(reportSearch.toLowerCase())
         )
     );
 
@@ -55,6 +67,16 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
         );
     }, [localUsers, userSearch]);
 
+    useMemo(() => {
+        setFilteredReports(
+            localReports.filter((u) =>
+                (u.content || u.type)
+                    ?.toLowerCase()
+                    .includes(reportSearch.toLowerCase())
+            )
+        );
+    }, [localReports, reportSearch]);
+
     const paginatedWebsites = useMemo(
         () =>
             filteredWebsites.slice(
@@ -63,6 +85,7 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
             ),
         [filteredWebsites, websitePage]
     );
+
     const paginatedUsers = useMemo(
         () =>
             filteredUsers.slice(
@@ -70,6 +93,15 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
                 userPage * PAGE_SIZE
             ),
         [filteredUsers, userPage]
+    );
+
+    const paginatedReports = useMemo(
+        () =>
+            filteredReport.slice(
+                (reportPage - 1) * PAGE_SIZE,
+                reportPage * PAGE_SIZE
+            ),
+        [filteredReport, reportPage]
     );
 
     const handleWebsiteRemove = async (w: websites) => {
@@ -189,7 +221,7 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
                             )}
                         </TableBody>
                     </Table>
-                    {/* Pagination */}
+
                     <div className="flex justify-between items-center mt-4">
                         <Button
                             variant="outline"
@@ -242,11 +274,11 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
                         <TableBody>
                             {paginatedUsers.map((u) => (
                                 <TableRow key={u.id}>
-                                    <TableCell>{u.name}</TableCell>
+                                    <TableCell><a href={`/profile/${u.name}`} target="_blank" className="text-primary-600">{u.name}</a></TableCell>
                                     <TableCell>{u.email}</TableCell>
                                     <TableCell>{u.role}</TableCell>
                                     <TableCell>{format(u.createdAt, "dd.MM.yyyy HH:mm")}</TableCell>
-                                    <TableCell className="space-y-2">{(u.banned_details as unknown as BannedDetailsType[]).map((ban, idx) => (
+                                    <TableCell className="space-y-2">{((typeof u.banned_details === "string" ? JSON.parse(u.banned_details) : u.banned_details) as unknown as BannedDetailsType[]).map((ban, idx) => (
                                         <div key={idx} className="flex flex-col">
                                             <span>{ban.reason ?? "(no reason)"}</span>
                                             <span className="text-xs text-gray-500">
@@ -286,6 +318,77 @@ const AdminDashboard = ({ websites, users }: { websites: websites[], users: User
                             size="sm"
                             disabled={userPage * PAGE_SIZE >= filteredUsers.length}
                             onClick={() => setUserPage((p) => p + 1)}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Reports</CardTitle>
+                    <Input
+                        placeholder="Search reports..."
+                        value={reportSearch}
+                        onChange={(e) => {
+                            setReportSearch(e.target.value);
+                            setReportPage(1);
+                        }}
+                        className="mt-2"
+                    />
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>Website</TableHead>
+                                <TableHead>Type</TableHead>
+                                <TableHead>Content</TableHead>
+                                <TableHead>Created at</TableHead>
+                                <TableHead>Created by</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedReports.map((u) => (
+                                <TableRow key={u.id}>
+                                    <TableCell>{u.id}</TableCell>
+                                    <TableCell><a href={`/website/${u.url}`} target="_blank" className="text-primary-600">{u.url}</a></TableCell>
+                                    <TableCell>{u.type}</TableCell>
+                                    <TableCell>{u.content}</TableCell>
+                                    <TableCell>{format(u.created_at, "dd.MM.yyyy HH:mm")}</TableCell>
+                                    <TableCell><a href={`/profile/${u.created_by}`} target="_blank" className="text-primary-600">{u.created_by}</a></TableCell>
+                                </TableRow>
+                            ))}
+
+                            {paginatedReports.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-center">
+                                        No reports found.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+
+                    <div className="flex justify-between items-center mt-4">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={reportPage === 1}
+                            onClick={() => setReportPage((p) => p - 1)}
+                        >
+                            Previous
+                        </Button>
+                        <span>
+                            Page {reportPage} of {Math.max(1, Math.ceil(filteredReport.length / PAGE_SIZE))}
+                        </span>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={reportPage * PAGE_SIZE >= filteredReport.length}
+                            onClick={() => setReportPage((p) => p + 1)}
                         >
                             Next
                         </Button>
