@@ -79,11 +79,11 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
         <Dialog open onOpenChange={onClose}>
             {/* // <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[1001] grid place-items-center-safe transition-all"> */}
             <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein !z-[1001]" {...rest}>
-                <Container className="!bg-background-950 overflow-hidden px-6 h-fit relative my-4">
+                <Container className="!bg-background-950 overflow-hidden md:px-6 px-4 h-fit relative">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>
                         <div className="text-center">
-                            <h2 className="text-3xl text-white font-bold mt-2 flex flex-col items-center gap-1"><Sparkles size={42} className="relative text-accent-500 animate-levitate" /> Try searching with AI</h2>
+                            <h2 className="md:text-3xl text-2xl  text-white font-bold mt-2 flex flex-col items-center gap-1"><Sparkles size={42} className="relative text-accent-500 animate-levitate" /> Try searching with AI</h2>
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>
 
@@ -104,7 +104,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                             />
                         </div>
                     </div>
-                    <div className={cn("flex flex-col md:items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto md:max-h-[70vh] items-start max-h-[50vh]")}>
+                    <div className={cn("flex flex-col md:items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto md:max-h-[70vh] items-center max-h-[50vh]")}>
                         {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
                             <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                             <h2 className="text-xl">Thinking...</h2>
