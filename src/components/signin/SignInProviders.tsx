@@ -1,5 +1,5 @@
 import { authClient } from "@/lib/auth-client";
-import { memo, useState, useTransition } from "react";
+import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 
 const ProviderItem = (({ name, provider }: { name: string, provider: any }) => {

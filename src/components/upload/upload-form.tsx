@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { uploadSchema } from "@/helpers/upload.helper";
 import { actions } from "astro:actions";
 import { debugLog } from "@/lib/log";
-import { cn, tryCatch } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import TagsSelector from "./tags-selector";
 import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
 import SkewedHighlight from "../skewed-highlight";
