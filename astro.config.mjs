@@ -7,6 +7,7 @@ import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
 
 import sitemap from '@astrojs/sitemap';
+import cloudflare from '@astrojs/cloudflare';
 //import getPrismaInstance from '@/lib/prisma';
 
 //const customPages = await fetch("https://example.com").then(users => { return ["https://openshorts.dev/XD"] });
@@ -22,7 +23,7 @@ export default defineConfig({
     //customPages: customPages
   })],
 
-  adapter: vercel(),//node({mode: "standalone"}),
+  adapter: cloudflare(),//node({mode: "standalone"}),
   experimental: {
     fonts: [{
         provider: fontProviders.google(),
