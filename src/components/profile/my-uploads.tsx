@@ -61,14 +61,14 @@ const MyUploads = ({ name }: { name: string }) => {
                         />
                     </PaginationItem>
                     {(() => {
-                        const MAX_PAGES_TO_LOAD = 5;
+                        const MAX_PAGES_TO_LOAD = 4;
                         const [maxItems, setMaxItems] = useState(MAX_PAGES_TO_LOAD);
                         useEffect(() => {
                             const handleResize = () => {
                                 if (window.innerWidth < 640) {
                                     setMaxItems(3);
                                 } else if (window.innerWidth < 1024) {
-                                    setMaxItems(5);
+                                    setMaxItems(3);
                                 } else {
                                     setMaxItems(MAX_PAGES_TO_LOAD);
                                 }
@@ -176,9 +176,9 @@ const MyUploads = ({ name }: { name: string }) => {
     return (
         <ul className="flex flex-col gap-2">
             {isLoading ? <>
-                <div className="md:w-xs w-3xs h-16 bg-gray-400 animate-pulse" />
-                <div className="md:w-xs w-3xs h-16 bg-gray-400 animate-pulse" />
-                <div className="md:w-xs w-3xs h-16 bg-gray-400 animate-pulse" />
+                <div className="md:w-xs w-3xs h-16 bg-background-800 animate-pulse rounded-md" />
+                <div className="md:w-xs w-3xs h-16 bg-background-800 animate-pulse rounded-md" />
+                <div className="md:w-xs w-3xs h-16 bg-background-800 animate-pulse rounded-md" />
             </> :
                 <>
                     {slicedUploads?.map((website, idx) => (
