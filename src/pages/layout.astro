@@ -74,7 +74,11 @@ debugLog("DEBUG", "user", Astro.locals.user);
             property="og:title"
             content={`${TITLE} ${subtitle ? ` - ${subtitle}` : ""}`}
         />
-        <meta property="og:description" content={Astro.props.description} />
+        <meta property="og:site_name" content="openshorts.dev" />
+        <meta
+            property="og:description"
+            content={Astro.props.description || DESCRIPTION}
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url} />
         <meta property="og:image" content="/og-bc.webp" />
@@ -84,7 +88,10 @@ debugLog("DEBUG", "user", Astro.locals.user);
             name="twitter:title"
             content={`${TITLE} ${subtitle ? ` - ${subtitle}` : ""}`}
         />
-        <meta name="twitter:description" content={Astro.props.description} />
+        <meta
+            name="twitter:description"
+            content={Astro.props.description || DESCRIPTION}
+        />
         <meta name="twitter:image" content="/og-bc.webp" />
     </head>
     <body
