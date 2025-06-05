@@ -48,23 +48,35 @@ if (!website) {
         " @ openshorts.dev " +
         new Date().getFullYear()}
 >
-    <section class="flex gap-6 justify-center items-start flex-wrap">
-        <WebsiteItem
-            website={{
-                ...website,
-                likesCount: website.user_likes.length,
-                commentsCount: website.comment.length,
-                isLiked: website.user_likes.some(
-                    (like) => like.user_id === Astro.locals.user?.id,
-                ),
-            }}
-            disableCommentsDialog
-            client:idle
-        />
-        <WebsiteComments
-            website={website}
-            currentUser={Astro.locals.user}
-            client:idle
-        />
+    <section class="flex flex-col gap-2 justify-center items-center flex-wrap">
+        <h1 class="bg-background-400 text-white py-2 px-6 rounded-md">
+            Detailed view of {website.name}
+        </h1>
+        <div class="flex gap-2 justify-center items-start flex-wrap w-full">
+            <WebsiteItem
+                website={{
+                    ...website,
+                    likesCount: website.user_likes.length,
+                    commentsCount: website.comment.length,
+                    isLiked: website.user_likes.some(
+                        (like) => like.user_id === Astro.locals.user?.id,
+                    ),
+                }}
+                className="!max-w-lg"
+                disableCommentsDialog
+                client:idle
+            />
+            <WebsiteComments
+                website={website}
+                currentUser={Astro.locals.user}
+                client:idle
+            />
+        </div>
+        <div class="bg-background-400 text-white px-4 py-6 rounded-md max-w-xl">
+            <h1 class="font-bold text-lg">{website.name}</h1>
+            <p class="text-balance break-words">
+                {website.description}
+            </p>
+        </div>
     </section>
 </Layout>
