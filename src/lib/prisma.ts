@@ -1,13 +1,14 @@
 import { PrismaClient } from "@prisma/client"
 import { Redis } from "@upstash/redis";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
-let prismaInstance: PrismaClient;
+let prismaInstance: any;
 
 export const getPrismaInstance = () => {
     if (!prismaInstance) {
         prismaInstance = new PrismaClient({
             //log: ['query', 'info', 'warn', 'error']
-        });
+        }).$extends(withAccelerate());
     }
     return prismaInstance;
 };
