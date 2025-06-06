@@ -92,12 +92,12 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         <div className="flex items-center gap-1 flex-wrap">
                             {
                                 website.tags.slice(0, MAX_TAGS_TO_DISPLAY).map((tag, index) => (
-                                    <div className="bg-secondary-700 text-text-950 text-sm font-semibold px-2 py-1 rounded-sm" key={index}>
+                                    <div className="bg-secondary-600 text-white text-sm font-semibold px-2 py-1 rounded-sm" key={index}>
                                         {tag.toUpperCase()}
                                     </div>
                                 ))
                             }
-                            {website.tags.length > MAX_TAGS_TO_DISPLAY && <span className="text-secondary-700 text-sm font-semibold">+{website.tags.length - MAX_TAGS_TO_DISPLAY}</span>}
+                            {website.tags.length > MAX_TAGS_TO_DISPLAY && <span className="text-secondary-600 text-sm font-semibold">+{website.tags.length - MAX_TAGS_TO_DISPLAY}</span>}
                         </div>
                         <div className="flex md:items-end items-center gap-1">
                             <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
