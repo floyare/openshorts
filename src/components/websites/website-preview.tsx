@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { FileQuestion, LoaderCircle } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface WebsitePreviewProps extends React.HTMLAttributes<HTMLDivElement> {
     src: string;
@@ -24,6 +24,8 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
     const fontSize = useMemo(() => size ? size.width * 0.7 : 22, [size.width]);
     const sizeStyle = { width: size.width, height: size.height, fontSize: fontSize };
 
+    const zoomedInImgRef = useRef<HTMLImageElement | null>(null)
+
     useEffect(() => {
         setLoading(true);
         setError(false);
@@ -46,6 +48,10 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
             img.onerror = null;
         };
     }, [src]);
+
+    useEffect(() => {
+        if (previewZoomedIn) zoomedInImgRef.current?.focus()
+    }, [previewZoomedIn])
 
     return (
         <div
@@ -79,13 +85,16 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                     />
                     {previewZoomedIn && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-50 transition-all">
                         <img
+                            ref={zoomedInImgRef}
                             src={src}
                             alt={alt}
+                            tabIndex={-1}
                             width={size.width * 1.6}
                             height={size.height * 1.6}
                             className="rounded-md border bg-background-900 shadow-2xl shadow-black cursor-zoom-out"
                             style={{ maxWidth: 500, maxHeight: 700 }}
                             onClick={() => previewZoomedInSet(false)}
+                            onBlur={() => previewZoomedInSet(false)}
                         />
                     </div>}
                 </div>
