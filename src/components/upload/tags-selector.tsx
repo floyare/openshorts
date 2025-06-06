@@ -18,7 +18,7 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
         return (
             <span
                 key={tag}
-                tabIndex={index}
+                tabIndex={0}
                 className={`px-4 py-2 group flex items-center gap-1 cursor-pointer rounded-full transition-colors ${selectedTags.includes(tag) ? "bg-background-500 text-white hover:bg-background-700" : "bg-background-950 text-text-100 hover:bg-background-700/50"}`}
                 onClick={() => {
                     const newTags = isSelected ? selectedTags.filter((t) => t !== tag) : (canAddMore ? [...selectedTags, tag] : selectedTags);
