@@ -1,3 +1,4 @@
+import useOnScreen from "@/hooks/useOnScreen";
 import { cn } from "@/lib/utils";
 import { FileQuestion, LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -25,6 +26,9 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
     const sizeStyle = { width: size.width, height: size.height, fontSize: fontSize };
 
     const zoomedInImgRef = useRef<HTMLImageElement | null>(null)
+
+    const previewDivRef = useRef<HTMLDivElement | null>(null)
+    const isVisible = useOnScreen(previewDivRef)
 
     useEffect(() => {
         setLoading(true);
@@ -58,6 +62,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
             {...props}
             className={cn("relative flex items-center justify-center bg-background-900 rounded-sm ", props.className)}
             style={{ width: size.width, height: size.height }}
+            ref={previewDivRef}
         >
             {loading && !error && (
                 <span
@@ -80,6 +85,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                             setLoading(false);
                             setError(true);
                         }}
+                        loading={isVisible ? "eager" : "lazy"}
                         onClick={() => previewZoomedInSet(true)}
                         style={sizeStyle}
                     />
