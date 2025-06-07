@@ -101,6 +101,8 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                             style={{ maxWidth: 500, maxHeight: 700 }}
                             onClick={() => previewZoomedInSet(false)}
                             onBlur={() => previewZoomedInSet(false)}
+                            loading="eager"
+                            fetchPriority="high"
                         />
                     </div>}
                 </div>
