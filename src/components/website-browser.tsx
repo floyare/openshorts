@@ -292,8 +292,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         }))} value={searchContent.tags}>
                             {
                                 tagsList.map((tag, idx) => (
-                                    <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("flex items-center p-4 !flex-0")} disabled={tag.count <= 0}>
-                                        <p className="flex items-center gap-2 text-text-50">{tag.name} <span className="text-xs text-secondary-500">({tag.count})</span></p>
+                                    <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle flex items-center p-4 !flex-0")} disabled={tag.count <= 0}>
+                                        <p className="flex items-center gap-2">{tag.name} <span className="group-data-[state=on]/toggle:!text-white text-xs text-secondary-500">({tag.count})</span></p>
                                     </ToggleGroupItem>
                                 ))
                             }
