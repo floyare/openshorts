@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { debugLog } from "@/lib/log";
 import { format } from "date-fns";
 import type { BannedDetailsType } from "@/types/user";
+import { getURLHost } from "@/lib/utils";
 
 const PAGE_SIZE = 5;
 
@@ -354,7 +355,7 @@ const AdminDashboard = ({ websites, users, reports }: { websites: websites[], us
                             {paginatedReports.map((u) => (
                                 <TableRow key={u.id}>
                                     <TableCell>{u.id}</TableCell>
-                                    <TableCell><a href={`/website/${u.url}`} target="_blank" className="text-primary-600">{u.url}</a></TableCell>
+                                    <TableCell><a href={`/website/${getURLHost(u.url)}`} target="_blank" className="text-primary-600">{u.url}</a></TableCell>
                                     <TableCell>{u.type}</TableCell>
                                     <TableCell><p className="max-w-xs break-words text-balance">{u.content}</p></TableCell>
                                     <TableCell>{format(u.created_at, "dd.MM.yyyy HH:mm")}</TableCell>

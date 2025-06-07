@@ -31,3 +31,14 @@ export async function tryCatch<T, E = Error>(
 export function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export const getURLHost = (url: string) => {
+    let fullHost = new URL(url).host;
+    if (fullHost.startsWith("www.")) {
+        fullHost = fullHost.slice(4);
+    }
+
+    const hostParts = fullHost.split('.');
+    const hostnameOnly = hostParts.slice(0, -1).join('.');
+    return hostnameOnly
+}

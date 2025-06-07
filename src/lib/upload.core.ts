@@ -1,7 +1,7 @@
 import { UTApi, UTFile } from "uploadthing/server";
 import getPrismaInstance from "./prisma";
 import { getWebsiteScreen } from "./screen.core";
-import { capitalizeFirstLetter, tryCatch } from "./utils";
+import { capitalizeFirstLetter, getURLHost, tryCatch } from "./utils";
 import sharp from "sharp";
 import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { auth } from "./auth";
@@ -78,13 +78,13 @@ export const uploadWebsite = async ({
     // await new Promise(resolve => setTimeout(resolve, 2000));
     // throw new Error("test")
 
-    let fullHost = new URL(url).host;
-    if (fullHost.startsWith("www.")) {
-        fullHost = fullHost.slice(4);
-    }
+    // let fullHost = new URL(url).host;
+    // if (fullHost.startsWith("www.")) {
+    //     fullHost = fullHost.slice(4);
+    // }
 
-    const hostParts = fullHost.split('.');
-    const hostnameOnly = hostParts.slice(0, -1).join('.');
+    // const hostParts = fullHost.split('.');
+    const hostnameOnly = getURLHost(url)
 
     //throw new Error(hostnameOnly)
 
