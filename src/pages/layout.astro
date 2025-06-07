@@ -37,7 +37,7 @@ import { ClientRouter } from "astro:transitions";
                 "@type": "WebSite",
                 name: "openshorts",
                 url: "https://openshorts.dev/",
-                description: DESCRIPTION,
+                description: Astro.props.description || DESCRIPTION,
                 publisher: {
                     "@type": "Organization",
                     name: "openshorts.",
