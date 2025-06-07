@@ -12,6 +12,7 @@ import { authClient } from "@/lib/auth-client";
 import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
 import { useDialogManager, getActiveDialogs } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
+import { useAnalytics } from "shibuitracker-client/client";
 
 interface WebsiteItemProps extends React.HTMLAttributes<HTMLDivElement> {
     website: WebsiteType,
@@ -27,6 +28,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     const [likes, likesSet] = useState(website.likesCount ?? 0)
     const { name, url, description, image, isLiked } = website;
     const { data: currentUser } = authClient.useSession()
+    const { sendEvent } = useAnalytics()
 
     const { callDialog } = useDialogManager(dialogs)
 
@@ -75,7 +77,12 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
         <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full h-full">
                 <div className="flex flex-col gap-2 w-full">
-                    <a href={website.url} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
+                    <a href={website.url} onMouseDown={(e) => {
+                        if (e.button === 1) {
+                            console.log("Clciked!")
+                            sendEvent("custom_event", { source: "navigate - " + website.url })
+                        }
+                    }} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={
                             `https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`
                             //`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`
