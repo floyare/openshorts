@@ -14,13 +14,14 @@ const { subtitle = "", description, class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
 import { Schema } from "astro-seo-schema";
-import { debugLog } from "@/lib/log";
+import { ClientRouter } from "astro:transitions";
 
 //debugLog("DEBUG", "url", Astro.url);
 ---
 
 <html lang="en">
     <head>
+        <ClientRouter />
         {
             import.meta.env.DEV && (
                 <script
