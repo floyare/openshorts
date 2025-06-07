@@ -21,7 +21,7 @@ import { ClientRouter } from "astro:transitions";
 
 <html lang="en">
     <head>
-        <ClientRouter />
+        <ClientRouter fallback="swap" />
         {
             import.meta.env.DEV && (
                 <script
