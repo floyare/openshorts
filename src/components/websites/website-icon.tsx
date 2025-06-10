@@ -1,5 +1,6 @@
 import { FileQuestion, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Image } from "@unpic/react";
 
 interface WebsiteIconProps {
     src: string;
@@ -59,9 +60,25 @@ const WebsiteIcon: React.FC<WebsiteIconProps> = ({
                 </span>
             )}
             {!error && (
-                <img
+                // <img
+                //     src={src}
+                //     alt={alt}
+                //     width={size}
+                //     height={size}
+                //     className={`object-contain ${loading ? "hidden" : "block"} w-full h-full`}
+                //     onLoad={() => setLoading(false)}
+                //     onError={() => {
+                //         setLoading(false);
+                //         setError(true);
+                //     }}
+                //     style={sizeStyle}
+                // />
+
+                <Image
                     src={src}
                     alt={alt}
+                    layout="constrained"
+                    //background=""
                     width={size}
                     height={size}
                     className={`object-contain ${loading ? "hidden" : "block"} w-full h-full`}
@@ -70,7 +87,7 @@ const WebsiteIcon: React.FC<WebsiteIconProps> = ({
                         setLoading(false);
                         setError(true);
                     }}
-                    style={sizeStyle}
+                //style={sizeStyle}
                 />
             )}
             {error &&
