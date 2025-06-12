@@ -64,7 +64,7 @@ const UploadForm = () => {
         <section>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className={cn(
-                    "flex flex-col gap-4 bg-background-900 p-4 rounded-md border-[1px] border-background-800 sm:min-w-xl min-w-auto transition-all relative my-8 max-w-3xs",
+                    "flex flex-col gap-4 bg-background-900 dark:bg-neutral-900 dark:border-neutral-700 p-4 rounded-md border-[1px] border-background-800 sm:min-w-xl min-w-auto transition-all relative my-8 max-w-3xs",
                     isSubmitting ? "opacity-60 animate-pulse pointer-events-none" : ""
                 )}>
                     <SkewedHighlight className="absolute -top-20 -left-8 z-10">

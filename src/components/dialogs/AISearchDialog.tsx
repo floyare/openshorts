@@ -79,7 +79,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
         <Dialog open onOpenChange={onClose}>
             {/* // <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[1001] grid place-items-center-safe transition-all"> */}
             <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein !z-[1001]" {...rest}>
-                <Container className="!bg-background-950 overflow-hidden md:px-6 px-4 h-fit relative">
+                <Container className="!bg-background-950 overflow-hidden md:px-6 px-4 h-fit relative dark:!bg-neutral-900 dark:!border-neutral-700">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>
                         <div className="text-center">
@@ -96,7 +96,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                             }
                             <Input
                                 disabled={isSearching || !userLoggedIn || aiNoUsagesLeft}
-                                className={cn(isSearching ? "animate-pulse" : "", "w-full drop-shadow-xl drop-shadow-black/20")}
+                                className={cn(isSearching ? "animate-pulse" : "", "w-full drop-shadow-xl drop-shadow-black/20 dark:bg-neutral-800")}
                                 placeholder="Find website with free image assets..."
                                 value={searchInput}
                                 onChange={(e) => searchInputSet(e.target.value)}
@@ -105,7 +105,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                         </div>
                     </div>
                     <div className={cn("flex flex-col md:items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto md:max-h-[70vh] items-center max-h-[50vh]")}>
-                        {isSearching && <div className={cn("bg-white p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
+                        {isSearching && <div className={cn("bg-white dark:bg-neutral-700 p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
                             <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                             <h2 className="text-xl">Thinking...</h2>
                         </div>}

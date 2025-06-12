@@ -78,7 +78,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     }
 
     return (
-        <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 bg-white w-full flex flex-col gap-2 grow relative", className)}>
+        <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full h-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} onMouseDown={(e) => {

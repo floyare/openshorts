@@ -56,7 +56,7 @@ const ReportWebsiteDialog = ({
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
-                <Container className="bg-white space-y-2">
+                <Container className="bg-white space-y-2 dark:!bg-neutral-900 dark:!border-neutral-700">
                     <div className="flex gap-8 justify-between items-center">
                         <h1 className="font-bold flex items-center gap-2"><Flag className="text-red-500" /> Report website</h1>
                         <Button variant={"ghost"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>
@@ -66,7 +66,7 @@ const ReportWebsiteDialog = ({
                         {REPORT_TYPES.map((option, idx) => {
                             return (
                                 <>
-                                    <div key={idx} className={cn(selectedReportOption?.type === option.type ? "bg-background-500 text-white" : "bg-background-950", "px-3 py-2 rounded-md cursor-pointer transition-colors")} onClick={() => selectedReportOptionSet(option)}>
+                                    <div key={idx} className={cn(selectedReportOption?.type === option.type ? "bg-background-500 text-white" : "bg-background-950 dark:bg-neutral-800", "px-3 py-2 rounded-md cursor-pointer transition-colors")} onClick={() => selectedReportOptionSet(option)}>
                                         {option.text}
                                     </div>
                                     {selectedReportOption?.type === "OTHER" && selectedReportOption.type === option.type && <Textarea

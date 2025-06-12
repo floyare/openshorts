@@ -51,7 +51,7 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
 
     return (
         <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[100] grid place-items-center-safe animate-fadein data-[state=closed]:animate-fadeout" {...rest}>
-            <Container className="!bg-background-950 min-w-2xs max-w-md">
+            <Container className="!bg-background-950 min-w-2xs max-w-md dark:!bg-neutral-900 dark:!border-neutral-700">
                 <div className="flex gap-2 items-center">
                     <h1 className="font-bold">Edit website</h1>
                     <Button variant={"ghost"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>

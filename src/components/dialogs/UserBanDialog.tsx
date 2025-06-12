@@ -14,7 +14,7 @@ const UserBanDialog = ({ onClose, additionalProps, ...rest }: UserBanDialogProps
     return (
         <Dialog open onOpenChange={() => onClose(null)}>
             <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
-                <Container>
+                <Container className="dark:!bg-neutral-900 dark:!border-neutral-700">
                     <h1 className="font-bold">Banning user: {additionalProps.user.name}</h1>
                     <form
                         className="flex flex-col gap-4 mt-4"
@@ -36,7 +36,7 @@ const UserBanDialog = ({ onClose, additionalProps, ...rest }: UserBanDialogProps
                             <span className="font-medium">Ban Description</span>
                             <textarea
                                 name="description"
-                                className="border rounded px-3 py-2 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                                className="border rounded px-3 py-2 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-primary bg-white dark:bg-neutral-800"
                                 placeholder="Reason for banning this user..."
                                 required
                             />
@@ -46,7 +46,7 @@ const UserBanDialog = ({ onClose, additionalProps, ...rest }: UserBanDialogProps
                             <input
                                 name="unban_date"
                                 type="datetime-local"
-                                className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                                className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary bg-white dark:bg-neutral-800"
                             />
                         </label>
                         <div className="flex justify-end gap-2 mt-2">

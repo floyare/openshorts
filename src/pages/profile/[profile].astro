@@ -48,7 +48,9 @@ const banDetails =
 >
     <div class="flex flex-wrap gap-2 mt-10">
         <div class="flex flex-col gap-2 lg:w-fit w-full">
-            <Container className="px-8 relative sm:grow-0 grow">
+            <Container
+                className="px-8 relative sm:grow-0 grow dark:bg-neutral-900 dark:border-neutral-700"
+            >
                 <SkewedHighlight
                     className="absolute sm:-top-16 sm:-left-8 left-[50%] -translate-x-[50%] sm:translate-x-0 -top-16 z-10"
                 >
@@ -133,12 +135,14 @@ const banDetails =
                     </Container>
                 )
             }
-            <Container className="px-8 flex items-center justify-around gap-12">
+            <Container
+                className="px-8 flex items-center justify-around gap-12 dark:bg-neutral-900 dark:border-neutral-700"
+            >
                 <ProfileStats name={profileData.name} client:load />
             </Container>
             {
                 isOwnProfile && (
-                    <Container>
+                    <Container className="dark:bg-neutral-900 dark:border-neutral-700">
                         <h2 class="font-bold pb-1.5 flex items-center gap-1">
                             <UploadCloud /> My uploads
                         </h2>
@@ -149,7 +153,9 @@ const banDetails =
                 )
             }
         </div>
-        <Container className="relative sm:mt-0 mt-22 grow">
+        <Container
+            className="relative sm:mt-0 mt-22 grow dark:bg-neutral-900 dark:border-neutral-700"
+        >
             <SkewedHighlight
                 className="absolute sm:-top-16 sm:left-[80%] left-[50%] -translate-x-[50%] sm:-translate-x-0 -top-20 w-max z-10"
             >

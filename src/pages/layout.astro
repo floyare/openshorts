@@ -18,6 +18,8 @@ import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 
 //debugLog("DEBUG", "url", Astro.url);
+
+// TODO: fix theme check on initial not working on page change
 ---
 
 <script is:inline>
@@ -125,14 +127,14 @@ import { ThemeSwitcher } from "@/components/ui/theme-switcher";
     </head>
     <body
         class:list={[
-            "bg-background-950 !p-8 text-text-50 rounded-3xl flex flex-col gap-6 relative",
+            "bg-background-950 dark:bg-neutral-950 dark:text-text-950 !p-8 text-text-50 rounded-3xl flex flex-col gap-6 relative",
             className,
         ]}
         {...props}
     >
         <Dialog client:idle />
         <Background
-            class={"fixed top-0 left-0 !w-full !h-full opacity-35 -z-10"}
+            class={"fixed top-0 left-0 !w-full !h-full opacity-35 dark: -z-10"}
         />
         <Toaster position="top-right" richColors client:visible />
         <Navbar />

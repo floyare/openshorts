@@ -19,7 +19,7 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
             <span
                 key={tag}
                 tabIndex={0}
-                className={`px-4 py-2 group flex items-center gap-1 cursor-pointer rounded-full transition-colors ${selectedTags.includes(tag) ? "bg-background-500 text-white hover:bg-background-700" : "bg-background-950 text-text-100 hover:bg-background-700/50"}`}
+                className={`px-4 py-2 group flex items-center gap-1 cursor-pointer rounded-full transition-colors ${selectedTags.includes(tag) ? "bg-background-500 text-white hover:bg-background-700" : "bg-background-950 dark:bg-neutral-700 dark:text-text-950 text-text-100 hover:bg-background-700/50 dark:hover:bg-neutral-600/70"}`}
                 onClick={() => {
                     const newTags = isSelected ? selectedTags.filter((t) => t !== tag) : (canAddMore ? [...selectedTags, tag] : selectedTags);
                     selectedTagsSet(newTags);
@@ -43,7 +43,7 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
                 })}
             </div>
             <div className={cn(
-                "flex flex-wrap gap-2 max-w-full bg-background-950 rounded-md border-[1px] border-background-800 max-h-36 overflow-auto p-2 transition-all",
+                "flex flex-wrap gap-2 max-w-full bg-background-950 dark:bg-neutral-800 dark:border-neutral-700 dark:text-text-950 rounded-md border-[1px] border-background-800 max-h-36 overflow-auto p-2 transition-all",
                 !canAddMore ? "grayscale-100 pointer-events-none opacity-65" : ""
             )}>
                 {DEFINED_TAGS

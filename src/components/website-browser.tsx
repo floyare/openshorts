@@ -140,7 +140,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const PaginationControls = memo(() => {
         if (noEntries) return null
         return (
-            <Pagination className={cn("transition-all bg-white text-text-50 px-4 py-1 sm:w-fit w-full rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
+            <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
@@ -265,7 +265,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     return (
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1 relative">
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
-                <div className="bg-white p-4 rounded-lg border-[1px] border-background-800 flex flex-col space-y-5">
+                <div className="bg-white dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
                     <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
                     <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-base shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
                         <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-semibold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
@@ -292,7 +292,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         }))} value={searchContent.tags}>
                             {
                                 tagsList.map((tag, idx) => (
-                                    <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle flex items-center p-4 !flex-0")} disabled={tag.count <= 0}>
+                                    <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle flex items-center p-4 !flex-0 dark:text-text-950")} disabled={tag.count <= 0}>
                                         <p className="flex items-center gap-2">{tag.name} <span className="group-data-[state=on]/toggle:!text-white text-xs text-secondary-500">({tag.count})</span></p>
                                     </ToggleGroupItem>
                                 ))
@@ -315,7 +315,7 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 </Container>
             </aside>
             <Container
-                className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
+                className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14 dark:bg-neutral-900 dark:border-neutral-700", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
             >
                 <SkewedHighlight className="absolute sm:-top-12 sm:-left-8 z-[1000] -top-20 left-[50%] sm:translate-x-0 translate-x-[-50%] text-center w-max">
                     <h2
@@ -327,9 +327,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                 {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
                     <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                 </div>}
-                <div className="bg-white border-background-900 border-[1px] rounded-sm md:absolute md:top-4 md:right-4 relative">
+                <div className="bg-white dark:bg-neutral-800 border-background-900 border-[1px] rounded-sm md:absolute md:top-4 md:right-4 relative">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
-                        <SelectTrigger size="default" className="text-lg w-full" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
+                        <SelectTrigger size="default" className="text-lg w-full dark:text-text-950 dark:border-neutral-700" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
                             <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
                         </SelectTrigger>
                         <SelectContent>

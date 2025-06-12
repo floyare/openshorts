@@ -10,6 +10,20 @@ html body[data-scroll-locked] {
     /* padding: unset !important; */
 }
 
+.dark {
+    #wave1 {
+        @apply !fill-background-50
+    }
+
+    #wave2 {
+        @apply !fill-background-200
+    }
+
+    #wave3 {
+        @apply !fill-background-400
+    }
+}
+
 .shimmer-background {
     background: linear-gradient(-45deg,
             var(--color-primary-500) 40%,
