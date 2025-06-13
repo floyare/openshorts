@@ -20,7 +20,10 @@ const url = Astro.url;
     ) : (
         <a
             href="/signin"
-            class="flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center"
+            class:list={[
+                "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center",
+                url.pathname === "/signin" ? "!text-text-400 font-bold" : "",
+            ]}
         >
             <LogIn size={32} /> Sign In
         </a>
