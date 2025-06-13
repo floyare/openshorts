@@ -32,7 +32,7 @@ const ProfileStats = ({ name }: { name: string }) => {
                 aria-label="Likes"
             >
                 <Heart size={32} className="fill-primary-600" />
-                {isLoading ? <div className="h-8 w-12 bg-background-800 animate-pulse rounded-md" /> : <h2 className="text-3xl font-semibold">{stats ? stats.likes : 0}</h2>}
+                {isLoading ? <div className="h-8 w-12 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" /> : <h2 className="text-3xl font-semibold">{stats ? stats.likes : 0}</h2>}
             </div>
             <div
                 className="flex flex-col items-center gap-1"
@@ -40,7 +40,7 @@ const ProfileStats = ({ name }: { name: string }) => {
                 aria-label="Uploads"
             >
                 <UploadCloud size={32} className="fill-primary-600" />
-                {isLoading ? <div className="h-8 w-12 bg-background-800 animate-pulse rounded-md" /> : <h2 className="text-3xl font-semibold">{stats ? stats.uploaded : 0}</h2>}
+                {isLoading ? <div className="h-8 w-12 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" /> : <h2 className="text-3xl font-semibold">{stats ? stats.uploaded : 0}</h2>}
             </div>
         </>
     );

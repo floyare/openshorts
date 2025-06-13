@@ -4,10 +4,10 @@ import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 //import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu"
 
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ initialTheme }: { initialTheme: "theme-light" | "dark" }) {
     const [theme, setThemeState] = React.useState<
         "theme-light" | "dark" | "system"
-    >("theme-light")
+    >(initialTheme ?? "theme-light")
 
     React.useEffect(() => {
         const isDarkMode = document.documentElement.classList.contains("dark")
@@ -16,9 +16,7 @@ export function ThemeSwitcher() {
 
     React.useEffect(() => {
         const isDark =
-            theme === "dark" ||
-            (theme === "system" &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches)
+            theme === "dark"
         document.documentElement.classList[isDark ? "add" : "remove"]("dark")
     }, [theme])
 
