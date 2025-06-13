@@ -83,7 +83,6 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} onMouseDown={(e) => {
                         if (e.button === 1) {
-                            console.log("Clciked!")
                             sendEvent("custom_event", { source: "navigate - " + website.url })
                         }
                     }} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
