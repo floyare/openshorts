@@ -90,10 +90,10 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             `https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`
                             //`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`
                         } alt={`${name} favicon`} size={48} />
-                        <h2 className="font-bold text-2xl flex items-center gap-1 relative w-full">
+                        <h3 className="font-bold text-2xl flex items-center gap-1 relative w-full">
                             <span className="truncate inline-block 2xl:!max-w-[6.3vw] !max-w-[38.5vw]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
-                        </h2>
+                        </h3>
                     </a>
                     <p className="w-full max-w-3xs overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
                         {description ? highlight(description) : "No description"}
