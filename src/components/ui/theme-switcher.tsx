@@ -11,13 +11,19 @@ export function ThemeSwitcher({ initialTheme }: { initialTheme: "theme-light" | 
 
     React.useEffect(() => {
         const isDarkMode = document.documentElement.classList.contains("dark")
-        setThemeState(isDarkMode ? "dark" : "theme-light")
+        setThemeState(theme ?? (isDarkMode ? "dark" : "theme-light"))
     }, [])
 
     React.useEffect(() => {
         const isDark =
             theme === "dark"
         document.documentElement.classList[isDark ? "add" : "remove"]("dark")
+
+        document.cookie =
+            "theme=" +
+            (isDark ? "dark" : "theme-light") +
+            "; " +
+            document.cookie;
     }, [theme])
 
     return (
