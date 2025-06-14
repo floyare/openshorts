@@ -36,6 +36,7 @@
         "@upstash/ratelimit": "^2.0.5",
         "@upstash/redis": "^1.34.9",
         "astro": "^5.7.4",
+        "astro-loading-indicator": "^0.7.0",
         "astro-seo-schema": "^5.0.0",
         "axios": "^1.9.0",
         "better-auth": "^1.2.7",

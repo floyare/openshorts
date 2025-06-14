@@ -16,6 +16,7 @@ import { Dialog } from "easy-dialogs";
 import { Schema } from "astro-seo-schema";
 import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import LoadingIndicator from "astro-loading-indicator/component";
 
 //debugLog("DEBUG", "url", Astro.url);
 const cookiesTheme = Astro.cookies.get("theme");
@@ -157,6 +158,7 @@ const cookiesTheme = Astro.cookies.get("theme");
         {...props}
     >
         <Dialog client:idle />
+        <LoadingIndicator color="var(--color-primary-500)" />
         <Background
             class={"fixed top-0 left-0 !w-full !h-full opacity-35 dark: -z-10"}
         />
