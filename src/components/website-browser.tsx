@@ -22,6 +22,7 @@ import { Button } from "./ui/button";
 import { useDialogManager } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
 import { useSearchParamState } from "@/hooks/useSearchParamState";
+import AdElement from "./ads/ad-element";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -66,6 +67,12 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const didMount = useRef(false);
 
     const { callDialog } = useDialogManager(dialogs)
+
+    const adPositionIndex = useMemo(() => Math.floor(Math.random() * 10), [page])
+
+    useEffect(() => {
+        debugLog("WARN", "ad", adPositionIndex)
+    }, [adPositionIndex])
 
     useEffect(() => {
         debugLog("ACTION", 'Setting phrase content', debouncedSearch)
@@ -346,9 +353,20 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                     <PaginationControls />
                 </div>
                 <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
-                    {filteredWebsites.map((website) => (
-                        <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                    ))}
+                    {filteredWebsites.map((website, idx) => {
+                        if (adPositionIndex === idx) {
+                            return (
+                                <>
+                                    <AdElement />
+                                    <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
+                                </>
+                            )
+                        }
+
+                        return (
+                            <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
+                        )
+                    })}
                 </div>
                 <PaginationControls />
 
