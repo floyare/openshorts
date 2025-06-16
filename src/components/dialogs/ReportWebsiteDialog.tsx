@@ -2,7 +2,7 @@ import { Flag, LoaderCircle, Send, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Dialog, DialogContent } from "../ui/dialog"
-import { useState, useTransition } from "react"
+import { Fragment, useState, useTransition } from "react"
 import { cn } from "@/lib/utils"
 import Textarea from "../ui/textarea"
 import { toast } from "sonner"
@@ -65,7 +65,7 @@ const ReportWebsiteDialog = ({
                     <div className="flex flex-col gap-2 my-4">
                         {REPORT_TYPES.map((option, idx) => {
                             return (
-                                <>
+                                <Fragment key={idx}>
                                     <div key={idx} className={cn(selectedReportOption?.type === option.type ? "bg-background-500 text-white" : "bg-background-950 dark:bg-neutral-800", "px-3 py-2 rounded-md cursor-pointer transition-colors")} onClick={() => selectedReportOptionSet(option)}>
                                         {option.text}
                                     </div>
@@ -76,7 +76,7 @@ const ReportWebsiteDialog = ({
                                         className="max-h-48"
                                         maxLength={REPORT_TEXT_MAX_LENGTH}
                                     />}
-                                </>
+                                </Fragment>
                             )
                         })}
                     </div>

@@ -23,6 +23,7 @@ import { useDialogManager } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
 import { useSearchParamState } from "@/hooks/useSearchParamState";
 import AdElement from "./ads/ad-element";
+import { Fragment } from "react";
 
 type BrowserProps = {
     entryWebsites: WebsiteType[],
@@ -255,7 +256,11 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         }
 
                         return items;
-                    })()}
+                    })().map((item, idx) => (
+                        <Fragment key={idx}>
+                            {item}
+                        </Fragment>
+                    ))}
                     <PaginationItem>
                         <PaginationNext
                             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
@@ -356,10 +361,10 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                     {filteredWebsites.map((website, idx) => {
                         if (adPositionIndex === idx) {
                             return (
-                                <>
+                                <Fragment key={idx}>
                                     <AdElement />
                                     <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                </>
+                                </Fragment>
                             )
                         }
 

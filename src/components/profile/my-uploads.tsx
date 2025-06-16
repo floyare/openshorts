@@ -182,7 +182,7 @@ const MyUploads = ({ name }: { name: string }) => {
             </> :
                 <>
                     {slicedUploads?.map((website, idx) => (
-                        <li className="hover:!bg-primary-950 dark:hover:!bg-neutral-700 nth-[even]:bg-primary-950/60 dark:nth-[even]:bg-background-200/60 px-4 py-1.5 rounded-md flex items-center gap-2 w-full">
+                        <li className="hover:!bg-primary-950 dark:hover:!bg-neutral-700 nth-[even]:bg-primary-950/60 dark:nth-[even]:bg-background-200/60 px-4 py-1.5 rounded-md flex items-center gap-2 w-full" key={idx}>
                             <div className="flex flex-col gap-0">
                                 <p className="inline-block truncate max-w-3xs">{website.url}</p>
                                 <p className="flex items-center gap-1"><Heart size={14} className="text-primary-400 fill-primary-500" /> {website.likes ?? 0}</p>

@@ -147,8 +147,8 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                                 {websitesResult.length > 0 && <p className="text-sm text-neutral-500 flex items-center gap-1">Found {websitesResult.length} websites!</p>}
                                 <div className="grid xl:grid-cols-2 grid-cols-1 gap-2" ref={animationParent}>
                                     {
-                                        websitesResult.map((website) => (
-                                            <WebsiteItem website={website} />
+                                        websitesResult.map((website, idx) => (
+                                            <WebsiteItem website={website} key={idx} />
                                         ))
                                     }
                                 </div>
