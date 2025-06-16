@@ -1,7 +1,8 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { z } from "astro/zod";
+import { DISPLAY_AD_BANNERS } from "./user.helper";
 
-export const PAGE_SIZE = 11 // * changed to 11 due to adding ad element
+export const PAGE_SIZE = DISPLAY_AD_BANNERS ? 11 : 12 // * changed to 11 due to adding ad element
 export const MAX_PAGES_TO_LOAD = 6
 export const DEBUG_ALLOW_LIKE_OWN_WEBSITES = false
 
