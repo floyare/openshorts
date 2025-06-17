@@ -9,6 +9,8 @@
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
+    "strictNullChecks": true,
+    "allowJs": true,
     "jsxImportSource": "react",
     "baseUrl": ".",
     "paths": {

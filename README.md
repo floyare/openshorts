@@ -10,3 +10,4 @@ todo:
 - [X] komentarze
 - [X] dodac about us
 - [-] dodac keywordsy
+- [ ] blog

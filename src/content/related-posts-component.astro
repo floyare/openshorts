@@ -1,0 +1,43 @@
+---
+import { debugLog } from "@/lib/log";
+import { format } from "date-fns/format";
+import { ExternalLink } from "lucide-react";
+
+const allPosts = Object.values(
+    await import.meta.glob("./blog/*.mdx", { eager: true }),
+);
+
+//console.log("all", allPosts);
+
+const getSlug = (path: string) => path.split("/").at(-1)!.replace(".mdx", "");
+
+const { relatedPosts } = Astro.props;
+
+const related = allPosts.filter((post: any) =>
+    relatedPosts.find((r: any) => r.id === getSlug(post.file)),
+);
+---
+
+<section
+    class="flex flex-col gap-2 mt-8 -mx-8 -mb-8 bg-background-950 dark:bg-neutral-800 px-6 py-4 rounded-md"
+>
+    <h3 class="text-lg">Related posts:</h3>
+    <div>
+        {
+            related.map((post: any) => (
+                <a
+                    href={"/blog/" + getSlug(post.file)}
+                    class="flex flex-col bg-white dark:bg-neutral-950 px-8 py-6 rounded-md no-underline gap-3 border-[1px] border-transparent hover:border-primary-500 transition-colors"
+                >
+                    <div>
+                        <b class="flex items-center gap-2 text-xl">
+                            {post.frontmatter.title} <ExternalLink size={14} />
+                        </b>
+                        <p>{post.frontmatter.description}</p>
+                    </div>
+                    <p>{format(post.frontmatter.pubDate, "dd.MM.yyyy")}</p>
+                </a>
+            ))
+        }
+    </div>
+</section>

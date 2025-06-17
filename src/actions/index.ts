@@ -13,6 +13,8 @@ import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import { admin } from './admin';
 import { user } from './user';
+import getPrismaInstance from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
@@ -157,6 +159,50 @@ export const server = {
             const limit = await validateLimit(ctx.clientAddress)
             if (!limit.success) throw new Error("Ratelimited!")
             return await reportWebsite({ url: input.url, content: { type: input.type, text: input.text }, context: ctx })
+        }
+    }),
+    getWebsiteDetails: defineAction({
+        input: z.object({
+            id: z.string()
+        }),
+        handler: async (input, ctx) => {
+            const limit = await validateLimit(ctx.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+
+            const website = await getPrismaInstance().websites.findFirst({
+                where: {
+                    id: input.id
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                        },
+                    },
+                    user_likes: true,
+                    comment: true,
+                }
+            })
+
+            if (!website) return null
+
+            debugLog("WARN", input.id, website)
+            const user = await auth.api.getSession({
+                headers: ctx.request.headers
+            })
+
+            if (!user?.user) return null
+
+            return {
+                ...website,
+                likesCount: website.user_likes.length,
+                commentsCount: website.comment.length,
+                isLiked: website.user_likes.some(
+                    (like) => like.user_id === user?.user.id,
+                ),
+            }
         }
     })
 }

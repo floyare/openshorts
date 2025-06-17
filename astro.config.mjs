@@ -8,6 +8,7 @@ import vercel from '@astrojs/vercel';
 
 import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
+import mdx from '@astrojs/mdx';
 //import getPrismaInstance from '@/lib/prisma';
 
 //const customPages = await fetch("https://example.com").then(users => { return ["https://openshorts.dev/XD"] });
@@ -21,7 +22,7 @@ export default defineConfig({
   integrations: [react(), sitemap({
     filter: (page) => !page.includes('/admin') && !page.includes('/layout') && !page.includes('/signout') && !page.endsWith("/profile/"),
     //customPages: customPages
-  }), partytown()],
+  }), partytown(), mdx()],
 
   adapter: vercel(),//node({mode: "standalone"}),
   experimental: {

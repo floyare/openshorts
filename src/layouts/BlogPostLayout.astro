@@ -1,0 +1,104 @@
+---
+import Container from "@/components/container";
+import getPrismaInstance from "@/lib/prisma";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import Layout from "@/pages/layout.astro";
+import { format } from "date-fns";
+import { Image } from "astro:assets";
+import { Calendar, Tags, User } from "lucide-react";
+import RelatedPostsComponent from "@/content/related-posts-component.astro";
+const { frontmatter } = Astro.props;
+
+const profileData = await getPrismaInstance().user.findFirst({
+    where: {
+        name: frontmatter.author,
+    },
+    select: {
+        image: true,
+        name: true,
+        role: true,
+        id: true,
+    },
+});
+
+if (!profileData) throw new Error("Author not found");
+---
+
+<Layout subtitle={frontmatter.title} description={frontmatter.description}>
+    <section class="flex justify-center flex-wrap gap-4 items-start">
+        <Container className="bg-white dark:bg-neutral-900 !p-8">
+            <div
+                class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
+            >
+                <h1 class="text-xl font-bold">{frontmatter.title}</h1>
+                <slot />
+            </div>
+            <RelatedPostsComponent relatedPosts={frontmatter.relatedPosts} />
+        </Container>
+
+        <Container
+            className="md:sticky md:top-2 relative top-0 md:w-fit w-full p-8 flex flex-col gap-8 dark:bg-neutral-950"
+        >
+            <p class="flex items-center gap-1">
+                <Calendar />
+                Published date: <span class="font-bold"
+                    >{format(frontmatter.pubDate, "dd.MM.yyyy")}</span
+                >
+            </p>
+
+            <div class="space-y-2">
+                <p class="flex items-center gap-1">
+                    <Tags />
+                    Tags:
+                </p>
+
+                <div class="flex items-center flex-wrap gap-1">
+                    {
+                        frontmatter.tags.map((tag: string) => (
+                            <div class="bg-secondary-600 text-white rounded-full px-3 py-1 text-sm">
+                                {tag}
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <a class="space-y-2" href={"/profile/" + profileData.name}>
+                <p class="flex items-center gap-1">
+                    <User />
+                    Author:
+                </p>
+                <div
+                    class="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-md hover:bg-background-950 dark:hover:bg-neutral-800 transition-colors"
+                >
+                    <Image
+                        src={profileData?.image!}
+                        alt="Profile image"
+                        class="rounded-full w-16 h-16"
+                        width={64}
+                        height={64}
+                    />
+                    <div class="flex flex-col gap-0.5">
+                        <h2 class="text-xl font-semibold">
+                            {profileData.name}
+                        </h2>
+                        <p
+                            class:list={[
+                                "text-sm w-fit",
+                                profileData.role === "OWNER"
+                                    ? "relative inline-block text-primary-500 font-bold before:content-[''] before:absolute before:z-20 before:top-1/2 before:-translate-y-1/2 before:w-full before:h-3 before:rounded-full before:bg-primary-600 before:blur-sm before:animate-pulse"
+                                    : "",
+                            ]}
+                        >
+                            {
+                                capitalizeFirstLetter(
+                                    profileData.role.toLowerCase(),
+                                )
+                            }
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </Container>
+    </section>
+</Layout>
