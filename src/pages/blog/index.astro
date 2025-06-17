@@ -1,0 +1,36 @@
+---
+import { ChevronRight } from "lucide-react";
+import Layout from "../layout.astro";
+import { format } from "date-fns";
+
+const allPosts = Object.values(
+    await import.meta.glob("../../content/blog/*.mdx", { eager: true }),
+);
+
+const getSlug = (path: string) => path.split("/").at(-1)!.replace(".mdx", "");
+---
+
+<Layout>
+    <section class="flex flex-col justify-center items-center">
+        <h1 class="text-2xl font-semibold">Blog posts</h1>
+        <div class="flex flex-wrap gap-2 p-4">
+            {
+                allPosts.map((post: any) => (
+                    <a
+                        href={"/blog/" + getSlug(post.file)}
+                        class="flex flex-col bg-white dark:bg-neutral-950 px-8 py-6 rounded-md no-underline gap-3 border-[1px] border-transparent hover:border-primary-500 transition-colors"
+                    >
+                        <div>
+                            <b class="flex items-center gap-2 text-xl">
+                                {post.frontmatter.title}{" "}
+                                <ChevronRight size={14} />
+                            </b>
+                            <p>{post.frontmatter.description}</p>
+                        </div>
+                        <p>{format(post.frontmatter.pubDate, "dd.MM.yyyy")}</p>
+                    </a>
+                ))
+            }
+        </div>
+    </section>
+</Layout>

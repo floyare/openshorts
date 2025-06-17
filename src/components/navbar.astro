@@ -1,6 +1,6 @@
 ---
 export const prerender = false;
-import { Compass, LoaderCircle, UploadCloud } from "lucide-react";
+import { Compass, LoaderCircle, Newspaper, UploadCloud } from "lucide-react";
 import Logo from "./logo.astro";
 import NavigationState from "./navigation-state.astro";
 
@@ -34,6 +34,16 @@ const url = Astro.url;
                 ]}
             >
                 <UploadCloud size={32} /> Upload
+            </a>
+
+            <a
+                href="/blog"
+                class:list={[
+                    "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
+                    url.pathname === "/blog" ? "text-text-400 font-bold" : "",
+                ]}
+            >
+                <Newspaper size={32} /> Blog
             </a>
 
             {
