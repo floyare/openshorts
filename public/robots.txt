@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://openshorts.dev/sitemap-index.xml
+Sitemap: https://www.openshorts.dev/sitemap-index.xml

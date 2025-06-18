@@ -18,7 +18,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  site: "https://openshorts.dev",
+  site: "https://www.openshorts.dev",
   integrations: [react(), sitemap({
     filter: (page) => !page.includes('/admin') && !page.includes('/layout') && !page.includes('/signout') && !page.endsWith("/profile/"),
     //customPages: customPages
