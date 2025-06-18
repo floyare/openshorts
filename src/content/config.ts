@@ -9,7 +9,8 @@ const blog = defineCollection({
         description: z.string(),
         tags: z.array(z.string()).optional(),
         relatedPosts: z.array(reference('blog')).optional(),
-        author: z.string()
+        author: z.string(),
+        image: z.string().url()
     }),
 });
 

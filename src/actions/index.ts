@@ -193,8 +193,6 @@ export const server = {
                 headers: ctx.request.headers
             })
 
-            if (!user?.user) return null
-
             return {
                 ...website,
                 likesCount: website.user_likes.length,

@@ -1,0 +1,12 @@
+---
+import { Schema } from "astro-seo-schema";
+const { items } = Astro.props;
+---
+
+<Schema
+    item={{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: items,
+    }}
+/>

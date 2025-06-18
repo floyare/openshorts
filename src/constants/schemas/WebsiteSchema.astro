@@ -1,0 +1,24 @@
+---
+import { Schema } from "astro-seo-schema";
+const { siteUrl, siteTitle, siteDescription } = Astro.props;
+---
+
+<Schema
+    item={{
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: siteTitle,
+        url: siteUrl,
+        description: siteDescription,
+        publisher: {
+            "@type": "Organization",
+            name: siteTitle,
+            logo: { "@type": "ImageObject", url: `${siteUrl}/favicon.png` },
+        },
+        potentialAction: {
+            "@type": "SearchAction",
+            target: `${siteUrl}/search?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+        },
+    }}
+/>

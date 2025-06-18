@@ -15,6 +15,7 @@ import { isUserBanned } from "@/lib/user.core";
 import { Button } from "@/components/ui/button";
 import ProfileNameUpdate from "@/components/profile/profile-name-update";
 import AdElement from "@/components/ads/ad-element";
+import ProfileSchema from "@/constants/schemas/ProfileSchema.astro";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
@@ -43,6 +44,11 @@ const banDetails =
     isOwnProfile && currentUser ? await isUserBanned({ currentUser }) : null;
 ---
 
+<ProfileSchema
+    name={profileData.name}
+    image={profileData.image}
+    url={Astro.url}
+/>
 <Layout
     subtitle={isOwnProfile ? "My profile" : `${profile}'s profile`}
     class="justify-center items-center !gap-2"

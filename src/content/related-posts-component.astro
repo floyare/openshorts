@@ -27,18 +27,27 @@ const related = allPosts.filter((post: any) =>
             related.map((post: any) => (
                 <a
                     href={"/blog/" + getSlug(post.file)}
-                    class="flex flex-col relative overflow-hidden bg-white dark:bg-neutral-950 px-8 py-6 rounded-md no-underline gap-3 border-[1px] border-transparent hover:border-primary-500 transition-colors"
+                    class="flex flex-col relative overflow-hidden bg-white dark:bg-neutral-950 px-8 py-6 rounded-md no-underline gap-2 border-[1px] border-transparent hover:border-primary-500 transition-colors"
                 >
+                    <p class="text-neutral-500 dark:text-neutral-600">
+                        {format(post.frontmatter.pubDate, "dd.MM.yyyy")}
+                    </p>
                     <div class="relative z-10">
                         <b class="flex items-center gap-2 text-xl">
                             {post.frontmatter.title} <ExternalLink size={14} />
                         </b>
                         <p>{post.frontmatter.description}</p>
                     </div>
-                    <p>{format(post.frontmatter.pubDate, "dd.MM.yyyy")}</p>
+                    <ul class="flex items-center gap-2 flex-wrap">
+                        {post.frontmatter.tags.map((tag: string) => (
+                            <li class="bg-primary-500 text-white rounded-full px-4 py-1">
+                                {tag}
+                            </li>
+                        ))}
+                    </ul>
                     <img
                         class="absolute lg:block hidden top-[50%] right-0 translate-y-[-50%] w-3xs z-0"
-                        src="https://placehold.co/600x400"
+                        src={post.frontmatter.image}
                         alt={post.frontmatter.title}
                     />
                 </a>

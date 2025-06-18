@@ -17,6 +17,7 @@ import { Schema } from "astro-seo-schema";
 import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import LoadingIndicator from "astro-loading-indicator/component";
+import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
 
 //debugLog("DEBUG", "url", Astro.url);
 const cookiesTheme = Astro.cookies.get("theme");
@@ -86,28 +87,16 @@ const cookiesTheme = Astro.cookies.get("theme");
                 />
             )
         }
-        <Schema
-            item={{
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "openshorts",
-                url: "https://openshorts.dev/",
-                description: Astro.props.description || DESCRIPTION,
-                publisher: {
-                    "@type": "Organization",
-                    name: "openshorts.",
-                    logo: {
-                        "@type": "ImageObject",
-                        url: "https://openshorts.dev/favicon.png",
-                    },
-                },
-                potentialAction: {
-                    "@type": "SearchAction",
-                    target: "https://openshorts.dev/?search={search_term_string}",
-                    "query-input": "required name=search_term_string",
-                },
-            }}
-        />
+
+        {
+            Astro.url.pathname === "/" && (
+                <WebsiteSchema
+                    siteTitle="openshorts"
+                    siteUrl={import.meta.env.SITE}
+                    siteDescription={Astro.props.description || DESCRIPTION}
+                />
+            )
+        }
 
         <meta name="google-adsense-account" content="ca-pub-9939390828296488" />
         <meta charset="utf-8" />
