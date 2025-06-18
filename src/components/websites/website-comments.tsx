@@ -183,6 +183,8 @@ const WebsiteComments = (props: CommentsProps) => {
                                 <div className="space-y-2 max-h-84 overflow-y-auto px-2" ref={animationParent}>
                                     {
                                         slicedComments?.map((comment, index) => {
+
+                                            // TODO: fix users avatar on error / not found no fallback
                                             return (
                                                 <div key={index} className="flex items-start gap-2 bg-white dark:!bg-neutral-800 dark:!border-neutral-700 py-3 px-4 rounded-md">
                                                     <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />

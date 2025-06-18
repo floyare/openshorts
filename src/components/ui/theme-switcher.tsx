@@ -1,33 +1,58 @@
-import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-//import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu"
+import { useEffect, useState } from "react";
 
-export function ThemeSwitcher({ initialTheme }: { initialTheme: "theme-light" | "dark" }) {
-    const [theme, setThemeState] = React.useState<
-        "theme-light" | "dark" | "system"
-    >(initialTheme ?? "theme-light")
+declare global {
+    interface Window {
+        updateTheme: (theme: "light" | "dark" | "system") => void;
+    }
+}
 
-    React.useEffect(() => {
-        const isDarkMode = document.documentElement.classList.contains("dark")
-        setThemeState(theme ?? (isDarkMode ? "dark" : "theme-light"))
-    }, [])
+export function ThemeSwitcher() {
+    const [currentTheme, setCurrentTheme] = useState<"light" | "dark">(() => {
+        if (typeof window === "undefined") return "light";
+        const storedTheme = localStorage.getItem("theme");
+        if (storedTheme === "dark") return "dark";
+        if (storedTheme === "light") return "light";
 
-    React.useEffect(() => {
-        const isDark =
-            theme === "dark"
-        document.documentElement.classList[isDark ? "add" : "remove"]("dark")
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    });
 
-        document.cookie =
-            "theme=" +
-            (isDark ? "dark" : "theme-light") +
-            "; " +
-            document.cookie;
-    }, [theme])
+    useEffect(() => {
+        const checkActualTheme = () => {
+            const isDarkMode = document.documentElement.classList.contains("dark");
+            setCurrentTheme(isDarkMode ? "dark" : "light");
+        };
+
+        checkActualTheme();
+
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    checkActualTheme();
+                    break;
+                }
+            }
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    const toggleTheme = () => {
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+        if (window.updateTheme) {
+            window.updateTheme(newTheme);
+        }
+    };
 
     return (
-        <Button variant="default" className="border-[1px] border-primary-500" size="icon" onClick={() => setThemeState(theme === "dark" ? "theme-light" : "dark")}>
+        <Button variant="default" className="border-[1px] border-primary-500" size="icon" onClick={toggleTheme}>
             <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
             <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
         </Button>

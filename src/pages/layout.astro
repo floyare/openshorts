@@ -13,70 +13,62 @@ import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", description, class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
-import { Schema } from "astro-seo-schema";
 import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import LoadingIndicator from "astro-loading-indicator/component";
 import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
-
-//debugLog("DEBUG", "url", Astro.url);
-const cookiesTheme = Astro.cookies.get("theme");
+import { debugLog } from "@/lib/log";
 ---
 
-<html lang="en" class={cookiesTheme?.value === "dark" ? "dark" : ""}>
+<html lang="en">
     <head>
-        <script is:inline define:vars={{ theme: cookiesTheme?.value }}>
-            function setDarkMode(document) {
-                const getThemePreference = () => {
-                    if (theme) return theme;
-
-                    if (
-                        typeof localStorage !== "undefined" &&
-                        localStorage.getItem("theme")
-                    ) {
-                        return localStorage.getItem("theme");
-                    }
-                    return window.matchMedia("(prefers-color-scheme: dark)")
-                        .matches
-                        ? "dark"
-                        : "theme-light";
-                };
-
-                const isDark =
-                    theme === "dark" ?? getThemePreference() === "dark";
-                document.documentElement.classList[isDark ? "add" : "remove"](
-                    "dark",
-                );
-
-                if (typeof localStorage !== "undefined") {
-                    const observer = new MutationObserver(() => {
-                        const isDark =
-                            document.documentElement.classList.contains("dark");
-                        localStorage.setItem(
-                            "theme",
-                            isDark ? "dark" : "theme-light",
-                        );
-
-                        document.cookie =
-                            "theme=" +
-                            (isDark ? "dark" : "theme-light") +
-                            "; " +
-                            document.cookie;
-                    });
-
-                    observer.observe(document.documentElement, {
-                        attributes: true,
-                        attributeFilter: ["class"],
-                    });
+        <script is:inline>
+            const getThemePreference = () => {
+                if (
+                    typeof localStorage !== "undefined" &&
+                    localStorage.getItem("theme")
+                ) {
+                    return localStorage.getItem("theme");
                 }
+
+                return window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            };
+
+            const theme = localStorage.getItem("theme");
+            let isDark;
+
+            if (theme === "system" || !theme) {
+                isDark = window.matchMedia(
+                    "(prefers-color-scheme: dark)",
+                ).matches;
+            } else {
+                isDark = theme === "dark";
             }
+            document.documentElement.classList.toggle("dark", isDark);
 
-            setDarkMode(document);
+            window.updateTheme = (newTheme) => {
+                let applyDark;
+                if (newTheme === "system") {
+                    localStorage.removeItem("theme");
+                    applyDark = window.matchMedia(
+                        "(prefers-color-scheme: dark)",
+                    ).matches;
+                } else {
+                    localStorage.setItem("theme", newTheme);
+                    applyDark = newTheme === "dark";
+                }
+                document.documentElement.classList.toggle("dark", applyDark);
+            };
 
-            document.addEventListener("astro:before-swap", (ev) => {
-                setDarkMode(ev.newDocument);
+            document.addEventListener("astro:after-swap", () => {
+                const currentStoredTheme =
+                    localStorage.getItem("theme") || "system";
+                window.updateTheme(currentStoredTheme);
             });
         </script>
+
         <ClientRouter fallback="swap" />
         {
             import.meta.env.DEV && (
@@ -163,10 +155,7 @@ const cookiesTheme = Astro.cookies.get("theme");
             <slot />
         </AnalyticsProvider>
         <div class="fixed bottom-6 right-6 z-10">
-            <ThemeSwitcher
-                initialTheme={cookiesTheme?.value as any}
-                client:load
-            />
+            <ThemeSwitcher client:load />
         </div>
         <footer
             class="text-sm text-text-500 flex justify-center items-center divide-x divide-current"
