@@ -12,7 +12,9 @@ const getSlug = (path: string) => path.split("/").at(-1)!.replace(".mdx", "");
 <Layout>
     <section class="flex flex-col justify-center items-center">
         <header class="text-2xl font-semibold">Blog posts</header>
-        <div class="flex flex-wrap gap-2 p-4">
+        <div
+            class="flex flex-col items-center justify-center flex-wrap gap-2 p-4"
+        >
             {
                 allPosts.map((post: any) => (
                     <a
@@ -23,17 +25,17 @@ const getSlug = (path: string) => path.split("/").at(-1)!.replace(".mdx", "");
                             <p class="text-neutral-500 dark:text-neutral-600">
                                 {format(post.frontmatter.pubDate, "dd.MM.yyyy")}
                             </p>
-                            <div>
-                                <b class="flex items-center gap-2 text-xl">
+                            <div class="space-y-2">
+                                <b class="flex items-center gap-2 text-xl max-w-md text-balance break-words">
                                     {post.frontmatter.title}{" "}
                                 </b>
                                 <p class="max-w-md text-balance break-words">
                                     {post.frontmatter.description}
                                 </p>
                             </div>
-                            <ul class="flex items-center gap-2 flex-wrap">
+                            <ul class="flex items-center gap-2 flex-wrap max-w-md">
                                 {post.frontmatter.tags.map((tag: string) => (
-                                    <li class="bg-primary-500 text-white rounded-full px-4 py-1">
+                                    <li class="bg-secondary-600 text-white rounded-full px-4 py-1">
                                         {tag}
                                     </li>
                                 ))}
@@ -41,7 +43,7 @@ const getSlug = (path: string) => path.split("/").at(-1)!.replace(".mdx", "");
                         </div>
 
                         <img
-                            class="relative lg:block hidden top-[50%] right-0 translate-y-[-50%] w-3xs z-0"
+                            class="relative lg:block hidden w-3xs z-0"
                             src={post.frontmatter.image}
                             alt={post.frontmatter.title}
                         />

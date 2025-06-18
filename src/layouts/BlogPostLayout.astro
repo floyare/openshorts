@@ -30,7 +30,7 @@ if (!profileData) throw new Error("Author not found");
             <div
                 class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
             >
-                <h1 class="text-xl font-bold">{frontmatter.title}</h1>
+                <h1 class="text-3xl font-bold">{frontmatter.title}</h1>
                 <slot />
             </div>
             <RelatedPostsComponent relatedPosts={frontmatter.relatedPosts} />
