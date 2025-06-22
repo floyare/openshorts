@@ -2,7 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
-//import node from '@astrojs/node';
+import node from '@astrojs/node';
 
 import vercel from '@astrojs/vercel';
 
@@ -15,21 +15,43 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()]
-  },
-  site: "https://www.openshorts.dev",
-  integrations: [react(), sitemap({
-    filter: (page) => !page.includes('/admin') && !page.includes('/layout') && !page.includes('/signout') && !page.endsWith("/profile/"),
-    //customPages: customPages
-  }), partytown(), mdx()],
+    vite: {
+        plugins: [tailwindcss()]
+    },
+    site: "https://www.openshorts.dev",
+    integrations: [
+        react(),
+        sitemap({
+            filter: (page) =>
+                !page.includes('/admin') &&
+                !page.includes('/layout') &&
+                !page.includes('/signout') &&
+                !page.endsWith("/profile/"),
+            serialize(item) {
+                if (!item.url) return item;
+                let priority = 0.3;
+                if (item.url === "https://www.openshorts.dev/") {
+                    priority = 1.0;
+                } else if (item.url.startsWith("https://www.openshorts.dev/website/")) {
+                    priority = 0.8;
+                } else if (item.url.startsWith("https://www.openshorts.dev/blog/")) {
+                    priority = 0.6;
+                } else if (item.url === "https://www.openshorts.dev/blog") {
+                    priority = 0.7;
+                }
+                return { ...item, priority };
+            }
+        }),
+        partytown(),
+        mdx()
+    ],
     trailingSlash: 'never',
-  adapter: vercel(),//node({mode: "standalone"}),
-  experimental: {
-    fonts: [{
-        provider: fontProviders.google(),
-        name: "Lexend",
-        cssVariable: "--font"
-    }]
-  }
+    adapter: node({mode: "standalone"}),
+    experimental: {
+        fonts: [{
+            provider: fontProviders.google(),
+            name: "Lexend",
+            cssVariable: "--font"
+        }]
+    }
 });
