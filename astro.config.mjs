@@ -23,7 +23,7 @@ export default defineConfig({
     filter: (page) => !page.includes('/admin') && !page.includes('/layout') && !page.includes('/signout') && !page.endsWith("/profile/"),
     //customPages: customPages
   }), partytown(), mdx()],
-
+    trailingSlash: 'never',
   adapter: vercel(),//node({mode: "standalone"}),
   experimental: {
     fonts: [{
