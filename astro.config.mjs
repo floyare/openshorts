@@ -2,7 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+//import node from '@astrojs/node';
 
 import vercel from '@astrojs/vercel';
 
@@ -46,7 +46,7 @@ export default defineConfig({
         mdx()
     ],
     trailingSlash: 'never',
-    adapter: node({mode: "standalone"}),
+    adapter: vercel(),//node({mode: "standalone"}),
     experimental: {
         fonts: [{
             provider: fontProviders.google(),
