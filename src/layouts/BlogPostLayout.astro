@@ -1,6 +1,6 @@
 ---
 import Container from "@/components/container";
-import getPrismaInstance from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import Layout from "@/pages/layout.astro";
 import { format } from "date-fns";
@@ -9,7 +9,7 @@ import { Calendar, Tags, User } from "lucide-react";
 import RelatedPostsComponent from "@/content/related-posts-component.astro";
 const { frontmatter } = Astro.props;
 
-const profileData = await getPrismaInstance().user.findFirst({
+const profileData = await prisma.user.findFirst({
     where: {
         name: frontmatter.author,
     },

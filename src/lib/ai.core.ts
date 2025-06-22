@@ -1,6 +1,6 @@
 import { tryCatch } from '@/lib/utils';
 import { GoogleGenAI } from "@google/genai"
-import getPrismaInstance from "./prisma"
+import { prisma } from "./prisma"
 import { getLikeCountsForWebsites } from "./websites.core"
 import { debugLog } from "./log"
 import { auth } from "./auth"
@@ -23,16 +23,16 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
     const aiUsage: AIUsageType | null = currentUser.user.ai_usage as AIUsageType | null
     if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of AI Search. Try again tommorow.")
 
-    const websites = await getPrismaInstance().websites.findMany({
+    const websites = await prisma.websites.findMany({
         include: {
             comment: true
         },
         where: { hidden: false }
     })
 
-    const websiteLikes = await getLikeCountsForWebsites(getPrismaInstance(), websites.map((w) => w.id))
+    const websiteLikes = await getLikeCountsForWebsites(prisma, websites.map((w) => w.id))
 
-    const userLikes = currentUser ? await getPrismaInstance().user_likes.findMany({
+    const userLikes = currentUser ? await prisma.user_likes.findMany({
         where: {
             user_id: currentUser.user.id,
             website_id: { in: websites.map((w) => w.id) }
@@ -100,7 +100,7 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
         used: aiUsage.used + 1
     })
 
-    await getPrismaInstance().user.update({
+    await prisma.user.update({
         where: {
             id: currentUser.user.id
         },

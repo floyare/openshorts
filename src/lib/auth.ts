@@ -1,6 +1,6 @@
 import { betterAuth, type User } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import getPrismaInstance from "./prisma";
+import { prisma } from "./prisma";
 import { randomBytes } from "crypto";
 
 export const auth = betterAuth({
@@ -12,7 +12,7 @@ export const auth = betterAuth({
                     let baseNickname = user.name;
                     let uniqueNickname = baseNickname;
                     let nameChange = false
-                    while (await getPrismaInstance().user.findUnique({ where: { name: uniqueNickname } })) {
+                    while (await prisma.user.findUnique({ where: { name: uniqueNickname } })) {
                         const randomSuffix = randomBytes(2).toString("hex");
                         uniqueNickname = `${baseNickname}-${randomSuffix}`;
                         nameChange = true
@@ -55,7 +55,7 @@ export const auth = betterAuth({
             }
         }
     },
-    database: prismaAdapter(getPrismaInstance(), {
+    database: prismaAdapter(prisma, {
         provider: "postgresql"
     }),
     socialProviders: {

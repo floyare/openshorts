@@ -1,12 +1,11 @@
 import type { WebsiteType } from "@/types/website";
-import getPrismaInstance from "./prisma";
+import { prisma } from "./prisma";
 import { getLikeCountsForWebsites } from "./websites.core";
 import type { ActionAPIContext } from "astro:actions";
 import { auth } from "./auth";
 import { debugLog } from "./log";
 
 export async function getProfileStats(name: string) {
-    const prisma = getPrismaInstance();
     const websitesUploaded = await prisma.websites.count({
         where: {
             hidden: false,
@@ -27,8 +26,6 @@ export async function getProfileStats(name: string) {
 
 // TODO: create one function for fetching websites with isLiked and likesCount wtih any modifier
 export async function getBestUploads(name: string, ctx: ActionAPIContext) {
-    const prisma = getPrismaInstance();
-
     const websites = await prisma.websites.findMany({
         where: {
             created_by: name,
@@ -53,7 +50,6 @@ export async function getBestUploads(name: string, ctx: ActionAPIContext) {
     if (currentUser?.user) {
         debugLog("DEBUG", "(searchWebsites) user loged in")
 
-        const prisma = getPrismaInstance();
         const userLikes = await prisma.user_likes.findMany({
             where: {
                 user_id: currentUser.user.id,

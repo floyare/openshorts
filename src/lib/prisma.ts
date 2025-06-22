@@ -1,20 +1,21 @@
 import { PrismaClient } from "@prisma/client"
 import { Redis } from "@upstash/redis";
 
-let prismaInstance: PrismaClient;
+declare global {
+    var prisma: PrismaClient | undefined;
+}
 
-export const getPrismaInstance = () => {
-    if (!prismaInstance) {
-        prismaInstance = new PrismaClient({
-            log: ['query', 'info', 'warn', 'error']
-        });
-    }
-    return prismaInstance;
-};
+export const prisma =
+    globalThis.prisma ??
+    new PrismaClient({
+        log: ['query', 'info', 'warn', 'error'],
+    });
+
+if (process.env.NODE_ENV !== 'production') {
+    globalThis.prisma = prisma;
+}
 
 export const redis = new Redis({
     url: import.meta.env.KV_REST_API_URL,
     token: import.meta.env.KV_REST_API_TOKEN,
 })
-
-export default getPrismaInstance

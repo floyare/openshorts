@@ -2,7 +2,7 @@
 export const prerender = false;
 import { Image } from "astro:assets";
 import Layout from "../layout.astro";
-import getPrismaInstance from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { debugLog } from "@/lib/log";
 import Container from "@/components/container";
 import { LogOut, Star, UploadCloud, User } from "lucide-react";
@@ -22,7 +22,7 @@ const currentUser = Astro.locals.user;
 
 const isOwnProfile = profile === currentUser?.name;
 
-const profileData = await getPrismaInstance().user.findFirst({
+const profileData = await prisma.user.findFirst({
     where: {
         name: profile,
     },

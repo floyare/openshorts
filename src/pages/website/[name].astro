@@ -1,12 +1,12 @@
 ---
 export const prerender = true;
-import getPrismaInstance from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import Layout from "../layout.astro";
 import WebsiteItem from "@/components/websites/website-item";
 import WebsiteComments from "@/components/websites/website-comments";
 
 export async function getStaticPaths() {
-    const websites = await getPrismaInstance().websites.findMany({
+    const websites = await prisma.websites.findMany({
         select: { name: true },
     });
 
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
     }));
 }
 
-const website = await getPrismaInstance().websites.findFirst({
+const website = await prisma.websites.findFirst({
     where: {
         name: {
             equals: Astro.params.name,

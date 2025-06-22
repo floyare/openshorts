@@ -1,12 +1,12 @@
 import type { BannedDetailsType } from "@/types/user"
-import getPrismaInstance from "./prisma"
+import { prisma } from "./prisma"
 import { isBefore } from "date-fns"
 import type { User } from "better-auth"
 
 export const isUserBanned = async ({ currentUser }: { currentUser: User }) => {
     if (!currentUser) throw new Error("User not logged in")
 
-    const result = await getPrismaInstance().user.findFirst({
+    const result = await prisma.user.findFirst({
         where: {
             id: currentUser.id
         }

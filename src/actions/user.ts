@@ -1,6 +1,6 @@
 import { MAX_PROFILE_NAME_LENGTH, MIN_PROFILE_NAME_LENGTH } from "@/helpers/user.helper";
 import { auth } from "@/lib/auth";
-import getPrismaInstance from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
 
@@ -20,7 +20,7 @@ export const user = {
                 throw new Error("You can't change your username");
             }
 
-            const isTaken = input.username ? await getPrismaInstance().user.findUnique({
+            const isTaken = input.username ? await prisma.user.findUnique({
                 where: {
                     name: input.username,
                 },
@@ -30,7 +30,7 @@ export const user = {
                 throw new Error("Username is already taken");
             }
 
-            return await getPrismaInstance().user.update({
+            return await prisma.user.update({
                 where: {
                     id: currentUser.user.id,
                 },

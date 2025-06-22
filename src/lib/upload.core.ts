@@ -1,5 +1,5 @@
 import { UTApi, UTFile } from "uploadthing/server";
-import getPrismaInstance from "./prisma";
+import { prisma } from "./prisma";
 import { getWebsiteScreen } from "./screen.core";
 import { capitalizeFirstLetter, getURLHost, tryCatch } from "./utils";
 import sharp from "sharp";
@@ -88,7 +88,6 @@ export const uploadWebsite = async ({
 
     //throw new Error(hostnameOnly)
 
-    const prisma = getPrismaInstance();
     const existingWebsite = await prisma.websites.findUnique({
         where: {
             hidden: false,

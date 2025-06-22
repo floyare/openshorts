@@ -1,6 +1,6 @@
 ---
 export const prerender = false;
-import getPrismaInstance from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import Layout from "./layout.astro";
 import { auth } from "@/lib/auth";
 import AdminDashboard from "@/components/admin/AdminDashboard";
@@ -13,13 +13,13 @@ if (currentUser?.user.role !== "OWNER") {
     return Astro.redirect("/404");
 }
 
-const usersFetch = getPrismaInstance().user.findMany({});
-const websitesFetch = getPrismaInstance().websites.findMany({
+const usersFetch = prisma.user.findMany({});
+const websitesFetch = prisma.websites.findMany({
     include: {
         user: true,
     },
 });
-const reportsFetch = getPrismaInstance().report.findMany({});
+const reportsFetch = prisma.report.findMany({});
 
 const [users, websites, reports] = await Promise.all([
     usersFetch,

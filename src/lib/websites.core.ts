@@ -1,7 +1,7 @@
 import { debugLog } from "./log";
-import getPrismaInstance from "./prisma"
+import { prisma } from "./prisma"
 import { tryCatch } from "./utils"
-import type { Prisma } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import type { SearchWebsitesResult } from "@/types/website";
 import { formatTagsWithCount, PAGE_SIZE, type ReportOption, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { auth } from "./auth";
@@ -18,8 +18,6 @@ export const reportWebsite = async ({ url, content, context }: { url: string, co
     })
 
     if (!currentUser?.user) throw new Error("User not logged in")
-
-    const prisma = getPrismaInstance();
 
     await prisma.report.create({
         data: {
@@ -38,8 +36,6 @@ export const toggleLikeWebsite = async ({ websiteId, context }: { websiteId: str
     })
 
     if (!currentUser?.user) throw new Error("User not logged in")
-
-    const prisma = getPrismaInstance();
 
     const existingLike = await prisma.user_likes.findUnique({
         where: {
@@ -80,14 +76,14 @@ export const getMyUploads = async ({ headers }: { headers: Headers }) => {
 
     //await new Promise(resolve => setTimeout(resolve, 3500));
 
-    const result = await getPrismaInstance().websites.findMany({
+    const result = await prisma.websites.findMany({
         where: {
             hidden: false,
             created_by: currentUser.user.name
         }
     })
 
-    const likes = await getLikeCountsForWebsites(getPrismaInstance(), result.map((w) => w.id))
+    const likes = await getLikeCountsForWebsites(prisma, result.map((w) => w.id))
 
     debugLog("DEBUG", 'likes', likes)
 
@@ -109,7 +105,7 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
     const isBanned = await isUserBanned({ currentUser: currentUser.user })
     if (!!isBanned) throw new Error("Your account is banned.")
 
-    const result = await getPrismaInstance().websites.findFirst({
+    const result = await prisma.websites.findFirst({
         where: {
             hidden: false,
             url: url,
@@ -132,7 +128,7 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
     const uploadResult = websiteScreen.error || !websiteScreen.data ? { data: { ufsUrl: null }, error: null } : await tryCatch(uploadFile({ fileObj: websiteScreen.data }));
     if (!uploadResult.data || uploadResult.error) throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
 
-    await getPrismaInstance().websites.update({
+    await prisma.websites.update({
         where: {
             hidden: false,
             url: url,
@@ -146,7 +142,6 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
 }
 
 export const doesWebsiteExists = async (url: string) => {
-    const prisma = getPrismaInstance();
     return !!(
         (await prisma.websites.findFirst({
             where: { url },
@@ -156,7 +151,6 @@ export const doesWebsiteExists = async (url: string) => {
 }
 
 export const fetchWebsiteTags = async () => {
-    const prisma = getPrismaInstance();
     return await tryCatch(
         prisma.websites.findMany({
             where: { hidden: false },
@@ -166,7 +160,6 @@ export const fetchWebsiteTags = async () => {
 };
 
 export const fetchWebsiteComments = async ({ url }: { url: string }) => {
-    const prisma = getPrismaInstance();
     return await prisma.comment.findMany({
         where: { website_url: url },
         include: {
@@ -192,7 +185,6 @@ export const postWebsiteComment = async ({ url, comment, headers }: { url: strin
     const isBanned = await isUserBanned({ currentUser: currentUser.user })
     if (!!isBanned) throw new Error("Your account is banned.")
 
-    const prisma = getPrismaInstance();
     const result = await tryCatch(prisma.comment.create({
         data: {
             content: comment,
@@ -216,7 +208,7 @@ export const removeWebsite = async ({ headers, url }: { headers: Headers, url: s
 
     if (!currentUser) return false
 
-    const result = await tryCatch(getPrismaInstance().websites.delete({
+    const result = await tryCatch(prisma.websites.delete({
         where: {
             url: url,
             created_by: currentUser.user.name
@@ -234,7 +226,7 @@ export const removeWebsite = async ({ headers, url }: { headers: Headers, url: s
     return !!result.data || !(!!result.error)
 }
 
-export async function getLikeCountsForWebsites(prisma: ReturnType<typeof getPrismaInstance>, websiteIds: string[]) {
+export async function getLikeCountsForWebsites(prisma: PrismaClient, websiteIds: string[]) {
     if (websiteIds.length === 0) return {};
     const likes = await prisma.user_likes.groupBy({
         by: ['website_id'],
@@ -257,7 +249,6 @@ export const searchWebsites = async ({
     showOnlyLiked = false
 }: { search?: string, tags?: string[], page?: number, pageSize?: number, sorting: SORTING_TYPE, headers?: Headers, showOnlyLiked?: boolean }): Promise<SearchWebsitesResult> => {
     debugLog("ACTION", 'searchWebsites()', { search, tags, page, pageSize, sorting, showOnlyLiked });
-    const prisma = getPrismaInstance();
 
     let orderBy: Prisma.websitesOrderByWithRelationInput | undefined;
 
@@ -340,7 +331,6 @@ export const searchWebsites = async ({
         if (currentUser?.user) {
             debugLog("DEBUG", "(searchWebsites) user loged in")
 
-            const prisma = getPrismaInstance();
             const userLikes = await prisma.user_likes.findMany({
                 where: {
                     user_id: currentUser.user.id,

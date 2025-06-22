@@ -13,7 +13,7 @@ import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import { admin } from './admin';
 import { user } from './user';
-import getPrismaInstance from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
@@ -169,7 +169,7 @@ export const server = {
             const limit = await validateLimit(ctx.clientAddress)
             if (!limit.success) throw new Error("Ratelimited!")
 
-            const website = await getPrismaInstance().websites.findFirst({
+            const website = await prisma.websites.findFirst({
                 where: {
                     id: input.id
                 },

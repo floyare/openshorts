@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import getPrismaInstance from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import type { BannedDetailsType } from "@/types/user";
 import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
@@ -17,7 +17,7 @@ export const admin = {
 
             if (currentUser?.user.role !== "OWNER") throw new Error("You are not allowed to perform this action");
 
-            return await getPrismaInstance().websites.update({
+            return await prisma.websites.update({
                 where: {
                     url: input.url,
                 },
@@ -40,7 +40,7 @@ export const admin = {
 
             if (currentUser?.user.role !== "OWNER") throw new Error("You are not allowed to perform this action");
 
-            const user = await getPrismaInstance().user.findUnique({
+            const user = await prisma.user.findUnique({
                 where: {
                     id: input.id,
                 },
@@ -48,7 +48,7 @@ export const admin = {
 
             if (!user) throw new Error("User does not exists")
 
-            return await getPrismaInstance().user.update({
+            return await prisma.user.update({
                 where: {
                     id: input.id,
                 },
