@@ -17,25 +17,11 @@ import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import LoadingIndicator from "astro-loading-indicator/component";
 import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
-import { debugLog } from "@/lib/log";
 ---
 
 <html lang="en">
     <head>
         <script is:inline>
-            const getThemePreference = () => {
-                if (
-                    typeof localStorage !== "undefined" &&
-                    localStorage.getItem("theme")
-                ) {
-                    return localStorage.getItem("theme");
-                }
-
-                return window.matchMedia("(prefers-color-scheme: dark)").matches
-                    ? "dark"
-                    : "light";
-            };
-
             const theme = localStorage.getItem("theme");
             let isDark;
 
