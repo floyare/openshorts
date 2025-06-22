@@ -15,6 +15,18 @@ const { title, description, pubDate, author, image, url } = Astro.props;
                 : undefined,
         url,
         image: { "@type": "ImageObject", url: image, caption: title },
-        author: { "@type": "Person", name: author },
+        author: {
+            "@type": "Person",
+            name: author,
+            url: `${import.meta.env.SITE}/profile/${author}`,
+        },
+        publisher: {
+            "@type": "Organization",
+            name: "openshorts.dev",
+            logo: {
+                "@type": "ImageObject",
+                url: `${import.meta.env.SITE}/favicon.png`,
+            },
+        },
     }}
 />

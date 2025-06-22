@@ -22,3 +22,13 @@ const { siteUrl, siteTitle, siteDescription } = Astro.props;
         },
     }}
 />
+
+<Schema
+    item={{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: siteTitle,
+        url: siteUrl,
+        logo: { "@type": "ImageObject", url: `${siteUrl}/favicon.png` },
+    }}
+/>
