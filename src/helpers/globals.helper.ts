@@ -1,0 +1,2 @@
+export const MAX_FEEDBACK_LENGTH = 250
+export const MIN_FEEDBACK_LENGTH = 10

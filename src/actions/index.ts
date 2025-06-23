@@ -15,6 +15,9 @@ import { admin } from './admin';
 import { user } from './user';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { MAX_FEEDBACK_LENGTH, MIN_FEEDBACK_LENGTH } from '@/helpers/globals.helper';
+import { tryCatch } from '@/lib/utils';
+import axios from 'axios';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
@@ -201,6 +204,40 @@ export const server = {
                     (like) => like.user_id === user?.user.id,
                 ),
             }
+        }
+    }),
+    sendFeedback: defineAction({
+        input: z.object({
+            content: z.string().min(MIN_FEEDBACK_LENGTH).max(MAX_FEEDBACK_LENGTH),
+            captcha: z.string().nonempty()
+        }),
+        handler: async (input, ctx) => {
+            const limit = await validateLimit(ctx.clientAddress)
+            if (!limit.success) throw new Error("Ratelimited!")
+
+            const captchaVerify = import.meta.env.PROD ? await tryCatch(axios.post(`https://challenges.cloudflare.com/turnstile/v0/siteverify`, {
+                secret: import.meta.env.TURNSTILE_SECRET,
+                response: input.captcha
+            })) : null
+
+            if (import.meta.env.PROD && (captchaVerify?.data?.data.success !== true || captchaVerify.error)) {
+                debugLog("ERROR", "(sendFeedback) Captcha verification failed: ", captchaVerify?.error?.message || "Unknown error");
+                throw new Error("Failed to verify captcha. Please try again.");
+            }
+
+            // TODO: maybe change only for logged in's
+            const result = await tryCatch(prisma.feedback.create({
+                data: {
+                    content: input.content,
+                }
+            }))
+
+            if (result.error) {
+                debugLog("ERROR", "(sendFeedback) Failed to create feedback: ", result.error.message || "Unknown error");
+                throw new Error(result.error.message || "Failed to send feedback. Please try again.")
+            }
+
+            return true;
         }
     })
 }
