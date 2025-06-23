@@ -42,7 +42,11 @@ export default defineConfig({
                 return { ...item, priority };
             }
         }),
-        partytown(),
+        // partytown({
+        //     config: {
+        //             forward: ['dataLayer.push'],
+        //     }
+        // }),
         mdx()
     ],
     trailingSlash: 'never',

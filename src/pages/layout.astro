@@ -117,11 +117,6 @@ import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
             content={Astro.props.description || DESCRIPTION}
         />
         <meta name="twitter:image" content="/og-bc.webp" />
-        <script
-            async
-            type="text/partytown"
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488"
-            crossorigin="anonymous"></script>
     </head>
     <body
         class:list={[
@@ -153,5 +148,11 @@ import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
         </footer>
+        <script
+            is:inline
+            async
+            defer
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488"
+            crossorigin="anonymous"></script>
     </body>
 </html>
