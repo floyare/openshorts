@@ -56,11 +56,11 @@ const FeedbackDialog = ({ onClose, additionalProps, ...rest }: FeedbackDialogPro
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
-                <Container className="dark:!border-neutral-700 bg-white dark:bg-neutral-950 px-4 py-6 space-y-4">
+                <Container className="dark:!border-neutral-700 relative bg-white dark:bg-neutral-950 px-4 py-6 space-y-4">
                     <div className="space-y-2">
-                        <h1 className="text-2xl font-semibold flex items-center w-full gap-2 dark:text-white text-neutral-900">
+                        <h1 className="text-2xl font-semibold md:flex inline-block w-full gap-2 dark:text-white text-neutral-900">
                             Send feedback about <span className="underline decoration-4 decoration-primary-600">openshorts</span>!
-                            <Button variant={"ghost"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>
+                            <Button variant={"ghost"} className="ml-auto md:relative absolute top-2 right-2 md:top-0 md:right-0" onClick={() => onClose(false)}><X /></Button>
                         </h1>
                         <p className="max-w-xl text-balance break-words text-neutral-800 dark:text-neutral-400">Share your thoughts about openshorts, what you liked or maybe disliked about our website. We want to deliver premium-grade experience while using this website, so any information is useful for us!</p>
                     </div>
