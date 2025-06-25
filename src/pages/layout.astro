@@ -118,6 +118,11 @@ import FeedbackButton from "@/components/feedback-button";
             content={Astro.props.description || DESCRIPTION}
         />
         <meta name="twitter:image" content="/og-bc.webp" />
+        <script
+            is:inline
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488"
+            crossorigin="anonymous"></script>
     </head>
     <body
         class:list={[
@@ -137,8 +142,8 @@ import FeedbackButton from "@/components/feedback-button";
             <slot />
         </AnalyticsProvider>
         <div class="fixed bottom-6 right-6 z-10 flex items-center gap-2">
-            <FeedbackButton client:load />
-            <ThemeSwitcher client:load />
+            <FeedbackButton client:idle />
+            <ThemeSwitcher client:idle />
         </div>
         <footer
             class="text-sm text-text-500 flex justify-center items-center divide-x divide-current"
@@ -150,10 +155,5 @@ import FeedbackButton from "@/components/feedback-button";
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
         </footer>
-        <script
-            is:inline
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488"
-            crossorigin="anonymous"></script>
     </body>
 </html>
