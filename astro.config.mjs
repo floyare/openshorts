@@ -7,7 +7,7 @@ import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
 
 import sitemap from '@astrojs/sitemap';
-import partytown from '@astrojs/partytown';
+//import partytown from '@astrojs/partytown';
 import mdx from '@astrojs/mdx';
 //import getPrismaInstance from '@/lib/prisma';
 

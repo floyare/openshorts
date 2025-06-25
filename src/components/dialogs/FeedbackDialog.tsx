@@ -2,13 +2,14 @@ import { LoaderCircle, Send, X } from "lucide-react";
 import Container from "../container";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent } from "../ui/dialog";
-import Textarea from "../ui/textarea";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition, lazy } from "react";
 import { MAX_FEEDBACK_LENGTH, MIN_FEEDBACK_LENGTH } from "@/helpers/globals.helper";
 import { actions } from "astro:actions";
 import { cn, tryCatch } from "@/lib/utils";
 import { toast } from "sonner";
+
+const Textarea = lazy(() => import("../ui/textarea"));
 
 type FeedbackDialogProps = {
     onClose: (val: boolean) => void

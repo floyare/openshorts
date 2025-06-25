@@ -2,13 +2,14 @@ import { Flag, LoaderCircle, Send, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Dialog, DialogContent } from "../ui/dialog"
-import { Fragment, useState, useTransition } from "react"
+import { Fragment, useState, useTransition, lazy } from "react"
 import { cn } from "@/lib/utils"
-import Textarea from "../ui/textarea"
 import { toast } from "sonner"
 import { REPORT_TEXT_MAX_LENGTH, REPORT_TEXT_MIN_LENGTH, REPORT_TYPES, type ReportOption } from "@/helpers/websites.helper"
 import { actions } from "astro:actions"
 import { debugLog } from "@/lib/log"
+
+const Textarea = lazy(() => import("../ui/textarea"));
 
 type ReportWebsiteDialogProps = {
     onClose: (val: boolean) => void
