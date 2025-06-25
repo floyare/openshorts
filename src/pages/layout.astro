@@ -118,11 +118,11 @@ import FeedbackButton from "@/components/feedback-button";
             content={Astro.props.description || DESCRIPTION}
         />
         <meta name="twitter:image" content="/og-bc.webp" />
-        <!-- <script
+        <script
             is:inline
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488"
-            crossorigin="anonymous"></script> -->
+            crossorigin="anonymous"></script>
     </head>
     <body
         class:list={[
@@ -138,9 +138,9 @@ import FeedbackButton from "@/components/feedback-button";
         />
         <Toaster position="top-right" richColors client:visible />
         <Navbar />
-        <!-- <AnalyticsProvider client:idle> -->
-        <slot />
-        <!-- </AnalyticsProvider> -->
+        <AnalyticsProvider client:idle>
+            <slot />
+        </AnalyticsProvider>
         <div class="fixed bottom-6 right-6 z-10 flex items-center gap-2">
             <FeedbackButton client:idle />
             <ThemeSwitcher client:idle />
