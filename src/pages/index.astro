@@ -1,5 +1,5 @@
 ---
-export const prerender = false;
+//export const prerender = false;
 
 import Layout from "./layout.astro";
 import WebsiteBrowser from "@/components/website-browser";
@@ -7,6 +7,7 @@ import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import type { User } from "better-auth";
 
+console.time("init_search");
 const websites = await searchWebsites({
     sorting: "new",
     headers: Astro.request.headers,
@@ -15,6 +16,7 @@ const websites = await searchWebsites({
 debugLog("INFO", "Session", Astro.locals.user);
 
 const isWebsitesFetchFailed = websites.tags.length <= 0;
+console.timeEnd("init_search");
 ---
 
 <Layout subtitle="Browse websites">

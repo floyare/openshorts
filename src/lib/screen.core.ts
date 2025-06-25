@@ -1,7 +1,5 @@
 import type { Browser } from "puppeteer-core";
-import puppeteer from "puppeteer-core";
 import { debugLog } from "./log";
-import chromium from '@sparticuz/chromium-min';
 
 export const getWebsiteScreen = async (url: string) => {
     const BROWSERLESS_API_KEY = import.meta.env.BROWSERLESS_API_KEY;
@@ -15,6 +13,8 @@ export const getWebsiteScreen = async (url: string) => {
     let browser: Browser | null = null;
     try {
         debugLog("DEBUG", "(getWebsiteScreen) Connecting")
+        const chromium = (await import('@sparticuz/chromium-min')).default;
+        const puppeteer = (await import('puppeteer-core')).default;
         if (import.meta.env.PROD) {
             const executablePath = await chromium.executablePath("https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar")
             browser = await puppeteer.launch({
