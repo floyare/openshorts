@@ -1,6 +1,4 @@
 ---
-export const prerender = false;
-
 const TITLE = "🪄 openshorts.dev";
 const DESCRIPTION =
     "Discover and share the best online tools and websites. Explore curated resources and contribute your favorites to our growing community.";
@@ -149,12 +147,14 @@ import FeedbackButton from "@/components/feedback-button";
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
         </footer>
-        <script is:inline>
+        <script type="module">
             function loadGoogleAdsScript() {
                 if (document.querySelector('script[src*="adsbygoogle.js"]')) {
                     console.log("Skrypt Google Ads już istnieje.");
                     return;
                 }
+
+                console.log("! Loaded Google Ads script ");
 
                 const script = document.createElement("script");
                 script.src =
@@ -165,9 +165,7 @@ import FeedbackButton from "@/components/feedback-button";
                 document.head.appendChild(script);
             }
 
-            window.addEventListener("load", () => {
-                setTimeout(loadGoogleAdsScript, 1000);
-            });
+            window.addEventListener("load", loadGoogleAdsScript);
         </script>
     </body>
 </html>
