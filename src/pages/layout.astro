@@ -142,8 +142,8 @@ import FeedbackButton from "@/components/feedback-button";
             <slot />
         </AnalyticsProvider>
         <div class="fixed bottom-6 right-6 z-10 flex items-center gap-2">
-            <FeedbackButton client:idle />
-            <ThemeSwitcher client:idle />
+            <FeedbackButton client:visible />
+            <ThemeSwitcher client:visible />
         </div>
         <footer
             class="text-sm text-text-500 flex justify-center items-center divide-x divide-current"
