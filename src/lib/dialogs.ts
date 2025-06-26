@@ -1,10 +1,12 @@
-import AISearchDialog from "@/components/dialogs/AISearchDialog";
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog";
-import EditDialogWebsite from "@/components/dialogs/EditWebsiteDialog";
-import FeedbackDialog from "@/components/dialogs/FeedbackDialog";
-import ReportWebsiteDialog from "@/components/dialogs/ReportWebsiteDialog";
-import UserBanDialog from "@/components/dialogs/UserBanDialog";
-import { WebsiteDetailsDialog } from "@/components/dialogs/WebsiteDetailsDialog";
+import { lazy } from "react";
+
+const AISearchDialog = lazy(() => import("@/components/dialogs/AISearchDialog"));
+const ConfirmationDialog = lazy(() => import("@/components/dialogs/ConfirmationDialog"));
+const EditDialogWebsite = lazy(() => import("@/components/dialogs/EditWebsiteDialog"));
+const FeedbackDialog = lazy(() => import("@/components/dialogs/FeedbackDialog"));
+const ReportWebsiteDialog = lazy(() => import("@/components/dialogs/ReportWebsiteDialog"));
+const UserBanDialog = lazy(() => import("@/components/dialogs/UserBanDialog"));
+const WebsiteDetailsDialog = lazy(() => import("@/components/dialogs/WebsiteDetailsDialog"));
 
 export const dialogs = [
     { id: "edit-website", component: EditDialogWebsite, useExitAnimation: true },

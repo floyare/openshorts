@@ -14,7 +14,7 @@ type WebsiteDetailsDialogProps = {
     }
 }
 
-export const WebsiteDetailsDialog = ({ onClose, additionalProps, ...rest }: WebsiteDetailsDialogProps) => {
+const WebsiteDetailsDialog = ({ onClose, additionalProps, ...rest }: WebsiteDetailsDialogProps) => {
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 !z-[1001] data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
@@ -29,3 +29,5 @@ export const WebsiteDetailsDialog = ({ onClose, additionalProps, ...rest }: Webs
         </Dialog >
     )
 }
+
+export default WebsiteDetailsDialog
