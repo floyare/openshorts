@@ -86,6 +86,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                             setError(true);
                         }}
                         loading={isVisible ? "eager" : "lazy"}
+                        fetchPriority={isVisible ? "high" : "low"}
                         onClick={() => previewZoomedInSet(true)}
                         style={sizeStyle}
                     />
