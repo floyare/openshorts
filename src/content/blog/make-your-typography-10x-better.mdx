@@ -1,0 +1,110 @@
+---
+title: "Make your Typography 10x Better!"
+pubDate: "2025-06-28"
+description: "Let's look at some dead-simple tools and tricks to pick great fonts, create a proper typescale, and make your text readable and professional."
+tags: ["fonts", "typography", "ui/ux", "frontend", "tools"]
+image: "https://placehold.co/600x400/F97316/FFFFFF?text=10x+Better+Typography"
+author: floyare
+relatedPosts:
+    - "iconography-uiux-visual-language"
+    - "svg-power-up-dynamic-graphics"
+---
+
+import WebsiteItemRenderer from "../website-item-renderer.tsx"
+
+We've all been there. You've spent weeks getting the logic just right, the components are beautifully structured, the API calls are snappy... but the site just looks... *meh*.
+
+Nine times out of ten, the problem is typography.
+
+Messy fonts, inconsistent sizes, and poor readability can make even the most brilliant app feel cheap and unprofessional. But we're developers, right? We're not supposed to be masters of typography. The good news is, you don't have to be. With the right set of free tools, you can get 90% of the way to pro-level typography in about 15 minutes.
+
+### Step 1: Stop Using Just One Font. Find a Great Pair.
+
+Using a single font for everything is the fastest way to look like a default Bootstrap site from 2014. You need two: one for headings and one for body text (paragraphs). This instantly creates hierarchy and visual interest.
+
+But how do you pick two that don't clash? You let a computer do it for you.
+
+<WebsiteItemRenderer id="fa348147-a249-457d-8adc-85ee7fc13145" client:visible/>
+
+**Fontjoy** is basically Tinder for fonts. You lock in a font you like, and it uses AI to generate combinations that go well with it. It's my first stop when I'm starting a new project and have no idea what I want.
+
+<WebsiteItemRenderer id="07bb2272-d1a5-44e7-93a4-d5214ac0c539" client:visible/>
+
+If you want a more "human-curated" choice, **Fontpair** is fantastic. It's a huge collection of proven font pairings, usually pulled directly from the Google Fonts library, which makes them super easy to use.
+
+### Step 2: Get Your Hands on the Fonts (for Free)
+
+Once you've found a pair you like, you need to grab the font files. While Google Fonts is the obvious choice, there are other great sources for high-quality, free-to-use fonts.
+
+<WebsiteItemRenderer id="37d60857-f3fe-4776-831d-da4ac28039b7" client:visible/>
+
+I've been using **Fontshare** a lot recently. It's a free service from a professional Indian Type Foundry, and the quality is outstanding. They have some really unique fonts you won't see everywhere else.
+
+### Step 3: Create a Typescale (This is The Most Important Part!)
+
+Okay, you have your fonts. **DO NOT** just start throwing random `font-size` values around your CSS. You'll end up with a mess. What you need is a *typescale*—a set of predefined font sizes that are mathematically related and look harmonious together.
+
+<WebsiteItemRenderer id="f15d84f4-9cba-4f6e-91ef-d51dc718969a" client:visible/>
+
+**Typescale.com** is a lifesaver. You pick a base font size (like 16px), choose a scale ratio (like "Major Third"), and it generates all the `h1`, `h2`, `p`, etc., font sizes for you. You can literally just copy-paste the CSS variables into your project.
+
+### Quick Tutorial: Putting It All Together
+
+Let's do a quick run-through.
+
+1.  **Find a Pair:** We use **Fontpair** and decide on "Poppins" for headings and "Roboto" for body text.
+2.  **Generate a Scale:** We go to **Typescale.com**, set our base size to 18px and use the "Perfect Fourth" scale. It gives us CSS variables.
+3.  **Implement in CSS:**
+
+```css
+/* In your main style.css file */
+
+/* 1. Import the fonts (e.g., from Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400&display=swap');
+
+/* 2. Paste the CSS variables from Typescale.com */
+:root {
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+
+  --p: 1.000rem;   /* 18px */
+  --h5: 1.333rem;  /* 24px */
+  --h4: 1.777rem;  /* 32px */
+  --h3: 2.369rem;  /* 42px */
+  --h2: 3.157rem;  /* 56px */
+  --h1: 4.209rem;  /* 75px */
+}
+
+/* 3. Apply the fonts and sizes */
+body {
+  font-family: var(--font-body);
+  font-size: var(--p);
+  line-height: 1.6; /* Important for readability! */
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 { font-size: var(--h1); }
+h2 { font-size: var(--h2); }
+h3 { font-size: var(--h3); }
+h4 { font-size: var(--h4); }
+h5 { font-size: var(--h5); }
+```
+
+That's it! Now you have a professional-looking, consistent typography system across your entire site.
+
+### Step 4: See How the Pros Do It
+
+Need some inspiration? Don't just guess. Look at what top-tier sites are doing.
+
+<WebsiteItemRenderer id="e3f46178-bf4d-4883-8ed5-9c8ec1a49a04" client:visible/>
+
+**Fonts in the Wild** is a gallery that shows you exactly what fonts are being used on real websites. It's a great way to see pairings in a real-world context.
+
+### The Takeaway
+
+Good typography isn't some dark art. It's a system. By using these tools to find a solid pair of fonts and create a mathematical typescale, you can drastically improve the look and feel of your projects with minimal effort. Your users' eyes will thank you.
