@@ -147,25 +147,14 @@ import FeedbackButton from "@/components/feedback-button";
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
         </footer>
-        <script type="module">
-            function loadGoogleAdsScript() {
-                if (document.querySelector('script[src*="adsbygoogle.js"]')) {
-                    console.log("Skrypt Google Ads już istnieje.");
-                    return;
-                }
-
-                console.log("! Loaded Google Ads script ");
-
-                const script = document.createElement("script");
-                script.src =
+        <script is:inline>
+            window.requestIdleCallback(() => {
+                const s = document.createElement("script");
+                s.async = true;
+                s.src =
                     "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-99393908296488";
-                script.async = true;
-                script.crossOrigin = "anonymous";
-
-                document.head.appendChild(script);
-            }
-
-            window.addEventListener("load", loadGoogleAdsScript);
+                document.body.appendChild(s);
+            });
         </script>
     </body>
 </html>
