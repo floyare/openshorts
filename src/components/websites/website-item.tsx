@@ -116,6 +116,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                 <div className="flex flex-col items-end gap-2 sm:w-max w-full">
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
                     <div className="flex items-center gap-1">
+                        {/* TODO:  DODAĆ on like animacje jakas zeby bylo ladne */}
                         <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer")}>
                             {
                                 likeActionPending ? <LoaderCircle className="animate-spin" /> :
