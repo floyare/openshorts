@@ -107,7 +107,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         </div>
                         <div className="flex md:items-end items-center gap-1">
                             <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
-                            <Button disabled={!(!!currentUser?.user)} className={!(!!currentUser?.user) ? "cursor-not-allowed" : "cursor-pointer"} onClick={async () => {
+                            <Button disabled={!(!!currentUser?.user)} className={cn("ml-auto", !(!!currentUser?.user) ? "cursor-not-allowed" : "cursor-pointer")} onClick={async () => {
                                 await callDialog("report-dialog", { url: website.url })
                             }} size={"icon"} variant={"ghost"} title={!(!!currentUser?.user) ? "You must be logged in to report this website" : "Report a problem with this website"}><Flag className="text-red-400" size={24} /></Button>
                         </div>
