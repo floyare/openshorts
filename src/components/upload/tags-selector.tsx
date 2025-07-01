@@ -4,11 +4,19 @@ import { cn } from "@/lib/utils";
 import { Plus, X } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { useEffect } from "react";
 
-type TagsSelectorProps = {}
+type TagsSelectorProps = {};
 
 const TagsSelector = ({ }: TagsSelectorProps) => {
-    const { register, setValue } = useFormContext();
+    const { register, setValue, formState } = useFormContext();
+
+    useEffect(() => {
+        if (formState.isSubmitSuccessful) {
+            selectedTagsSet([]);
+        }
+    }, [formState.isSubmitSuccessful]);
+
     const [selectedTags, selectedTagsSet] = useState<string[]>([]);
 
     const canAddMore = useMemo(() => selectedTags.length < MAX_TAGS_PER_UPLOAD, [selectedTags])

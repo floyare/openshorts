@@ -32,7 +32,7 @@ const UploadForm = () => {
         mode: "onBlur"
     })
 
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError } = methods
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError, reset } = methods
     const recaptchaRef = useRef<TurnstileInstance>(null);
 
     const onSubmit: SubmitHandler<UploadFormInputs> = async (data) => {
@@ -58,6 +58,7 @@ const UploadForm = () => {
         }
 
         recaptchaRef.current?.reset()
+        reset()
     }
 
     return (
