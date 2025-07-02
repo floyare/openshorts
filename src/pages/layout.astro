@@ -22,34 +22,18 @@ import FeedbackButton from "@/components/feedback-button";
     <head>
         <script is:inline>
             const theme = localStorage.getItem("theme");
-            let isDark;
-
-            if (theme === "system" || !theme) {
-                isDark = window.matchMedia(
-                    "(prefers-color-scheme: dark)",
-                ).matches;
-            } else {
-                isDark = theme === "dark";
-            }
+            const isDark = theme === "dark";
             document.documentElement.classList.toggle("dark", isDark);
 
             window.updateTheme = (newTheme) => {
-                let applyDark;
-                if (newTheme === "system") {
-                    localStorage.removeItem("theme");
-                    applyDark = window.matchMedia(
-                        "(prefers-color-scheme: dark)",
-                    ).matches;
-                } else {
-                    localStorage.setItem("theme", newTheme);
-                    applyDark = newTheme === "dark";
-                }
+                localStorage.setItem("theme", newTheme);
+                const applyDark = newTheme === "dark";
                 document.documentElement.classList.toggle("dark", applyDark);
             };
 
             document.addEventListener("astro:after-swap", () => {
                 const currentStoredTheme =
-                    localStorage.getItem("theme") || "system";
+                    localStorage.getItem("theme") || "light";
                 window.updateTheme(currentStoredTheme);
             });
         </script>
