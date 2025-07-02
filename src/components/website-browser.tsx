@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, HeartPlus, LoaderCircle, Search, Sparkles, Tags } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, HeartPlus, LoaderCircle, Search, Sparkles, Tags, Youtube } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
@@ -315,14 +315,19 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
                 </div>
-                <Container className="bg-gradient-to-tr to-secondary-500/80 from-background-300 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
+                <Container className="bg-gradient-to-tr overflow-hidden relative z-10 to-primary-200/80 from-primary-500 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
+                    <div>
+                        <Heart className="fill-accent-500 absolute bottom-16 right-8 opacity-60 -z-10 -rotate-6" size={32} />
+                        <Heart className="fill-accent-500 absolute bottom-18 -right-2 opacity-60 -z-10 rotate-12" size={42} />
+                        <Heart className="fill-accent-500 absolute -bottom-6 -right-6 opacity-60 -z-10 -rotate-12" size={96} />
+                    </div>
                     <div className="flex flex-col items-center justify-center">
-                        <HeartPlus size={36} />
                         <h2 className="font-semibold text-xl text-center">Help <u>openshorts</u> Go Global!</h2>
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap justify-center">
+                    <div className="flex items-center gap-2 flex-wrap justify-center relative z-10">
+                        <a href="https://www.youtube.com/@floyare" target="_blank" title="floyare's Youtube channel"><Button variant={"secondary"} className="bg-red-500 hover:bg-red-400 !text-white"><Youtube size={20} /> Youtube Channel</Button></a>
                         <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
-                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"}><Coffee size={20} /> Buy me a coffee!</Button></a>
+                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-500 !text-white"><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
                 </Container>
             </aside>
