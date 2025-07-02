@@ -73,6 +73,24 @@ html body[data-scroll-locked] {
     animation: bounceIn 0.5s ease-in-out forwards;
 }
 
+@keyframes innerGlow {
+    0% {
+        box-shadow: 0 0 0px rgba(164, 28, 255, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(123, 7, 255, 0.9);
+    }
+
+    100% {
+        box-shadow: 0 0 0px rgba(164, 28, 255, 0.5);
+    }
+}
+
+button.liked__website {
+    animation: innerGlow 0.7s ease-in-out forwards;
+}
+
 @theme {
     --animate-fadein: fadeIn 0.3s ease-in-out forwards;
     --animate-fadeout: fadeOut 0.3s ease-in-out forwards;
