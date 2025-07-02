@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Layout from "../layout.astro";
 import WebsiteItem from "@/components/websites/website-item";
 import WebsiteComments from "@/components/websites/website-comments";
+import WebsiteEntrySchema from "@/constants/schemas/WebsiteEntrySchema.astro";
 
 export async function getStaticPaths() {
     const websites = await prisma.websites.findMany({
@@ -40,6 +41,13 @@ if (!website) {
 }
 ---
 
+<WebsiteEntrySchema
+    name={website.name}
+    description={website.description}
+    url={website.url}
+    image={website.image}
+    created_at={website.created_at}
+/>
 <Layout
     subtitle={website.name}
     description={website.description +

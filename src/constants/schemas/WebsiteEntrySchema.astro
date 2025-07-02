@@ -1,0 +1,22 @@
+---
+import { debugLog } from "@/lib/log";
+import { Schema } from "astro-seo-schema";
+const { name, image, url, description, created_at } = Astro.props;
+
+const siteUrl = import.meta.env.SITE;
+debugLog("DEBUG", `${siteUrl}/${name}`);
+---
+
+<Schema
+    item={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name,
+        description: `${description} - ${url}`,
+        image,
+        url: `${siteUrl}/website/${name}`,
+        datePublished: created_at
+            ? new Date(created_at).toISOString()
+            : undefined,
+    }}
+/>

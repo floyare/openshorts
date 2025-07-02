@@ -81,7 +81,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         if (e.button === 1) {
                             sendEvent("custom_event", { source: "navigate - " + website.url })
                         }
-                    }} target="_blank" className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
+                    }} target="_blank" title={`Visit ${website.name}`} className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={
                             `https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`
                             //`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`

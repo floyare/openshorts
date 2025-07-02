@@ -34,15 +34,15 @@ export default defineConfig({
                 !page.endsWith("/profile/"),
             serialize(item) {
                 if (!item.url) return item;
-                let priority = 0.3;
+                let priority = 0.5;
                 if (item.url === "https://www.openshorts.dev/") {
                     priority = 1.0;
                 } else if (item.url.startsWith("https://www.openshorts.dev/website/")) {
-                    priority = 0.8;
-                } else if (item.url.startsWith("https://www.openshorts.dev/blog/")) {
-                    priority = 0.6;
-                } else if (item.url === "https://www.openshorts.dev/blog") {
                     priority = 0.7;
+                } else if (item.url.startsWith("https://www.openshorts.dev/blog/")) {
+                    priority = 0.8;
+                } else if (item.url === "https://www.openshorts.dev/blog") {
+                    priority = 0.9;
                 }
                 return { ...item, priority };
             }
