@@ -1,6 +1,13 @@
 ---
 export const prerender = false;
-import { Compass, LoaderCircle, Newspaper, UploadCloud } from "lucide-react";
+import {
+    ArrowRight,
+    ChevronRight,
+    Compass,
+    LoaderCircle,
+    Newspaper,
+    UploadCloud,
+} from "lucide-react";
 import Logo from "./logo.astro";
 import NavigationState from "./navigation-state.astro";
 
@@ -70,5 +77,15 @@ const url = Astro.url;
                 )
             }
         </div>
+        <a
+            href="/blog"
+            class="bg-background-500 text-white px-4 py-2 -mt-4 rounded-md flex items-center justify-center gap-1 flex-wrap"
+        >
+            <p class="text-center text-balance break-words">
+                ✨ Our <b>Awesome Blog</b> is Now available!
+            </p>
+
+            <ArrowRight />
+        </a>
     </div>
 </nav>
