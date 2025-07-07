@@ -40,11 +40,13 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
         select: { website_id: true }
     }) : []
 
+    const likedIds = new Set(userLikes.map(l => l.website_id));
+
     const fullWebsites = websites.map((web) => {
         return {
             ...web,
             commentsCount: web.comment.length,
-            isLiked: userLikes.map((l) => l.website_id).includes(web.id),
+            isLiked: likedIds.has(web.id) ?? 0,
             likesCount: websiteLikes[web.id] ?? 0
         }
     })
@@ -64,10 +66,10 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
             //id: w.id,
             name: w.name,
             description: w.description,
-            url: w.url,
+            url: new URL(w.url).hostname,
             tags: w.tags,
             likesCount: w.likesCount,
-            commentsCount: w.commentsCount
+            //commentsCount: w.commentsCount
         }))),
         "USER REQUEST CONTENT:"
     ]
