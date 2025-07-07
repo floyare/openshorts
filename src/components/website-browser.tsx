@@ -279,8 +279,8 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
                 <div className="bg-white dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
                     <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
-                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-base shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
-                        <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-semibold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
+                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-base font-semibold shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
+                        <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-extrabold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
                     </Button>
                     <div className="flex flex-col space-y-1">
                         <Input
@@ -305,13 +305,13 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                             {
                                 tagsList.map((tag, idx) => (
                                     <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle flex items-center p-4 !flex-0 dark:text-text-950")} disabled={tag.count <= 0}>
-                                        <p className="flex items-center gap-2">{tag.name} <span className="group-data-[state=on]/toggle:!text-white text-xs text-secondary-500">({tag.count})</span></p>
+                                        <p className="flex items-center gap-2">{tag.name} <span className="group-data-[state=on]/toggle:!text-white text-xs dark:text-secondary-700 text-secondary-500">({tag.count})</span></p>
                                     </ToggleGroupItem>
                                 ))
                             }
                         </ToggleGroup>
                     </div>
-                    {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 transition-colors p-2 rounded-md">
+                    {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
                         <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
                 </div>
@@ -325,9 +325,9 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
                         <h2 className="font-semibold text-xl text-center">Help <u>openshorts</u> Go Global!</h2>
                     </div>
                     <div className="flex items-center gap-2 flex-wrap justify-center relative z-10">
-                        <a href="https://www.youtube.com/@floyare" target="_blank" title="floyare's Youtube channel"><Button variant={"secondary"} className="bg-red-500 hover:bg-red-400 !text-white"><Youtube size={20} /> Youtube Channel</Button></a>
+                        <a href="https://www.youtube.com/@floyare" target="_blank" title="floyare's Youtube channel"><Button variant={"secondary"} className="bg-red-600 hover:bg-red-500 !text-white"><Youtube size={20} /> Youtube Channel</Button></a>
                         <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
-                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-500 !text-white"><Coffee size={20} /> Buy me a coffee!</Button></a>
+                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-600 !text-white"><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
                 </Container>
             </aside>

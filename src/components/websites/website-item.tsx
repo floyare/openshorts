@@ -117,10 +117,10 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
                     <div className="flex items-center gap-1">
                         {/* TODO:  zrobic lepsze te animacje i serio tylko onclick */}
-                        <Button variant={"secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")}>
+                        <Button variant={isWebsiteLiked ? "primary" : "secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")}>
                             {
                                 likeActionPending ? <LoaderCircle className="animate-spin" /> :
-                                    <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-text-600 group-hover:fill-text-900" : "", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")} />
+                                    <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-white group-hover:fill-text-900" : "", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")} />
                             }
                             <p className="font-semibold text-xl">{likes}</p>
                         </Button>

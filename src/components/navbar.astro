@@ -24,7 +24,9 @@ const url = Astro.url;
                 href="/"
                 class:list={[
                     "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                    url.pathname === "/" ? "text-text-400 font-bold" : "",
+                    url.pathname === "/"
+                        ? "text-text-400 dark:text-text-600 font-bold"
+                        : "",
                 ]}
             >
                 <Compass size={32} /> Browse
@@ -34,7 +36,9 @@ const url = Astro.url;
                 href="/upload"
                 class:list={[
                     "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                    url.pathname === "/upload" ? "text-text-400 font-bold" : "",
+                    url.pathname === "/upload"
+                        ? "text-text-400 dark:text-text-600 font-bold"
+                        : "",
                 ]}
             >
                 <UploadCloud size={32} /> Upload
@@ -45,7 +49,7 @@ const url = Astro.url;
                 class:list={[
                     "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
                     url.pathname.includes("/blog")
-                        ? "text-text-400 font-bold"
+                        ? "text-text-400 dark:text-text-600 font-bold"
                         : "",
                 ]}
             >
@@ -61,7 +65,7 @@ const url = Astro.url;
                             class:list={[
                                 "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center grayscale-100 pointer-events-none opacity-70",
                                 url.pathname === "/signin"
-                                    ? "!text-text-400 font-bold"
+                                    ? "!text-text-400 dark:text-text-600 font-bold"
                                     : "",
                             ]}
                         >

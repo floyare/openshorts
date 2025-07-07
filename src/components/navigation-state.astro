@@ -11,7 +11,7 @@ const url = Astro.url;
             class:list={[
                 "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
                 url.pathname.includes("/profile")
-                    ? "text-text-400 font-bold"
+                    ? "text-text-400 dark:text-text-600 font-bold"
                     : "",
             ]}
         >
@@ -22,7 +22,9 @@ const url = Astro.url;
             href="/signin"
             class:list={[
                 "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center",
-                url.pathname === "/signin" ? "!text-text-400 font-bold" : "",
+                url.pathname === "/signin"
+                    ? "!text-text-400 dark:text-text-600 font-bold"
+                    : "",
             ]}
         >
             <LogIn size={32} /> Sign In
