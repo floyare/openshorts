@@ -12,7 +12,7 @@ import { authClient } from "@/lib/auth-client";
 import { DEBUG_ALLOW_LIKE_OWN_WEBSITES } from "@/helpers/websites.helper";
 import { useDialogManager, getActiveDialogs } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
-import { useAnalytics } from "shibuitracker-client/client";
+//import { useAnalytics } from "shibuitracker-client/client";
 
 interface WebsiteItemProps extends React.HTMLAttributes<HTMLDivElement> {
     website: WebsiteType,
@@ -28,7 +28,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     const [likes, likesSet] = useState(website.likesCount ?? 0)
     const { name, url, description, image, isLiked } = website;
     const { data: currentUser } = authClient.useSession()
-    const { sendEvent } = useAnalytics()
+    //const { sendEvent } = useAnalytics()
 
     const { callDialog } = useDialogManager(dialogs)
 
@@ -79,7 +79,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} onMouseDown={(e) => {
                         if (e.button === 1) {
-                            sendEvent("custom_event", { source: "navigate - " + website.url })
+                            //sendEvent("custom_event", { source: "navigate - " + website.url })
                         }
                     }} target="_blank" title={`Visit ${website.name}`} className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
                         <WebsiteIcon src={
