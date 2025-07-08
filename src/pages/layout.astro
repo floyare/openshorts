@@ -108,7 +108,7 @@ import FeedbackButton from "@/components/feedback-button";
         ]}
         {...props}
     >
-        <Dialog client:idle />
+        <Dialog client:only />
         <LoadingIndicator color="var(--color-primary-500)" />
         <Background
             class={"fixed top-0 left-0 !w-full !h-full opacity-35 dark: -z-10"}
