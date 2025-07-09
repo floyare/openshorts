@@ -10,6 +10,7 @@ import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 //import partytown from '@astrojs/partytown';
 import mdx from '@astrojs/mdx';
+import netlify from '@astrojs/netlify';
 //import getPrismaInstance from '@/lib/prisma';
 
 //const customPages = await fetch("https://example.com").then(users => { return ["https://openshorts.dev/XD"] });
@@ -57,7 +58,7 @@ export default defineConfig({
         lottie()
     ],
     trailingSlash: 'never',
-    adapter: vercel(),//node({mode: "standalone"}),
+    adapter: netlify(),//node({mode: "standalone"}),
     experimental: {
         fonts: [{
             provider: fontProviders.google(),
