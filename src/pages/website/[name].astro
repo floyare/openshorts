@@ -5,6 +5,8 @@ import Layout from "../layout.astro";
 import WebsiteItem from "@/components/websites/website-item";
 import WebsiteComments from "@/components/websites/website-comments";
 import WebsiteEntrySchema from "@/constants/schemas/WebsiteEntrySchema.astro";
+import { format } from "date-fns";
+import { ChevronRight } from "lucide-react";
 
 export async function getStaticPaths() {
     const websites = await prisma.websites.findMany({
@@ -57,9 +59,19 @@ if (!website) {
         new Date().getFullYear()}
 >
     <section class="flex flex-col gap-2 justify-center items-center flex-wrap">
-        <h1 class="bg-background-400 text-white py-2 px-6 rounded-md">
-            Detailed view of {website.name}
-        </h1>
+        <div class="flex gap-2">
+            <div class="bg-background-400 text-white py-2 px-6 rounded-md">
+                <b>Detailed view of {website.name}</b>
+                <p>Uploaded at: {format(website.created_at, "dd.MM.yyyy")}</p>
+            </div>
+            <a
+                href="/#browse"
+                class="bg-accent-500 text-white text-shadow-xs text-shadow-black/60 py-2 px-6 font-bold rounded-md flex gap-2 items-center cursor-pointer"
+            >
+                Check out other Amazing Websites HERE! <ChevronRight />
+            </a>
+        </div>
+
         <div class="flex gap-2 justify-center items-start flex-wrap w-full">
             <WebsiteItem
                 website={{
@@ -79,12 +91,6 @@ if (!website) {
                 currentUser={Astro.locals.user}
                 client:idle
             />
-        </div>
-        <div class="bg-background-400 text-white px-4 py-6 rounded-md max-w-xl">
-            <h1 class="font-bold text-lg">{website.name}</h1>
-            <p class="text-balance break-words">
-                {website.description}
-            </p>
         </div>
     </section>
 </Layout>
