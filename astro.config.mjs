@@ -61,7 +61,7 @@ export default defineConfig({
     experimental: {
         fonts: [{
             provider: fontProviders.google(),
-            name: "Inter",
+            name: "Poppins",
             cssVariable: "--font",
             weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
         }]
