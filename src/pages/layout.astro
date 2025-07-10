@@ -20,19 +20,6 @@ import FeedbackButton from "@/components/feedback-button";
 
 <html lang="en">
     <head>
-        <!-- <script is:inline>
-            window.requestIdleCallback(() => {
-                const s = document.createElement("script");
-                s.async = true;
-                s.src =
-                    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488&fc=alwaysshow";
-                document.body.appendChild(s);
-            });
-        </script> -->
-        <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488&fc=alwaysshow"
-            crossorigin="anonymous"></script>
         <script is:inline>
             const theme = localStorage.getItem("theme");
             const isDark = theme === "dark";
@@ -144,5 +131,14 @@ import FeedbackButton from "@/components/feedback-button";
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
         </footer>
+        <script is:inline>
+            window.requestIdleCallback(() => {
+                const s = document.createElement("script");
+                s.async = true;
+                s.src =
+                    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488";
+                document.body.appendChild(s);
+            });
+        </script>
     </body>
 </html>
