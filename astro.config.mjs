@@ -18,6 +18,11 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
+        build: {
+            rollupOptions: {
+                treeshake: 'smallest',
+            },
+        },
     },
     site: "https://www.openshorts.dev",
     integrations: [
@@ -53,12 +58,12 @@ export default defineConfig({
     ],
     trailingSlash: 'never',
     adapter: vercel(),//node({mode: "standalone"}),
-    // experimental: {
-    //     fonts: [{
-    //         provider: fontProviders.google(),
-    //         name: "Poppins",
-    //         cssVariable: "--font",
-    //         weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-    //     }]
-    // }
+    experimental: {
+        fonts: [{
+            provider: fontProviders.google(),
+            name: "Poppins",
+            cssVariable: "--font",
+            weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+        }]
+    }
 });
