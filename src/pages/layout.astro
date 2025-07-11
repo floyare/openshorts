@@ -14,7 +14,7 @@ const { subtitle = "", description, class: className, ...props } = Astro.props;
 //import { ClientRouter } from "astro:transitions";
 //import { ThemeSwitcher } from "@/components/theme-switcher";
 //import LoadingIndicator from "astro-loading-indicator/component";
-import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
+//import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
 //import FeedbackButton from "@/components/feedback-button";
 ---
 
@@ -39,7 +39,7 @@ import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
         </script>
 
         <ClientRouter fallback="swap" /> -->
-        {
+        <!-- {
             import.meta.env.DEV && (
                 <script
                     is:inline
@@ -57,7 +57,7 @@ import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
                     siteDescription={Astro.props.description || DESCRIPTION}
                 />
             )
-        }
+        } -->
 
         <meta name="google-adsense-account" content="ca-pub-9939390828296488" />
         <meta charset="utf-8" />
@@ -125,7 +125,7 @@ import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
             <FeedbackButton client:visible />
             <ThemeSwitcher client:visible />
         </div> -->
-        <footer
+        <!-- <footer
             class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current"
         >
             <p class="px-2">
@@ -134,7 +134,7 @@ import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
             <a href="/tos" class="px-2"> Terms of Service </a>
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
-        </footer>
+        </footer> -->
         <!-- <script is:inline>
             window.requestIdleCallback(() => {
                 const s = document.createElement("script");
