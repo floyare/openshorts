@@ -2,11 +2,11 @@
 export const prerender = false;
 
 import Layout from "./layout.astro";
-import WebsiteBrowser from "@/components/website-browser";
-import { searchWebsites } from "@/lib/websites.core";
+//import WebsiteBrowser from "@/components/website-browser";
+//import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
-import type { User } from "better-auth";
-import HeroSection from "@/components/home/hero-section.astro";
+//import type { User } from "better-auth";
+//import HeroSection from "@/components/home/hero-section.astro";
 
 console.time("init_search");
 const websites = {
@@ -37,7 +37,7 @@ console.timeEnd("init_search");
                     </div>
                 )
             }
-            <HeroSection />
+            <!-- <HeroSection />
             <section id="browse">
                 <WebsiteBrowser
                     entryWebsites={websites.websites}
@@ -46,7 +46,7 @@ console.timeEnd("init_search");
                     currentUser={(Astro.locals.user as User) ?? undefined}
                     client:idle
                 />
-            </section>
+            </section> -->
         </div>
     </main>
 </Layout>
