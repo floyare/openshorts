@@ -1,4 +1,4 @@
-import type { Browser } from "puppeteer-core";
+//import type { Browser } from "puppeteer-core";
 import { debugLog } from "./log";
 
 export const getWebsiteScreen = async (url: string) => {
@@ -9,26 +9,29 @@ export const getWebsiteScreen = async (url: string) => {
 
     debugLog("DEBUG", "(getWebsiteScreen) Fetching - ", url)
 
+    return null
+
     const browserWSEndpoint = `wss://production-sfo.browserless.io/chromium?token=${BROWSERLESS_API_KEY}`;
     let browser: Browser | null = null;
     try {
         debugLog("DEBUG", "(getWebsiteScreen) Connecting")
-        const chromium = (await import('@sparticuz/chromium-min')).default;
-        const puppeteer = (await import('puppeteer-core')).default;
+        //const chromium = (await import('@sparticuz/chromium-min')).default;
+        //const puppeteer = (await import('puppeteer-core')).default;
         if (import.meta.env.PROD) {
-            const executablePath = await chromium.executablePath("https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar")
-            browser = await puppeteer.launch({
-                executablePath,
-                args: chromium.args,
-                headless: chromium.headless,
-                defaultViewport: chromium.defaultViewport
-            })
+            throw new Error("disabled")
+            // const executablePath = await chromium.executablePath("https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar")
+            // browser = await puppeteer.launch({
+            //     executablePath,
+            //     args: chromium.args,
+            //     headless: chromium.headless,
+            //     defaultViewport: chromium.defaultViewport
+            // })
         } else {
             browser = await puppeteer.connect({ browserWSEndpoint });
         }
 
         //await puppeteer.connect({ browserWSEndpoint });
-        const page = await browser.newPage();
+        const page = await browser?.newPage();
 
         await page.setUserAgent(
             "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) " +
