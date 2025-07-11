@@ -1,10 +1,42 @@
 import { MAX_PROFILE_NAME_LENGTH, MIN_PROFILE_NAME_LENGTH } from "@/helpers/user.helper";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isUserBanned } from "@/lib/user.core";
 import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
 
 export const user = {
+    getProfile: defineAction({
+        input: z.object({
+            profile: z.string(),
+            isOwnProfile: z.boolean().optional(),
+        }),
+        handler: async (input) => {
+            const { profile, isOwnProfile = false } = input;
+            const profileData = await prisma.user.findFirst({
+                where: {
+                    name: profile,
+                },
+                select: {
+                    image: true,
+                    name: true,
+                    role: true,
+                    id: true,
+                    banned_details: isOwnProfile,
+                    name_change_available: isOwnProfile,
+                },
+            });
+            return profileData;
+        },
+    }),
+    isUserBanned: defineAction({
+        input: z.object({
+            currentUser: z.any()
+        }),
+        handler: async (input, ctx) => {
+            return await isUserBanned({ currentUser: input.currentUser });
+        }
+    }),
     updateUsername: defineAction({
         input: z.object({
             username: z.string().min(MIN_PROFILE_NAME_LENGTH).max(MAX_PROFILE_NAME_LENGTH).optional(),

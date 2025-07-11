@@ -2,7 +2,6 @@
 export const prerender = false;
 import { Image } from "astro:assets";
 import Layout from "../layout.astro";
-import { prisma } from "@/lib/prisma";
 import { debugLog } from "@/lib/log";
 import Container from "@/components/container";
 import { LogOut, Star, UploadCloud, User } from "lucide-react";
@@ -11,29 +10,20 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 import BestUploads from "../../components/profile/best-uploads";
 import ProfileStats from "@/components/profile/profile-stats";
 import MyUploads from "@/components/profile/my-uploads";
-import { isUserBanned } from "@/lib/user.core";
 import { Button } from "@/components/ui/button";
 import ProfileNameUpdate from "@/components/profile/profile-name-update";
 import AdElement from "@/components/ads/ad-element";
 import ProfileSchema from "@/constants/schemas/ProfileSchema.astro";
+import { actions } from "astro:actions";
 
 const { profile } = Astro.params;
 const currentUser = Astro.locals.user;
 
 const isOwnProfile = profile === currentUser?.name;
 
-const profileData = await prisma.user.findFirst({
-    where: {
-        name: profile,
-    },
-    select: {
-        image: true,
-        name: true,
-        role: true,
-        id: true,
-        banned_details: isOwnProfile,
-        name_change_available: isOwnProfile,
-    },
+const { data: profileData } = await Astro.callAction(actions.user.getProfile, {
+    profile,
+    isOwnProfile,
 });
 
 debugLog("DEBUG", "Profile data", profileData);
@@ -41,7 +31,11 @@ debugLog("DEBUG", "Profile data", profileData);
 if (!profileData) return Astro.redirect("/404?error=profile-not-found");
 
 const banDetails =
-    isOwnProfile && currentUser ? await isUserBanned({ currentUser }) : null;
+    isOwnProfile && currentUser
+        ? await (
+              await Astro.callAction(actions.user.isUserBanned, currentUser)
+          ).data
+        : null;
 ---
 
 <ProfileSchema

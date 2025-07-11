@@ -1,9 +1,9 @@
 ---
 export const prerender = false;
-import { prisma } from "@/lib/prisma";
 import Layout from "./layout.astro";
 import { auth } from "@/lib/auth";
 import AdminDashboard from "@/components/admin/AdminDashboard";
+import { actions } from "astro:actions";
 
 const currentUser = await auth.api.getSession({
     headers: Astro.request.headers,
@@ -13,26 +13,15 @@ if (currentUser?.user.role !== "OWNER") {
     return Astro.redirect("/404");
 }
 
-const usersFetch = prisma.user.findMany({});
-const websitesFetch = prisma.websites.findMany({
-    include: {
-        user: true,
-    },
-});
-const reportsFetch = prisma.report.findMany({});
-
-const [users, websites, reports] = await Promise.all([
-    usersFetch,
-    websitesFetch,
-    reportsFetch,
-]);
+const { data } = await Astro.callAction(actions.admin.getDashboardData, {});
+if (!data) throw new Error("No data found for admin dashboard");
 ---
 
 <Layout subtitle="Admin Dashboard">
     <AdminDashboard
-        users={users}
-        websites={websites}
-        reports={reports}
+        users={data.users}
+        websites={data.websites}
+        reports={data.reports}
         client:idle
     />
 </Layout>

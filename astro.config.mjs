@@ -58,7 +58,7 @@ export default defineConfig({
     ],
     trailingSlash: 'never',
     output: 'static',
-    adapter: vercel({ isr: true }),//node({mode: "standalone"}),
+    adapter: vercel(),//node({mode: "standalone"}),
     experimental: {
         fonts: [{
             provider: fontProviders.google(),

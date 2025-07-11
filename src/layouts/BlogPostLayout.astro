@@ -26,116 +26,142 @@ if (!profileData) throw new Error("Author not found");
 
 <Layout subtitle={frontmatter.title} description={frontmatter.description}>
     <main class="flex flex-col items-center gap-2 justify-center">
-    <article class="flex flex-col items-start gap-2 justify-center max-w-[50%]">
-        <div class="flex flex-col gap-4 p-4">
-            <nav aria-label="Breadcrumb" class="mb-2">
-                <ol class="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    <li>
-                        <a href="/" class="hover:underline hover:text-primary-600 transition-colors">Home</a>
-                    </li>
-                    <li>
-                        <span class="mx-1">/</span>
-                    </li>
-                    <li>
-                        <a href="/blog" class="hover:underline hover:text-primary-600 transition-colors">Blog</a>
-                    </li>
-                    <li>
-                        <span class="mx-1">/</span>
-                    </li>
-                    <li aria-current="page" class="font-semibold text-neutral-900 dark:text-neutral-100">
-                        {frontmatter.title}
-                    </li>
-                </ol>
-            </nav>
-            <h1 class="text-4xl !font-black">{frontmatter.title}</h1>
-            <p class="text-neutral-900 dark:text-neutral-300">{frontmatter.description}</p>
-            <div class="flex items-center gap-4">
-                <p class="flex items-center gap-1">
-                    <User /> {profileData.name}
+        <article
+            class="flex flex-col items-start gap-2 justify-center max-w-[50%]"
+        >
+            <div class="flex flex-col gap-4 p-4">
+                <nav aria-label="Breadcrumb" class="mb-2">
+                    <ol
+                        class="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400"
+                    >
+                        <li>
+                            <a
+                                href="/"
+                                class="hover:underline hover:text-primary-600 transition-colors"
+                                >Home</a
+                            >
+                        </li>
+                        <li>
+                            <span class="mx-1">/</span>
+                        </li>
+                        <li>
+                            <a
+                                href="/blog"
+                                class="hover:underline hover:text-primary-600 transition-colors"
+                                >Blog</a
+                            >
+                        </li>
+                        <li>
+                            <span class="mx-1">/</span>
+                        </li>
+                        <li
+                            aria-current="page"
+                            class="font-semibold text-neutral-900 dark:text-neutral-100"
+                        >
+                            {frontmatter.title}
+                        </li>
+                    </ol>
+                </nav>
+                <h1 class="text-4xl !font-black">{frontmatter.title}</h1>
+                <p class="text-neutral-900 dark:text-neutral-300">
+                    {frontmatter.description}
                 </p>
-
-                <p class="flex items-center gap-1">
-                    <Calendar /> {format(frontmatter.pubDate, "dd.MM.yyyy")}
-                </p>
-            </div>
-            <img src={frontmatter.image} class="h-auto w-full rounded-lg" width={500} alt={frontmatter.title} />
-        </div>
-        <section class="flex justify-center gap-4 items-start">
-            <Container className="bg-white dark:bg-neutral-900 !p-8">
-                <div
-                    class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
-                >
-                    <h1 class="text-3xl font-bold">{frontmatter.title}</h1>
-                    <slot />
-                </div>
-                <RelatedPostsComponent
-                    relatedPosts={frontmatter.relatedPosts}
-                />
-            </Container>
-
-            <Container
-                className="md:sticky md:top-2 relative top-0 w-fit p-8 flex flex-col gap-8 dark:bg-neutral-950"
-            >
-                <p class="flex flex-col items-center gap-1">
-                    <Calendar />
-                        Published date: <span class="font-bold">{format(frontmatter.pubDate, "dd.MM.yyyy")}</span>
-                </p>
-
-                <div class="space-y-2">
-                    <p class="flex items-center gap-1">
-                        <Tags />
-                        Tags:
-                    </p>
-
-                    <div class="flex items-center flex-wrap gap-1">
-                        {
-                            frontmatter.tags.map((tag: string) => (
-                                <div class="bg-secondary-600 text-white rounded-full px-3 py-1 text-sm">
-                                    {tag}
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-
-                <a class="space-y-2" href={"/profile/" + profileData.name}>
+                <div class="flex items-center gap-4">
                     <p class="flex items-center gap-1">
                         <User />
-                        Author:
+                        {profileData.name}
                     </p>
+
+                    <p class="flex items-center gap-1">
+                        <Calendar />
+                        {format(frontmatter.pubDate, "dd.MM.yyyy")}
+                    </p>
+                </div>
+                <img
+                    src={frontmatter.image}
+                    class="h-auto w-full rounded-lg"
+                    width={500}
+                    alt={frontmatter.title}
+                />
+            </div>
+            <section class="flex justify-center gap-4 items-start">
+                <Container className="bg-white dark:bg-neutral-900 !p-8">
                     <div
-                        class="flex flex-wrap items-center gap-2 cursor-pointer px-3 py-2 rounded-md hover:bg-background-950 dark:hover:bg-neutral-800 transition-colors"
+                        class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
                     >
-                        <Image
-                            src={profileData?.image!}
-                            alt="Profile image"
-                            class="rounded-full w-16 h-16"
-                            width={64}
-                            height={64}
-                        />
-                        <div class="flex flex-col gap-0.5">
-                            <h2 class="text-xl font-semibold">
-                                {profileData.name}
-                            </h2>
-                            <p
-                                class:list={[
-                                    "text-sm w-fit",
-                                    profileData.role === "OWNER"
-                                        ? "relative inline-block text-primary-500 font-bold before:content-[''] before:absolute before:z-20 before:top-1/2 before:-translate-y-1/2 before:w-full before:h-3 before:rounded-full before:bg-primary-600 before:blur-sm before:animate-pulse"
-                                        : "",
-                                ]}
-                            >
-                                {
-                                    capitalizeFirstLetter(
-                                        profileData.role.toLowerCase(),
-                                    )
-                                }
-                            </p>
+                        <h1 class="text-3xl font-bold">{frontmatter.title}</h1>
+                        <slot />
+                    </div>
+                    <RelatedPostsComponent
+                        relatedPosts={frontmatter.relatedPosts}
+                    />
+                </Container>
+
+                <Container
+                    className="md:sticky md:top-2 relative top-0 w-fit p-8 flex flex-col gap-8 dark:bg-neutral-950"
+                >
+                    <p class="flex flex-col items-center gap-1">
+                        <Calendar />
+                        Published date: <span class="font-bold"
+                            >{format(frontmatter.pubDate, "dd.MM.yyyy")}</span
+                        >
+                    </p>
+
+                    <div class="space-y-2">
+                        <p class="flex items-center gap-1">
+                            <Tags />
+                            Tags:
+                        </p>
+
+                        <div class="flex items-center flex-wrap gap-1">
+                            {
+                                frontmatter.tags.map((tag: string) => (
+                                    <div class="bg-secondary-600 text-white rounded-full px-3 py-1 text-sm">
+                                        {tag}
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
-                </a>
-            </Container>
-        </section>
-    </article>
-</main>
+
+                    <a class="space-y-2" href={"/profile/" + profileData.name}>
+                        <p class="flex items-center gap-1">
+                            <User />
+                            Author:
+                        </p>
+                        <div
+                            class="flex flex-wrap items-center gap-2 cursor-pointer px-3 py-2 rounded-md hover:bg-background-950 dark:hover:bg-neutral-800 transition-colors"
+                        >
+                            <Image
+                                src={profileData?.image!}
+                                alt="Profile image"
+                                class="rounded-full w-16 h-16"
+                                width={64}
+                                height={64}
+                            />
+                            <div class="flex flex-col gap-0.5">
+                                <h2 class="text-xl font-semibold">
+                                    {profileData.name}
+                                </h2>
+                                <p
+                                    class:list={[
+                                        "text-sm w-fit",
+                                        profileData.role === "OWNER"
+                                            ? "relative inline-block text-primary-500 font-bold before:content-[''] before:absolute before:z-20 before:top-1/2 before:-translate-y-1/2 before:w-full before:h-3 before:rounded-full before:bg-primary-600 before:blur-sm before:animate-pulse"
+                                            : "",
+                                    ]}
+                                >
+                                    {
+                                        capitalizeFirstLetter(
+                                            profileData.role.toLowerCase(),
+                                        )
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </Container>
+            </section>
+        </article>
+    </main>
 </Layout>

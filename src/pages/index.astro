@@ -3,16 +3,29 @@ export const prerender = false;
 
 import Layout from "./layout.astro";
 import WebsiteBrowser from "@/components/website-browser";
-import { searchWebsites } from "@/lib/websites.core";
 import { debugLog } from "@/lib/log";
 import type { User } from "better-auth";
 import HeroSection from "@/components/home/hero-section.astro";
+import { actions } from "astro:actions";
 
 console.time("init_search");
-const websites = await searchWebsites({
-    sorting: "new",
-    headers: Astro.request.headers,
-});
+const { data: websites, error } = await Astro.callAction(
+    actions.searchWebsites,
+    {
+        sorting: "new",
+        headers: Astro.request.headers,
+    },
+);
+
+// const websites = await searchWebsites({
+//     sorting: "new",
+//     headers: Astro.request.headers,
+// });
+
+if (!websites || error) {
+    debugLog("ERROR", "Websites fetch failed", error);
+    throw new Error("Failed to fetch websites");
+}
 
 debugLog("INFO", "Session", Astro.locals.user);
 

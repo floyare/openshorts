@@ -5,6 +5,26 @@ import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
 
 export const admin = {
+    getDashboardData: defineAction({
+        input: z.object({}),
+        handler: async (_, ctx) => {
+            const usersFetch = prisma.user.findMany({});
+            const websitesFetch = prisma.websites.findMany({
+                include: {
+                    user: true,
+                },
+            });
+            const reportsFetch = prisma.report.findMany({});
+
+            const [users, websites, reports] = await Promise.all([
+                usersFetch,
+                websitesFetch,
+                reportsFetch,
+            ]);
+
+            return { users, websites, reports }
+        }
+    }),
     websiteVisibleToggle: defineAction({
         input: z.object({
             url: z.string().url(),
