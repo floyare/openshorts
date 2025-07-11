@@ -18,11 +18,6 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
-        build: {
-            rollupOptions: {
-                treeshake: 'smallest',
-            },
-        },
     },
     site: "https://www.openshorts.dev",
     integrations: [
