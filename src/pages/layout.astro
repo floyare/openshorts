@@ -4,18 +4,18 @@ const DESCRIPTION =
     "Discover and share the best online tools and websites. Explore curated resources and contribute your favorites to our growing community.";
 
 import "../styles/global.css";
-import { AnalyticsProvider } from "shibuitracker-client/client";
+//import { AnalyticsProvider } from "shibuitracker-client/client";
 import { Font } from "astro:assets";
-import Navbar from "@/components/navbar.astro";
-import { Toaster } from "@/components/ui/sonner";
+//import Navbar from "@/components/navbar.astro";
+//import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", description, class: className, ...props } = Astro.props;
-import Background from "@/assets/bc.svg";
-import { Dialog } from "easy-dialogs";
+//import Background from "@/assets/bc.svg";
+//import { Dialog } from "easy-dialogs";
 //import { ClientRouter } from "astro:transitions";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import LoadingIndicator from "astro-loading-indicator/component";
+//import { ThemeSwitcher } from "@/components/theme-switcher";
+//import LoadingIndicator from "astro-loading-indicator/component";
 import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
-import FeedbackButton from "@/components/feedback-button";
+//import FeedbackButton from "@/components/feedback-button";
 ---
 
 <html lang="en">
@@ -112,19 +112,19 @@ import FeedbackButton from "@/components/feedback-button";
         ]}
         {...props}
     >
-        <Dialog client:only />
+        <!-- <Dialog client:only />
         <LoadingIndicator color="var(--color-primary-500)" />
         <Background
             class={"fixed top-0 left-0 !w-full !h-full opacity-35 dark: -z-10"}
         />
         <Toaster position="top-right" richColors client:visible />
         <Navbar />
-        <AnalyticsProvider children={null} client:idle />
+        <AnalyticsProvider children={null} client:idle /> -->
         <slot />
-        <div class="fixed bottom-6 right-6 z-10 flex items-center gap-2">
+        <!-- <div class="fixed bottom-6 right-6 z-10 flex items-center gap-2">
             <FeedbackButton client:visible />
             <ThemeSwitcher client:visible />
-        </div>
+        </div> -->
         <footer
             class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current"
         >
