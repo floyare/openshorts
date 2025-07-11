@@ -57,7 +57,8 @@ export default defineConfig({
         lottie()
     ],
     trailingSlash: 'never',
-    adapter: vercel(),//node({mode: "standalone"}),
+    output: 'static',
+    adapter: vercel({ isr: true, edgeMiddleware: true }),//node({mode: "standalone"}),
     experimental: {
         fonts: [{
             provider: fontProviders.google(),
