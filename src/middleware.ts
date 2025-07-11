@@ -2,8 +2,6 @@ import { defineMiddleware } from "astro:middleware";
 import { auth } from "./lib/auth";
 import { debugLog } from "./lib/log";
 
-export const config = { runtime: 'nodejs' };
-
 // TODO: zmienic to zeby nie brac autha z middleware tylko tam gdzie potrzebne i to async
 export const onRequest = defineMiddleware(async (context, next) => {
     const authPaths = ['/', '/profile', '/website'];
