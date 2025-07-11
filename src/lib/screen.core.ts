@@ -13,10 +13,9 @@ export const getWebsiteScreen = async (url: string) => {
     let browser: Browser | null = null;
     try {
         debugLog("DEBUG", "(getWebsiteScreen) Connecting")
-        //const chromium = (await import('@sparticuz/chromium-min')).default;
+        const chromium = (await import('@sparticuz/chromium-min')).default;
         const puppeteer = (await import('puppeteer-core')).default;
         if (import.meta.env.PROD) {
-            throw new Error("disabled")
             const executablePath = await chromium.executablePath("https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar")
             browser = await puppeteer.launch({
                 executablePath,
