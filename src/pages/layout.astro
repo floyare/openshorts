@@ -11,7 +11,7 @@ import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", description, class: className, ...props } = Astro.props;
 import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
-import { ClientRouter } from "astro:transitions";
+//import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import LoadingIndicator from "astro-loading-indicator/component";
 import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
@@ -20,7 +20,7 @@ import FeedbackButton from "@/components/feedback-button";
 
 <html lang="en">
     <head>
-        <script is:inline>
+        <!-- <script is:inline>
             const theme = localStorage.getItem("theme");
             const isDark = theme === "dark";
             document.documentElement.classList.toggle("dark", isDark);
@@ -38,7 +38,7 @@ import FeedbackButton from "@/components/feedback-button";
             });
         </script>
 
-        <ClientRouter fallback="swap" />
+        <ClientRouter fallback="swap" /> -->
         {
             import.meta.env.DEV && (
                 <script
