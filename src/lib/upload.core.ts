@@ -2,7 +2,6 @@ import { UTApi, UTFile } from "uploadthing/server";
 import { prisma } from "./prisma";
 import { getWebsiteScreen } from "./screen.core";
 import { capitalizeFirstLetter, getURLHost, tryCatch } from "./utils";
-import sharp from "sharp";
 import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { auth } from "./auth";
 import type { ActionAPIContext } from "astro:actions";
@@ -22,11 +21,17 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
 
     debugLog("ACTION", "Started uploading file with fileId:", fileId)
 
-    const optimizedBuffer = await sharp(Buffer.from(buffer))
-        .webp({ quality: 30 })
-        .resize({ width: 300, height: 500 })
-        .toFormat("webp")
-        .toBuffer();
+    const apiResponse = await axios.post(
+        "/api/image-optimize",
+        buffer,
+        {
+            headers: {
+                "Content-Type": fileObj.type,
+            },
+            responseType: "arraybuffer",
+        }
+    );
+    const optimizedBuffer = Buffer.from(apiResponse.data);
 
     debugLog("ACTION", "Deleting old file..")
     const deleteResult = await utapi.deleteFiles(fileId, { keyType: "customId" });

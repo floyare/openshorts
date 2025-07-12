@@ -73,7 +73,9 @@
         "onlyBuiltDependencies": [
             "@prisma/client",
             "@prisma/engines",
+            "@tailwindcss/oxide",
             "esbuild",
+            "msgpackr-extract",
             "prisma",
             "puppeteer-core",
             "sharp"

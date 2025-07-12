@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, HeartPlus, LoaderCircle, Search, Sparkles, Tags, Youtube } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, Tags, Youtube } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { memo } from "react";
@@ -24,16 +24,48 @@ import { dialogs } from "@/lib/dialogs";
 import { useSearchParamState } from "@/hooks/useSearchParamState";
 import AdElement from "./ads/ad-element";
 import { Fragment } from "react";
+import useSWR from "swr";
 
 type BrowserProps = {
-    entryWebsites: WebsiteType[],
-    totalWebsites: number,
-    tags: WebsiteTag[],
+    //entryWebsites: WebsiteType[],
+    //totalWebsites: number,
+    //tags: WebsiteTag[],
     currentUser?: User
 }
 
-const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: BrowserProps) => {
+// TODO: dodac skeleton placeholdery loading
+const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }: BrowserProps) => {
     const [page, setPage] = useState(1);
+
+    const fetcher = () =>
+        actions.searchWebsites({
+            sorting: "new"
+        }).then(({ data, error }) => {
+            if (error) throw error;
+            return data;
+        });
+
+    const { data: entryFetchData, error, isLoading } = useSWR("websites", async () => fetcher(), {
+        revalidateOnFocus: false,
+        revalidateOnMount: true,
+        revalidateOnReconnect: false,
+        refreshWhenOffline: false,
+        refreshWhenHidden: false,
+        refreshInterval: 0,
+    })
+
+    const entryWebsites = useMemo(
+        () => entryFetchData?.websites || [],
+        [entryFetchData?.websites]
+    );
+    const totalWebsites = useMemo(
+        () => entryFetchData?.total || 0,
+        [entryFetchData?.total]
+    );
+    const tags = useMemo(
+        () => entryFetchData?.tags || [],
+        [entryFetchData?.tags]
+    );
 
     const [currentWebsites, currentWebsitesSet] = useState<WebsiteType[]>(entryWebsites);
     const filteredWebsites = currentWebsites.filter((website) => true)
@@ -41,6 +73,12 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     const [totalPages, totalPagesSet] = useState(Math.ceil(totalWebsites / PAGE_SIZE))
     const [tagsList, tagsListSet] = useState(tags)
     const noEntries = useMemo(() => tagsList.every((p) => p.count === 0), [tagsList])
+
+    useEffect(() => {
+        currentWebsitesSet(entryWebsites)
+        totalPagesSet(totalWebsites)
+        tagsListSet(tags)
+    }, [entryFetchData])
 
     const [searchContentPhrase, searchContentPhraseSet] = useSearchParamState<string>("search", "");
 
@@ -81,9 +119,6 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
     }, [debouncedSearch])
 
     useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-
         const isSearchTheSame = JSON.stringify(previousSearch.current) === JSON.stringify({ searchContent, showOnlyLiked })
         debugLog("WARN", 'thesame', isSearchTheSame, JSON.stringify(previousSearch.current), JSON.stringify({ searchContent, showOnlyLiked }))
 
@@ -139,10 +174,6 @@ const WebsiteBrowser = ({ entryWebsites, totalWebsites, tags, currentUser }: Bro
         }
 
         startWebsitesLoading(() => fetchWebsites({}))
-
-        return () => {
-            controller.abort();
-        }
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
     const PaginationControls = memo(() => {
