@@ -9,6 +9,7 @@ import type { ActionAPIContext } from "astro:actions";
 import { debugLog } from "./log";
 import { isUserBanned } from "./user.core";
 import axios from "axios";
+import sharp from "sharp";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -22,17 +23,11 @@ export async function uploadFile({ fileObj }: { fileObj: File }) {
 
     debugLog("ACTION", "Started uploading file with fileId:", fileId)
 
-    const apiResponse = await axios.post(
-        "/api/image-optimize",
-        buffer,
-        {
-            headers: {
-                "Content-Type": fileObj.type,
-            },
-            responseType: "arraybuffer",
-        }
-    );
-    const optimizedBuffer = Buffer.from(apiResponse.data);
+    const optimizedBuffer = await sharp(Buffer.from(buffer))
+        .webp({ quality: 30 })
+        .resize({ width: 300, height: 500 })
+        .toFormat("webp")
+        .toBuffer();
 
     debugLog("ACTION", "Deleting old file..")
     const deleteResult = await utapi.deleteFiles(fileId, { keyType: "customId" });
