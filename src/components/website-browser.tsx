@@ -58,10 +58,12 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
         () => entryFetchData?.websites || [],
         [entryFetchData?.websites]
     );
+
     const totalWebsites = useMemo(
         () => entryFetchData?.total || 0,
         [entryFetchData?.total]
     );
+
     const tags = useMemo(
         () => entryFetchData?.tags || [],
         [entryFetchData?.tags]
@@ -76,7 +78,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
 
     useEffect(() => {
         currentWebsitesSet(entryWebsites)
-        totalPagesSet(totalWebsites)
+        totalPagesSet(Math.ceil(totalWebsites / PAGE_SIZE))
         tagsListSet(tags)
     }, [entryFetchData])
 
