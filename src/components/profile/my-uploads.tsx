@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { useDialogManager } from "easy-dialogs"
 import { dialogs } from "@/lib/dialogs";
 
+// TODO: ulepszyc troche to, dodac jakis search input czy cos bo trudno sie szuka
 const MyUploads = ({ name }: { name: string }) => {
     const fetcher = () =>
         actions.getMyUploads().then(({ data, error }) => {

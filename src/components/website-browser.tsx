@@ -33,7 +33,6 @@ type BrowserProps = {
     currentUser?: User
 }
 
-// TODO: dodac skeleton placeholdery loading
 const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }: BrowserProps) => {
     const [page, setPage] = useState(1);
 
