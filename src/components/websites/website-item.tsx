@@ -87,7 +87,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             //`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`
                         } alt={`${name} favicon`} size={48} />
                         <h3 className="font-bold text-2xl flex items-center gap-1 relative w-full">
-                            <span className="truncate inline-block 2xl:!max-w-[6.3vw] !max-w-[38.5vw]">{highlight(name)}</span>
+                            <span className="truncate inline-block 2xl:!max-w-[6.3vw] xl:!max-w-[16.5vw] !max-w-[25vw]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h3>
                     </a>
