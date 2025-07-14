@@ -27,7 +27,7 @@ if (!profileData) throw new Error("Author not found");
 <Layout subtitle={frontmatter.title} description={frontmatter.description}>
     <main class="flex flex-col items-center gap-2 justify-center">
         <article
-            class="flex flex-col items-start gap-2 justify-center max-w-[50%]"
+            class="flex flex-col items-start gap-2 justify-center max-w-[75%]"
         >
             <div class="flex flex-col gap-4 p-4">
                 <nav aria-label="Breadcrumb" class="mb-2">
@@ -77,12 +77,14 @@ if (!profileData) throw new Error("Author not found");
                         {format(frontmatter.pubDate, "dd.MM.yyyy")}
                     </p>
                 </div>
-                <img
-                    src={frontmatter.image}
-                    class="h-auto w-full rounded-lg"
-                    width={500}
-                    alt={frontmatter.title}
-                />
+                <div class="w-full flex items-center justify-center">
+                    <img
+                        src={frontmatter.image}
+                        class="h-auto w-full max-w-md rounded-lg"
+                        width={500}
+                        alt={frontmatter.title}
+                    />
+                </div>
             </div>
             <section class="flex justify-center gap-4 items-start">
                 <Container className="bg-white dark:bg-neutral-900 !p-8">
