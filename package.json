@@ -83,6 +83,7 @@
     },
     "devDependencies": {
         "@tailwindcss/typography": "^0.5.16",
-        "prisma": "^6.10.1"
+        "prisma": "^6.10.1",
+        "vite": "^7.0.4"
     }
 }
