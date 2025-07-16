@@ -421,7 +421,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     {
                         isLoading ? (
                             [...Array(PAGE_SIZE).keys()].map((_, idx) => (
-                                <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none">
+                                <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none" key={idx}>
 
                                 </div>
                             ))
