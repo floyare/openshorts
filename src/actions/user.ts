@@ -2,8 +2,9 @@ import { MAX_PROFILE_NAME_LENGTH, MIN_PROFILE_NAME_LENGTH } from "@/helpers/user
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isUserBanned } from "@/lib/user.core";
-import { z } from "astro/zod";
+import { z, ZodType } from "astro/zod";
 import { defineAction } from "astro:actions";
+import type { User } from "better-auth";
 
 export const user = {
     getProfile: defineAction({
@@ -31,7 +32,7 @@ export const user = {
     }),
     isUserBanned: defineAction({
         input: z.object({
-            currentUser: z.any()
+            currentUser: z.custom<User>((val) => true)
         }),
         handler: async (input, ctx) => {
             return await isUserBanned({ currentUser: input.currentUser });

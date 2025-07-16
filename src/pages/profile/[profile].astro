@@ -21,6 +21,11 @@ const currentUser = Astro.locals.user;
 
 const isOwnProfile = profile === currentUser?.name;
 
+if (!profile) {
+    debugLog("ERROR", "Profile parameter is missing");
+    return Astro.redirect("/404?error=profile-not-found");
+}
+
 const { data: profileData } = await Astro.callAction(actions.user.getProfile, {
     profile,
     isOwnProfile,
@@ -33,7 +38,9 @@ if (!profileData) return Astro.redirect("/404?error=profile-not-found");
 const banDetails =
     isOwnProfile && currentUser
         ? await (
-              await Astro.callAction(actions.user.isUserBanned, currentUser)
+              await Astro.callAction(actions.user.isUserBanned, {
+                  currentUser: currentUser,
+              })
           ).data
         : null;
 ---
