@@ -102,12 +102,14 @@ if (!profileData) throw new Error("Author not found");
                 <Container
                     className="md:sticky md:top-2 relative top-0 w-fit p-8 flex flex-col gap-8 dark:bg-neutral-950"
                 >
-                    <p class="flex flex-col items-center gap-1">
+                    <div class="flex items-center gap-4">
                         <Calendar />
-                        Published date: <span class="font-bold"
-                            >{format(frontmatter.pubDate, "dd.MM.yyyy")}</span
-                        >
-                    </p>
+                        <div>
+                            Published date: <p class="font-bold">
+                                {format(frontmatter.pubDate, "dd.MM.yyyy")}
+                            </p>
+                        </div>
+                    </div>
 
                     <div class="space-y-2">
                         <p class="flex items-center gap-1">
