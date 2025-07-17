@@ -39,6 +39,7 @@ export default defineConfig({
                 console.log("Custom pages fetched:", j[0], [...(j[0])] );
                 return [...(j[0])] 
             }).catch((err) => {
+                console.warn("Tried to get env:", PROFILE_FETCH_KEY);
                 console.error("Error fetching custom pages:", err);
                 return [];
             }),
