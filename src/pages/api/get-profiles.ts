@@ -1,5 +1,6 @@
 export const prerender = false
 import type { APIRoute } from "astro";
+import { prisma } from "../../lib/prisma"
 
 export const GET: APIRoute = async (ctx) => {
     const key = ctx.request.headers.get("x-key")
