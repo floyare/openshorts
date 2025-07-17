@@ -73,7 +73,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
 
     const [totalPages, totalPagesSet] = useState(Math.ceil(totalWebsites / PAGE_SIZE))
     const [tagsList, tagsListSet] = useState(tags)
-    const noEntries = useMemo(() => tagsList.every((p) => p.count === 0), [tagsList])
+    const noEntries = useMemo(() => tagsList.every((p) => p.count === 0) && !isLoading, [tagsList])
 
     useEffect(() => {
         currentWebsitesSet(entryWebsites)
