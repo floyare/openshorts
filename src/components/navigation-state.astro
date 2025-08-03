@@ -9,7 +9,7 @@ const url = Astro.url;
         <a
             href="/profile"
             class:list={[
-                "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
+                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
                 url.pathname.includes("/profile")
                     ? "text-text-400 dark:text-text-600 font-bold"
                     : "",
@@ -21,7 +21,7 @@ const url = Astro.url;
         <a
             href="/signin"
             class:list={[
-                "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center",
+                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center",
                 url.pathname === "/signin"
                     ? "!text-text-400 dark:text-text-600 font-bold"
                     : "",

@@ -5,80 +5,114 @@ import {
     ChevronRight,
     Compass,
     LoaderCircle,
+    Menu,
     Newspaper,
     UploadCloud,
+    X,
 } from "lucide-react";
 import Logo from "./logo.astro";
 import NavigationState from "./navigation-state.astro";
+import { cn } from "@/lib/utils";
 
 const url = Astro.url;
 ---
 
 <nav class="w-full flex items-center justify-center" transition:name="navbar">
-    <div class="flex flex-col items-center gap-6">
-        <Logo className="!scale-110" />
-        <div
-            class="flex items-center justify-center gap-8 bg-white dark:bg-neutral-800 dark:text-text-950 rounded-full sm:!px-12 !px-6 py-3 border-[1px] border-background-800 dark:border-neutral-700"
-        >
-            <a
-                href="/"
-                class:list={[
-                    "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                    url.pathname === "/"
-                        ? "text-text-400 dark:text-text-600 font-bold"
-                        : "",
-                ]}
-            >
-                <Compass size={32} /> Browse
-            </a>
-
-            <a
-                href="/upload"
-                class:list={[
-                    "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                    url.pathname === "/upload"
-                        ? "text-text-400 dark:text-text-600 font-bold"
-                        : "",
-                ]}
-            >
-                <UploadCloud size={32} /> Upload
-            </a>
-
-            <a
-                href="/blog"
-                class:list={[
-                    "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                    url.pathname.includes("/blog")
-                        ? "text-text-400 dark:text-text-600 font-bold"
-                        : "",
-                ]}
-            >
-                <Newspaper size={32} /> Blog
-            </a>
-
-            {
-                Astro.isPrerendered ? (
-                    <NavigationState server:defer slot="auth">
-                        <a
-                            slot="fallback"
-                            href="/signin"
-                            class:list={[
-                                "flex flex-col items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center grayscale-100 pointer-events-none opacity-70",
-                                url.pathname === "/signin"
-                                    ? "!text-text-400 dark:text-text-600 font-bold"
-                                    : "",
-                            ]}
-                        >
-                            <LoaderCircle size={32} className="animate-spin" />{" "}
-                            Loading...
-                        </a>
-                    </NavigationState>
-                ) : (
-                    <NavigationState />
-                )
-            }
+    <div class="flex items-start gap-12 justify-between w-full px-12">
+        <div class="flex flex-col justify-center items-center gap-4">
+            <Logo className="" />
+            <p>
+                search fast, create <span class="text-primary-500 font-semibold"
+                    >faster</span
+                >
+            </p>
         </div>
-        <a
+        <div class="relative">
+            <input id="navbar-toggle" type="checkbox" class="peer sr-only" />
+
+            <label
+                for="navbar-toggle"
+                class="block xl:!hidden cursor-pointer peer-checked:hidden"
+            >
+                <Menu size={48} className="!text-text-50" />
+            </label>
+
+            <label
+                for="navbar-toggle"
+                class="hidden xl:!hidden cursor-pointer peer-checked:block"
+            >
+                <X size={48} className="!text-text-50" />
+            </label>
+            <div
+                class={cn(
+                    "xl:flex items-center justify-center gap-6 bg-white z-[1005] dark:bg-neutral-800 dark:text-text-950 sm:!px-12 !px-6 py-6 border-[1px] border-background-800 dark:border-neutral-700",
+                    "xl:flex-row flex-col xl:rounded-full rounded-md absolute xl:relative right-0",
+                    "hidden peer-checked:flex",
+                )}
+            >
+                <a
+                    href="/"
+                    class:list={[
+                        "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
+                        url.pathname === "/"
+                            ? "text-text-400 dark:text-text-600 font-bold"
+                            : "",
+                    ]}
+                >
+                    <Compass size={32} /> Browse
+                </a>
+
+                <a
+                    href="/upload"
+                    class:list={[
+                        "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
+                        url.pathname === "/upload"
+                            ? "text-text-400 dark:text-text-600 font-bold"
+                            : "",
+                    ]}
+                >
+                    <UploadCloud size={32} /> Upload
+                </a>
+
+                <a
+                    href="/blog"
+                    class:list={[
+                        "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
+                        url.pathname.includes("/blog")
+                            ? "text-text-400 dark:text-text-600 font-bold"
+                            : "",
+                    ]}
+                >
+                    <Newspaper size={32} /> Blog
+                </a>
+
+                {
+                    Astro.isPrerendered ? (
+                        <NavigationState server:defer slot="auth">
+                            <a
+                                slot="fallback"
+                                href="/signin"
+                                class:list={[
+                                    "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center grayscale-100 pointer-events-none opacity-70",
+                                    url.pathname === "/signin"
+                                        ? "!text-text-400 dark:text-text-600 font-bold"
+                                        : "",
+                                ]}
+                            >
+                                <LoaderCircle
+                                    size={32}
+                                    className="animate-spin"
+                                />{" "}
+                                Loading...
+                            </a>
+                        </NavigationState>
+                    ) : (
+                        <NavigationState />
+                    )
+                }
+            </div>
+        </div>
+        <!-- <a
             href="/blog"
             class="bg-background-500 text-white px-4 py-2 -mt-4 rounded-md flex items-center justify-center gap-1 flex-wrap"
         >
@@ -87,6 +121,6 @@ const url = Astro.url;
             </p>
 
             <ArrowRight />
-        </a>
+        </a> -->
     </div>
 </nav>
