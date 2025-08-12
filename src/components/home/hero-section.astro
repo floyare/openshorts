@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { Button } from "../ui/button";
 import LottieAnimation from "astro-integration-lottie/Lottie.astro";
 ---
@@ -8,22 +8,29 @@ import LottieAnimation from "astro-integration-lottie/Lottie.astro";
     class="pb-48 md:px-48 px-12 pt-24 flex items-start justify-center w-full gap-2"
 >
     <div class="space-y-4">
-        <h1 class="text-5xl font-bold tracking-tighter">
+        <h2 class="text-5xl font-bold tracking-tighter">
             search fast, create <span
                 class="text-text-500 font-extrabold underline decoration-4 decoration-text-500"
                 >faster.</span
             >
-        </h1>
+        </h2>
         <p class="text-2xl max-w-3xl break-words text-balance">
             Try openshorts, a powerful search engine for websites with useful
             tools, assets and more websites that will help you find what you
             need quickly.
         </p>
-        <a href="#browse"
-            ><Button variant={"primary"} className="!px-8 text-xl !py-6 my-4"
-                >Start browsing! <ArrowRight /></Button
-            ></a
-        >
+        <div class="flex items-center gap-3 flex-wrap">
+            <a href="#browse"
+                ><Button variant={"primary"} className="!px-8 text-xl !py-6"
+                    >Start browsing! <ArrowDown /></Button
+                ></a
+            >
+            <a href="/blog"
+                ><Button variant={"ghost"} className="!px-8 text-xl !py-6"
+                    >See our Blog!</Button
+                ></a
+            >
+        </div>
     </div>
 
     <div class="relative md:block hidden">

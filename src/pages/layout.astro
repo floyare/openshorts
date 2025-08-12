@@ -1,7 +1,7 @@
 ---
-const TITLE = "openshorts.dev - search fast, create faster";
+const TITLE = "openshorts.dev | search fast, create faster";
 const DESCRIPTION =
-    "Discover and share the best online tools and websites. Explore curated tools, assets, graphics and more. Contribute your favorites websites to our growing community. Try it now for FREE, enhance your searching experience with AI Search feature.";
+    "Discover and share the best online tools and websites. Explore useful tools, assets, graphics and more. Contribute your favorites websites to our growing community and enhance your searching experience with AI Search feature.";
 
 import "../styles/global.css";
 import { AnalyticsProvider } from "shibuitracker-client/client";
@@ -20,6 +20,7 @@ import FeedbackButton from "@/components/feedback-button";
 
 <html lang="en">
     <head>
+        <meta charset="utf-8" />
         <script is:inline>
             const theme = localStorage.getItem("theme");
             const isDark = theme === "dark";
@@ -60,7 +61,6 @@ import FeedbackButton from "@/components/feedback-button";
         }
 
         <meta name="google-adsense-account" content="ca-pub-9939390828296488" />
-        <meta charset="utf-8" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
