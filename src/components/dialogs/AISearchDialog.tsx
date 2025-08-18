@@ -78,7 +78,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
     return (
         <Dialog open onOpenChange={onClose}>
             {/* // <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-[1001] grid place-items-center-safe transition-all"> */}
-            <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein !z-[1001]" {...rest}>
+            <DialogContent className="data-[state=closed]:!animate-fadeout animate-fadein !z-[1005]" {...rest}>
                 <Container className="!bg-background-950 overflow-hidden md:px-6 px-4 h-fit relative dark:!bg-neutral-900 dark:!border-neutral-700">
                     <div className="flex flex-col gap-4 items-center bg-gradient-to-tr from-primary-500 to-primary-300 -mx-6 -mt-4.5 py-6 px-12 relative">
                         <Button variant={"ghost"} className="absolute top-2 right-2 text-white" onClick={() => onClose(false)}><X /></Button>
