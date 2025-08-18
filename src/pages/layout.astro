@@ -16,11 +16,13 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import LoadingIndicator from "astro-loading-indicator/component";
 import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
 import FeedbackButton from "@/components/feedback-button";
+import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
 ---
 
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <GoogleTagmanagerPartytown id="GTM-T57K4JBX" />
         <script is:inline>
             const theme = localStorage.getItem("theme");
             const isDark = theme === "dark";
