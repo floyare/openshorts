@@ -15,14 +15,16 @@ export const admin = {
                 },
             });
             const reportsFetch = prisma.report.findMany({});
+            const feedbacksFetch = prisma.feedback.findMany({});
 
-            const [users, websites, reports] = await Promise.all([
+            const [users, websites, reports, feedbacks] = await Promise.all([
                 usersFetch,
                 websitesFetch,
                 reportsFetch,
+                feedbacksFetch
             ]);
 
-            return { users, websites, reports }
+            return { users, websites, reports, feedbacks }
         }
     }),
     websiteVisibleToggle: defineAction({

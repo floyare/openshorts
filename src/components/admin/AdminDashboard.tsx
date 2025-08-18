@@ -1,4 +1,4 @@
-import type { report, User, websites } from "@prisma/client";
+import type { report, User, websites, feedback } from "@prisma/client";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -15,10 +15,11 @@ import { getURLHost } from "@/lib/utils";
 
 const PAGE_SIZE = 5;
 
-const AdminDashboard = ({ websites, users, reports }: { websites: websites[], users: User[], reports: report[] }) => {
+const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: websites[], users: User[], reports: report[], feedbacks: feedback[] }) => {
     const [localWebsites, localWebsitesSet] = useState<websites[]>(websites)
     const [localUsers, localUsersSet] = useState<User[]>(users)
     const [localReports, localReportsSet] = useState<report[]>(reports)
+    const [localFeedbacks, localFeedbacksSet] = useState<feedback[]>(feedbacks)
 
     const [websiteSearch, setWebsiteSearch] = useState("");
     const [userSearch, setUserSearch] = useState("");
@@ -26,6 +27,7 @@ const AdminDashboard = ({ websites, users, reports }: { websites: websites[], us
     const [reportPage, setReportPage] = useState(1);
     const [websitePage, setWebsitePage] = useState(1);
     const [userPage, setUserPage] = useState(1);
+    const [feedbackPage, setFeedbackPage] = useState(1);
 
     const { callDialog } = useDialogManager(dialogs)
     const [filteredWebsites, setFilteredWebsites] = useState(() =>
@@ -103,6 +105,15 @@ const AdminDashboard = ({ websites, users, reports }: { websites: websites[], us
                 reportPage * PAGE_SIZE
             ),
         [filteredReport, reportPage]
+    );
+
+    const paginatedFeedbacks = useMemo(
+        () =>
+            localFeedbacks.slice(
+                (feedbackPage - 1) * PAGE_SIZE,
+                feedbackPage * PAGE_SIZE
+            ),
+        [localFeedbacks, feedbackPage]
     );
 
     const handleWebsiteRemove = async (w: websites) => {
@@ -390,6 +401,59 @@ const AdminDashboard = ({ websites, users, reports }: { websites: websites[], us
                             size="sm"
                             disabled={reportPage * PAGE_SIZE >= filteredReport.length}
                             onClick={() => setReportPage((p) => p + 1)}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card className="">
+                <CardHeader>
+                    <CardTitle>Feedback Messages</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Content</TableHead>
+                                <TableHead>Created At</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedFeedbacks.map((f) => (
+                                <TableRow key={f.id}>
+                                    <TableCell><p className="max-w-xs break-words text-balance">{f.content}</p></TableCell>
+                                    <TableCell>{format(f.created_at, "dd.MM.yyyy HH:mm")}</TableCell>
+                                </TableRow>
+                            ))}
+                            {paginatedFeedbacks.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={4} className="text-center">
+                                        No feedback found.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+
+                    <div className="flex justify-between items-center mt-4">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={feedbackPage === 1}
+                            onClick={() => setFeedbackPage((p) => p - 1)}
+                        >
+                            Previous
+                        </Button>
+                        <span>
+                            Page {feedbackPage} of {Math.max(1, Math.ceil(localFeedbacks.length / PAGE_SIZE))}
+                        </span>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={feedbackPage * PAGE_SIZE >= localFeedbacks.length}
+                            onClick={() => setFeedbackPage((p) => p + 1)}
                         >
                             Next
                         </Button>
