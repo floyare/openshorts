@@ -1,0 +1,19 @@
+---
+import WebsiteItem from "@/components/websites/website-item";
+import { actions } from "astro:actions";
+const { id } = Astro.props;
+
+const website = await Astro.callAction(actions.getWebsiteDetails, {
+    id: id,
+    ignoreRatelimit: true,
+});
+
+if (!website.data || website.error) {
+    console.log(website);
+    throw new Error(`Website with id ${id} not found`);
+}
+---
+
+<div class="not-prose">
+    <WebsiteItem website={website.data} client:visible />
+</div>

@@ -166,10 +166,12 @@ export const server = {
     }),
     getWebsiteDetails: defineAction({
         input: z.object({
-            id: z.string()
+            id: z.string(),
+            ignoreRatelimit: z.boolean().optional()
         }),
         handler: async (input, ctx) => {
-            const limit = await validateLimit(ctx.clientAddress)
+            console.log("> Fetching website for details", input.id)
+            const limit = input.ignoreRatelimit === false ? await validateLimit(ctx.clientAddress) : { success: true }
             if (!limit.success) throw new Error("Ratelimited!")
 
             const website = await prisma.websites.findFirst({
