@@ -5,7 +5,14 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 import Layout from "@/pages/layout.astro";
 import { format } from "date-fns";
 import { Image } from "astro:assets";
-import { Calendar, Tags, User } from "lucide-react";
+import {
+    Calendar,
+    ExternalLink,
+    Github,
+    Tags,
+    User,
+    Youtube,
+} from "lucide-react";
 import RelatedPostsComponent from "@/content/related-posts-component.astro";
 const { frontmatter } = Astro.props;
 
@@ -27,66 +34,74 @@ if (!profileData) throw new Error("Author not found");
 <Layout subtitle={frontmatter.title} description={frontmatter.description}>
     <main class="flex flex-col items-center gap-2 justify-center">
         <article
-            class="flex flex-col items-start gap-2 justify-center max-w-[75%]"
+            class="flex flex-col items-start gap-2 justify-center lg:max-w-[80%] max-w-full"
         >
-            <div class="flex flex-col gap-4 p-4">
-                <nav aria-label="Breadcrumb" class="mb-2">
-                    <ol
-                        class="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400"
-                    >
-                        <li>
-                            <a
-                                href="/"
-                                class="hover:underline hover:text-primary-600 transition-colors"
-                                >Home</a
-                            >
-                        </li>
-                        <li>
-                            <span class="mx-1">/</span>
-                        </li>
-                        <li>
-                            <a
-                                href="/blog"
-                                class="hover:underline hover:text-primary-600 transition-colors"
-                                >Blog</a
-                            >
-                        </li>
-                        <li>
-                            <span class="mx-1">/</span>
-                        </li>
-                        <li
-                            aria-current="page"
-                            class="font-semibold text-neutral-900 dark:text-neutral-100"
+            <div
+                class="grid md:grid-cols-2 grid-cols-1 place-items-between gap-4"
+            >
+                <div class="flex flex-col gap-4 p-4">
+                    <nav aria-label="Breadcrumb" class="mb-2">
+                        <ol
+                            class="flex items-center space-x-2 text-sm text-neutral-600 dark:text-neutral-400"
                         >
-                            {frontmatter.title}
-                        </li>
-                    </ol>
-                </nav>
-                <h1 class="text-4xl !font-black">{frontmatter.title}</h1>
-                <p class="text-neutral-900 dark:text-neutral-300">
-                    {frontmatter.description}
-                </p>
-                <div class="flex items-center gap-4">
-                    <p class="flex items-center gap-1">
-                        <User />
-                        {profileData.name}
+                            <li>
+                                <a
+                                    href="/"
+                                    class="hover:underline hover:text-primary-600 transition-colors"
+                                    >Home</a
+                                >
+                            </li>
+                            <li>
+                                <span class="mx-1">/</span>
+                            </li>
+                            <li>
+                                <a
+                                    href="/blog"
+                                    class="hover:underline hover:text-primary-600 transition-colors"
+                                    >Blog</a
+                                >
+                            </li>
+                            <li>
+                                <span class="mx-1">/</span>
+                            </li>
+                            <li
+                                aria-current="page"
+                                class="font-semibold text-neutral-900 dark:text-neutral-100"
+                            >
+                                {frontmatter.title}
+                            </li>
+                        </ol>
+                    </nav>
+                    <h1 class="text-4xl !font-black">{frontmatter.title}</h1>
+                    <p class="text-neutral-900 dark:text-neutral-300">
+                        {frontmatter.description}
                     </p>
+                    <div class="flex items-center gap-4">
+                        <p class="flex items-center gap-1">
+                            <User />
+                            {profileData.name}
+                        </p>
 
-                    <p class="flex items-center gap-1">
-                        <Calendar />
-                        {format(frontmatter.pubDate, "dd.MM.yyyy")}
-                    </p>
+                        <p class="flex items-center gap-1">
+                            <Calendar />
+                            {format(frontmatter.pubDate, "dd.MM.yyyy")}
+                        </p>
+                    </div>
                 </div>
-                <div class="w-full flex items-center justify-center">
+                <div
+                    class="w-full flex items-center md:justify-end justify-center"
+                >
                     <img
                         src={frontmatter.image}
-                        class="h-auto w-full max-w-md rounded-lg"
+                        class="w-full max-w-xs rounded-lg"
                         width={500}
                         alt={frontmatter.title}
                     />
                 </div>
             </div>
-            <section class="flex justify-center gap-4 items-start">
+            <section
+                class="flex md:justify-between justify-center w-full gap-4 items-start flex-wrap"
+            >
                 <Container className="bg-white dark:bg-neutral-900 !p-8">
                     <div
                         class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
@@ -128,42 +143,63 @@ if (!profileData) throw new Error("Author not found");
                         </div>
                     </div>
 
-                    <a class="space-y-2" href={"/profile/" + profileData.name}>
+                    <div class="space-y-2">
                         <p class="flex items-center gap-1">
                             <User />
                             Author:
                         </p>
+
                         <div
-                            class="flex flex-wrap items-center gap-2 cursor-pointer px-3 py-2 rounded-md hover:bg-background-950 dark:hover:bg-neutral-800 transition-colors"
+                            class="bg-background-950 rounded-sm px-4 py-6 border-[1px] border-background-800"
                         >
-                            <Image
-                                src={profileData?.image!}
-                                alt="Profile image"
-                                class="rounded-full w-16 h-16"
-                                width={64}
-                                height={64}
-                            />
-                            <div class="flex flex-col gap-0.5">
-                                <h2 class="text-xl font-semibold">
-                                    {profileData.name}
-                                </h2>
-                                <p
-                                    class:list={[
-                                        "text-sm w-fit",
-                                        profileData.role === "OWNER"
-                                            ? "relative inline-block text-primary-500 font-bold before:content-[''] before:absolute before:z-20 before:top-1/2 before:-translate-y-1/2 before:w-full before:h-3 before:rounded-full before:bg-primary-600 before:blur-sm before:animate-pulse"
-                                            : "",
-                                    ]}
-                                >
-                                    {
-                                        capitalizeFirstLetter(
-                                            profileData.role.toLowerCase(),
-                                        )
-                                    }
-                                </p>
+                            <div class="flex items-center gap-4">
+                                <Image
+                                    src={profileData?.image!}
+                                    alt="Profile image"
+                                    class="rounded-full w-22 h-22"
+                                    width={96}
+                                    height={96}
+                                />
+                                <div class="">
+                                    <a
+                                        href={"/profile/" + profileData.name}
+                                        class="hover:underline transition-all"
+                                    >
+                                        <h3
+                                            class="text-2xl font-medium leading-8 flex items-center gap-2"
+                                        >
+                                            {profileData.name}
+                                            <ExternalLink size={18} />
+                                        </h3>
+                                    </a>
+                                    <p class="text-primary-500">
+                                        {
+                                            capitalizeFirstLetter(
+                                                profileData.role.toLowerCase(),
+                                            )
+                                        }
+                                    </p>
+                                    <div
+                                        class="mt-2 text-sm flex items-center gap-2 flex-wrap"
+                                    >
+                                        <a
+                                            href={"https://www.youtube.com/@floyare"}
+                                            class="text-black transition-colors flex items-center gap-1 bg-accent-800 rounded-md px-3 py-1 border-[1px] border-accent-700"
+                                        >
+                                            <Youtube /> Youtube Channel
+                                        </a>
+
+                                        <a
+                                            href={"https://github.com/floyare"}
+                                            class="text-black transition-colors flex items-center gap-1 bg-accent-800 rounded-md px-3 py-1 border-[1px] border-accent-700"
+                                        >
+                                            <Github /> Github Profile
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </Container>
             </section>
         </article>
