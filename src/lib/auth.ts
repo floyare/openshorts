@@ -1,7 +1,6 @@
 import { betterAuth, type User } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-import randomBytes from 'randombytes';
 
 export const auth = betterAuth({
     trustedOrigins: ["http://192.168.0.107:4321"],
@@ -13,7 +12,7 @@ export const auth = betterAuth({
                     let uniqueNickname = baseNickname;
                     let nameChange = false
                     while (await prisma.user.findUnique({ where: { name: uniqueNickname } })) {
-                        const randomSuffix = randomBytes(2).toString("hex");
+                        const randomSuffix = (Math.random() + 1).toString(36).substring(7)
                         uniqueNickname = `${baseNickname}-${randomSuffix}`;
                         nameChange = true
                     }
