@@ -74,21 +74,8 @@ export default defineConfig({
         lottie()
     ],
     trailingSlash: 'never',
-    output: 'server',
-    adapter: vercel({
-        isr: {
-            expiration: 60 * 5,
-            exclude: [
-                '/admin',
-                '/tos',
-                '/about',
-                '/privacy',
-                '/signout',
-                '/layout',
-
-            ]
-        }
-    }),//node({mode: "standalone"}),
+    output: 'static',
+    adapter: vercel(),//node({mode: "standalone"}),
     experimental: {
         fonts: [{
             provider: fontProviders.google(),

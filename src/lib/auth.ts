@@ -1,7 +1,7 @@
 import { betterAuth, type User } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-import { randomBytes } from "crypto";
+import randomBytes from 'randombytes';
 
 export const auth = betterAuth({
     trustedOrigins: ["http://192.168.0.107:4321"],

@@ -1,12 +1,51 @@
 ---
 import WebsiteItem from "@/components/websites/website-item";
-import { actions } from "astro:actions";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { tryCatch } from "@/lib/utils";
+
 const { id } = Astro.props;
 
-const website = await Astro.callAction(actions.getWebsiteDetails, {
-    id: id,
-    ignoreRatelimit: true,
-});
+// const website = await Astro.callAction(actions.getWebsiteDetails, {
+//     id: id,
+//     ignoreRatelimit: true,
+// });
+
+const getWebsite = async () => {
+    const website = await prisma.websites.findFirst({
+        where: {
+            id: id,
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                },
+            },
+            user_likes: true,
+            comment: true,
+        },
+    });
+
+    if (!website) return null;
+
+    const user = await auth.api.getSession({
+        headers: Astro.request.headers,
+    });
+
+    return {
+        ...website,
+        likesCount: website.user_likes.length,
+        commentsCount: website.comment.length,
+        isLiked: website.user_likes.some(
+            (like) => like.user_id === user?.user.id,
+        ),
+    };
+};
+
+const website = await tryCatch(getWebsite());
 
 if (!website.data || website.error) {
     console.log(website);
@@ -15,5 +54,5 @@ if (!website.data || website.error) {
 ---
 
 <div class="not-prose">
-    <WebsiteItem website={website.data} client:visible />
+    <WebsiteItem website={website.data} />
 </div>

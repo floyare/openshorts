@@ -55,6 +55,7 @@
         "lucide-react": "^0.501.0",
         "next-themes": "^0.4.6",
         "puppeteer-core": "^24.12.1",
+        "randombytes": "^2.1.0",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "react-hook-form": "^7.56.1",
@@ -84,6 +85,7 @@
     },
     "devDependencies": {
         "@tailwindcss/typography": "^0.5.16",
+        "@types/randombytes": "^2.0.3",
         "prisma": "^6.10.1",
         "vite": "^7.0.4"
     }
