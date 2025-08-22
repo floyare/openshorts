@@ -41,7 +41,7 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
             });
         </script>
 
-        <ClientRouter fallback="swap" />
+        <ClientRouter fallback="none" />
         {
             import.meta.env.DEV && (
                 <script
