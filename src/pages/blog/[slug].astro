@@ -5,7 +5,6 @@ import {
     render,
     type CollectionEntry,
 } from "astro:content";
-import Layout from "../layout.astro";
 import BlogPostLayout from "@/layouts/BlogPostLayout.astro";
 import ArticleSchema from "@/constants/schemas/ArticleSchema.astro";
 import BreadcrumbSchema from "@/constants/schemas/BreadcrumbSchema.astro";
@@ -23,6 +22,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+console.warn("post", post);
 const entry = await getEntry("blog", post.slug);
 if (!entry) throw new Error("Blog post not found");
 const { Content, headings } = await render(entry);
