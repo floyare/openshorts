@@ -3,6 +3,8 @@ import WebsiteItem from "@/components/websites/website-item";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { tryCatch } from "@/lib/utils";
+import type { WebsiteType } from "@/types/website";
+import type { user_likes } from "@prisma/client";
 
 const { id } = Astro.props;
 
@@ -39,7 +41,7 @@ const getWebsite = async () => {
         ...website,
         likesCount: website.user_likes.length,
         commentsCount: website.comment.length,
-        isLiked: website.user_likes.some(
+        isLiked: (website.user_likes as user_likes[]).some(
             (like) => like.user_id === user?.user.id,
         ),
     };
@@ -54,5 +56,5 @@ if (!website.data || website.error) {
 ---
 
 <div class="not-prose">
-    <WebsiteItem website={website.data} />
+    <WebsiteItem website={website.data} client:visible />
 </div>

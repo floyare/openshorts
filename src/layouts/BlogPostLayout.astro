@@ -102,7 +102,9 @@ if (!profileData) throw new Error("Author not found");
             <section
                 class="flex md:justify-between justify-center w-full gap-4 items-start flex-wrap"
             >
-                <Container className="bg-white dark:bg-neutral-900 !p-8">
+                <Container
+                    className="bg-white dark:bg-neutral-900 !p-8 dark:border-neutral-800"
+                >
                     <div
                         class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
                     >
@@ -115,7 +117,7 @@ if (!profileData) throw new Error("Author not found");
                 </Container>
 
                 <Container
-                    className="md:sticky md:top-2 relative top-0 w-fit p-8 flex flex-col gap-8 dark:bg-neutral-950"
+                    className="md:sticky md:top-2 relative top-0 w-fit p-8 flex flex-col gap-8 dark:bg-neutral-950 dark:border-neutral-800"
                 >
                     <div class="flex items-center gap-4">
                         <Calendar />
@@ -150,7 +152,7 @@ if (!profileData) throw new Error("Author not found");
                         </p>
 
                         <div
-                            class="bg-background-950 rounded-sm px-4 py-6 border-[1px] border-background-800"
+                            class="bg-background-950 dark:bg-neutral-900 rounded-sm px-4 py-6 border-[1px] border-background-800 dark:border-neutral-700"
                         >
                             <div class="flex items-center gap-4">
                                 <Image

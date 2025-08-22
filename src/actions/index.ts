@@ -18,6 +18,7 @@ import { auth } from '@/lib/auth';
 import { MAX_FEEDBACK_LENGTH, MIN_FEEDBACK_LENGTH } from '@/helpers/globals.helper';
 import { tryCatch } from '@/lib/utils';
 import axios from 'axios';
+import type { user_likes } from '@prisma/client';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
@@ -202,7 +203,7 @@ export const server = {
                 ...website,
                 likesCount: website.user_likes.length,
                 commentsCount: website.comment.length,
-                isLiked: website.user_likes.some(
+                isLiked: (website.user_likes as user_likes[]).some(
                     (like) => like.user_id === user?.user.id,
                 ),
             }
