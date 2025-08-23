@@ -26,6 +26,8 @@ import AdElement from "./ads/ad-element";
 import { Fragment } from "react";
 import useSWR from "swr";
 
+import InfiniteScroll from "react-infinite-scroll-component";
+
 type BrowserProps = {
     //entryWebsites: WebsiteType[],
     //totalWebsites: number,
@@ -98,13 +100,28 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
     const debouncedSearch = useDebounce(searchContent.search, 600)
     //const debouncedTags = useDebounce(searchContent.tags, 300)
 
-    const previousSearch = useRef<{ searchContent: SearchContentType | null, showOnlyLiked: boolean }>({
+    const previousSearch = useRef<{
+        searchContent: SearchContentType | null,
+        showOnlyLiked: boolean
+    }>({
         searchContent: searchContentPhrase.length > 0 ? {
             search: searchContentPhrase, tags: []
         } : null,
         showOnlyLiked
     })
     const didMount = useRef(false);
+
+    const previousFilters = useRef<{
+        tags: string[],
+        showOnlyLiked: boolean,
+        sorting: SORTING_TYPE,
+        search: string
+    }>({
+        tags: [],
+        showOnlyLiked: false,
+        sorting: "new",
+        search: ""
+    })
 
     const { callDialog } = useDialogManager(dialogs)
 
@@ -118,6 +135,8 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
     useEffect(() => {
         const isSearchTheSame = JSON.stringify(previousSearch.current) === JSON.stringify({ searchContent, showOnlyLiked })
         debugLog("WARN", 'thesame', isSearchTheSame, JSON.stringify(previousSearch.current), JSON.stringify({ searchContent, showOnlyLiked }))
+
+        const filtersChanged = JSON.stringify(previousFilters.current) !== JSON.stringify({ tags: searchContent.tags, showOnlyLiked, sorting: sortingSelected, search: debouncedSearch })
 
         // * check if filters are empty and browser was not mounted
         if (!isSearchTheSame && !didMount.current) {
@@ -155,165 +174,175 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         return updatedTag ? { ...tag, count: updatedTag.count } : { ...tag, count: 0 };
                     })
                 );
-                currentWebsitesSet(data.data.websites);
+
+                if (filtersChanged) currentWebsitesSet(data.data.websites); else currentWebsitesSet((p) => {
+                    const newWebsites = [...p];
+                    data.data?.websites.forEach((website) => {
+                        if (!newWebsites.find((w) => w.id === website.id)) {
+                            newWebsites.push(website);
+                        }
+                    });
+                    return newWebsites;
+                });
 
                 previousSearch.current = { searchContent, showOnlyLiked }
+                previousFilters.current = { tags: searchContent.tags, showOnlyLiked, sorting: sortingSelected, search: debouncedSearch }
             } catch (err) {
                 debugLog("ERROR", "Exception while fetching websites: ", err);
             }
         };
 
-        if (!isSearchTheSame && page !== 1) {
+        if ((!isSearchTheSame || filtersChanged) && page !== 1) {
             debugLog("WARN", "search not the same setting page to 1")
             setPage(1)
             //startWebsitesLoading(() => fetchWebsites({ overridePage: 1 }))
             return
         }
 
-        startWebsitesLoading(() => fetchWebsites({}))
+        startWebsitesLoading(() => fetchWebsites({ overridePage: filtersChanged ? 1 : undefined }))
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
-    const PaginationControls = memo(() => {
-        if (noEntries && !isLoading) return null
-        return (
-            <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious
-                            onClick={() => setPage((p) => Math.max(1, p - 1))}
-                            isDisabled={page <= 1 || websitesLoading}
-                            aria-label="Previous page"
-                            title="Previous page"
-                        />
-                    </PaginationItem>
-                    {isLoading ? (
-                        [...Array(8).keys()].map((_, idx) => (
-                            <PaginationItem key={idx} className="bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none">
-                                <PaginationLink
-                                    className="!text-xl"
-                                    isDisabled={false}
-                                >
+    // const PaginationControls = memo(() => {
+    //     if (noEntries && !isLoading) return null
+    //     return (
+    //         <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
+    //             <PaginationContent>
+    //                 <PaginationItem>
+    //                     <PaginationPrevious
+    //                         onClick={() => setPage((p) => Math.max(1, p - 1))}
+    //                         isDisabled={page <= 1 || websitesLoading}
+    //                         aria-label="Previous page"
+    //                         title="Previous page"
+    //                     />
+    //                 </PaginationItem>
+    //                 {isLoading ? (
+    //                     [...Array(8).keys()].map((_, idx) => (
+    //                         <PaginationItem key={idx} className="bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none">
+    //                             <PaginationLink
+    //                                 className="!text-xl"
+    //                                 isDisabled={false}
+    //                             >
 
-                                </PaginationLink>
-                            </PaginationItem>
-                        ))
-                    ) :
-                        (() => {
-                            const [maxItems, setMaxItems] = useState(MAX_PAGES_TO_LOAD);
-                            const totalGroups = Math.ceil(totalPages / maxItems);
-                            const [currentGroup, setCurrentGroup] = useState(0);
+    //                             </PaginationLink>
+    //                         </PaginationItem>
+    //                     ))
+    //                 ) :
+    //                     (() => {
+    //                         const [maxItems, setMaxItems] = useState(MAX_PAGES_TO_LOAD);
+    //                         const totalGroups = Math.ceil(totalPages / maxItems);
+    //                         const [currentGroup, setCurrentGroup] = useState(0);
 
-                            useEffect(() => {
-                                const newGroup = Math.floor((page - 1) / maxItems);
-                                setCurrentGroup(newGroup);
-                            }, [page, maxItems]);
+    //                         useEffect(() => {
+    //                             const newGroup = Math.floor((page - 1) / maxItems);
+    //                             setCurrentGroup(newGroup);
+    //                         }, [page, maxItems]);
 
-                            useEffect(() => {
-                                const handleResize = () => {
-                                    if (window.innerWidth < 640) {
-                                        setMaxItems(3);
-                                    } else if (window.innerWidth < 1024) {
-                                        setMaxItems(5);
-                                    } else {
-                                        setMaxItems(MAX_PAGES_TO_LOAD);
-                                    }
-                                };
-                                handleResize();
-                                window.addEventListener("resize", handleResize);
-                                return () => window.removeEventListener("resize", handleResize);
-                            }, []);
+    //                         useEffect(() => {
+    //                             const handleResize = () => {
+    //                                 if (window.innerWidth < 640) {
+    //                                     setMaxItems(3);
+    //                                 } else if (window.innerWidth < 1024) {
+    //                                     setMaxItems(5);
+    //                                 } else {
+    //                                     setMaxItems(MAX_PAGES_TO_LOAD);
+    //                                 }
+    //                             };
+    //                             handleResize();
+    //                             window.addEventListener("resize", handleResize);
+    //                             return () => window.removeEventListener("resize", handleResize);
+    //                         }, []);
 
-                            const startPage = currentGroup * maxItems + 1;
-                            const endPage = Math.min(startPage + maxItems - 1, totalPages);
+    //                         const startPage = currentGroup * maxItems + 1;
+    //                         const endPage = Math.min(startPage + maxItems - 1, totalPages);
 
-                            const items = [];
+    //                         const items = [];
 
-                            if (currentGroup > 0) {
-                                items.push(
-                                    <>
-                                        {maxItems > 3 && <PaginationItem key={1}>
-                                            <PaginationLink
-                                                isActive={page === 1}
-                                                onClick={() => setPage(1)}
-                                                isDisabled={websitesLoading}
-                                                className="!text-xl"
-                                            >
-                                                {1}
-                                            </PaginationLink>
-                                        </PaginationItem>}
-                                        <PaginationItem key="ellipsis-prev">
-                                            <PaginationLink
-                                                isActive={false}
-                                                onClick={() => setPage((p) => (currentGroup) * maxItems)}
-                                                isDisabled={websitesLoading}
-                                            >
-                                                ...
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    </>
-                                );
-                            }
+    //                         if (currentGroup > 0) {
+    //                             items.push(
+    //                                 <>
+    //                                     {maxItems > 3 && <PaginationItem key={1}>
+    //                                         <PaginationLink
+    //                                             isActive={page === 1}
+    //                                             onClick={() => setPage(1)}
+    //                                             isDisabled={websitesLoading}
+    //                                             className="!text-xl"
+    //                                         >
+    //                                             {1}
+    //                                         </PaginationLink>
+    //                                     </PaginationItem>}
+    //                                     <PaginationItem key="ellipsis-prev">
+    //                                         <PaginationLink
+    //                                             isActive={false}
+    //                                             onClick={() => setPage((p) => (currentGroup) * maxItems)}
+    //                                             isDisabled={websitesLoading}
+    //                                         >
+    //                                             ...
+    //                                         </PaginationLink>
+    //                                     </PaginationItem>
+    //                                 </>
+    //                             );
+    //                         }
 
-                            for (let i = startPage; i <= endPage; i++) {
-                                items.push(
-                                    <PaginationItem key={i}>
-                                        <PaginationLink
-                                            isActive={page === i}
-                                            onClick={() => setPage(i)}
-                                            isDisabled={websitesLoading}
-                                            className="!text-xl"
-                                        >
-                                            {i}
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                );
-                            }
+    //                         for (let i = startPage; i <= endPage; i++) {
+    //                             items.push(
+    //                                 <PaginationItem key={i}>
+    //                                     <PaginationLink
+    //                                         isActive={page === i}
+    //                                         onClick={() => setPage(i)}
+    //                                         isDisabled={websitesLoading}
+    //                                         className="!text-xl"
+    //                                     >
+    //                                         {i}
+    //                                     </PaginationLink>
+    //                                 </PaginationItem>
+    //                             );
+    //                         }
 
-                            if (currentGroup < totalGroups - 1) {
-                                items.push(
-                                    <>
-                                        <PaginationItem key="ellipsis-next">
-                                            <PaginationLink
-                                                isActive={false}
-                                                onClick={() => setPage((p) => (currentGroup + 1) * maxItems + 1)}
-                                                isDisabled={websitesLoading}
-                                            >
-                                                ...
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        {maxItems > 3 && <PaginationItem key={totalPages}>
-                                            <PaginationLink
-                                                isActive={page === totalPages}
-                                                onClick={() => setPage(totalPages)}
-                                                isDisabled={websitesLoading}
-                                                className="!text-xl"
-                                            >
-                                                {totalPages}
-                                            </PaginationLink>
-                                        </PaginationItem>}
-                                    </>
-                                );
-                            }
+    //                         if (currentGroup < totalGroups - 1) {
+    //                             items.push(
+    //                                 <>
+    //                                     <PaginationItem key="ellipsis-next">
+    //                                         <PaginationLink
+    //                                             isActive={false}
+    //                                             onClick={() => setPage((p) => (currentGroup + 1) * maxItems + 1)}
+    //                                             isDisabled={websitesLoading}
+    //                                         >
+    //                                             ...
+    //                                         </PaginationLink>
+    //                                     </PaginationItem>
+    //                                     {maxItems > 3 && <PaginationItem key={totalPages}>
+    //                                         <PaginationLink
+    //                                             isActive={page === totalPages}
+    //                                             onClick={() => setPage(totalPages)}
+    //                                             isDisabled={websitesLoading}
+    //                                             className="!text-xl"
+    //                                         >
+    //                                             {totalPages}
+    //                                         </PaginationLink>
+    //                                     </PaginationItem>}
+    //                                 </>
+    //                             );
+    //                         }
 
-                            return items;
-                        })().map((item, idx) => (
-                            <Fragment key={idx}>
-                                {item}
-                            </Fragment>
-                        )
-                        )}
-                    <PaginationItem>
-                        <PaginationNext
-                            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                            isDisabled={page >= totalPages || websitesLoading}
-                            aria-label="Next page"
-                            title="Next page"
-                        />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
-        )
-    })
+    //                         return items;
+    //                     })().map((item, idx) => (
+    //                         <Fragment key={idx}>
+    //                             {item}
+    //                         </Fragment>
+    //                     )
+    //                     )}
+    //                 <PaginationItem>
+    //                     <PaginationNext
+    //                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+    //                         isDisabled={page >= totalPages || websitesLoading}
+    //                         aria-label="Next page"
+    //                         title="Next page"
+    //                     />
+    //                 </PaginationItem>
+    //             </PaginationContent>
+    //         </Pagination>
+    //     )
+    // })
 
     return (
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1 relative">
@@ -387,7 +416,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 </Container>
             </aside>
             <Container
-                className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14 dark:bg-neutral-900 dark:border-neutral-700", websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : "")}
+                className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14 dark:bg-neutral-900 dark:border-neutral-700"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
             >
                 <SkewedHighlight className="absolute sm:-top-12 sm:-left-8 z-[1000] -top-20 left-[50%] sm:translate-x-0 translate-x-[-50%] text-center w-max">
                     <h2
@@ -396,10 +425,10 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         <Compass /> Explore websites
                     </h2>
                 </SkewedHighlight>
-                {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
+                {/* {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
                     <LoaderCircle size={48} className="text-primary-500 animate-spin" />
-                </div>}
-                <div className="bg-white dark:bg-neutral-800 border-background-900 border-[1px] rounded-sm md:absolute md:top-4 md:right-4 relative">
+                </div>} */}
+                <div className="bg-white dark:bg-neutral-800 border-background-900 border-[1px] rounded-sm w-fit ml-auto relative">
                     <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
                         <SelectTrigger size="default" className="text-lg w-full dark:text-text-950 dark:border-neutral-700" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
                             <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
@@ -414,36 +443,48 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="w-full flex">
+                {/* <div className="w-full flex">
                     <PaginationControls />
-                </div>
-                <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
-                    {
-                        isLoading ? (
-                            [...Array(PAGE_SIZE).keys()].map((_, idx) => (
-                                <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none" key={idx}>
+                </div> */}
+                <InfiniteScroll
+                    // TODO: add if loading is infinite then retry
+                    dataLength={filteredWebsites.length}
+                    next={() => {
+                        setPage((p) => p + 1)
+                    }}
+                    hasMore={totalWebsites > filteredWebsites.length}
+                    loader={<p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>}
+                    endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
+                    scrollThreshold={0.95}
+                >
+                    <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
+                        {
+                            isLoading ? (
+                                [...Array(PAGE_SIZE).keys()].map((_, idx) => (
+                                    <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none" key={idx}>
 
-                                </div>
-                            ))
-                        ) : (
-                            filteredWebsites.map((website, idx) => {
-                                if (adPositionIndex === idx) {
+                                    </div>
+                                ))
+                            ) : (
+                                filteredWebsites.map((website, idx) => {
+                                    if (adPositionIndex === idx) {
+                                        return (
+                                            <Fragment key={idx}>
+                                                <AdElement />
+                                                <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
+                                            </Fragment>
+                                        )
+                                    }
+
                                     return (
-                                        <Fragment key={idx}>
-                                            <AdElement />
-                                            <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                        </Fragment>
+                                        <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
                                     )
-                                }
-
-                                return (
-                                    <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                )
-                            })
-                        )
-                    }
-                </div>
-                <PaginationControls />
+                                })
+                            )
+                        }
+                    </div>
+                </InfiniteScroll>
+                {/* <PaginationControls /> */}
 
                 {noEntries && (
                     <div className="flex flex-col items-center space-y-1.5 md:mb-0 mb-4">

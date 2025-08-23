@@ -10,4 +10,6 @@ todo:
 - [X] komentarze
 - [X] dodac about us
 - [-] dodac keywordsy
-- [ ] blog
+- [X] blog
+- [ ] naprawic na blog postach nie updatuja sie website item renderery bo prerender jest
+- [ ] naprawic przy mobilce lepiej te website item w browse
