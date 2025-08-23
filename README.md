@@ -12,4 +12,5 @@ todo:
 - [-] dodac keywordsy
 - [X] blog
 - [ ] naprawic na blog postach nie updatuja sie website item renderery bo prerender jest
-- [ ] naprawic przy mobilce lepiej te website item w browse
+- [X] naprawic przy mobilce lepiej te website item w browse
+- [ ] zrobic ze skads pobiera sie zcachowana pierwsza strona websites i sie ustawia z serwera do komponenta od razu.

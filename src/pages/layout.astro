@@ -129,12 +129,12 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
         <Navbar />
         <AnalyticsProvider children={null} client:idle />
         <slot />
-        <div class="fixed bottom-6 right-6 z-10 flex items-center gap-2">
+        <div class="fixed bottom-6 right-6 z-[1002] flex items-center gap-2">
             <FeedbackButton client:visible />
             <ThemeSwitcher client:visible />
         </div>
         <footer
-            class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current fixed bottom-0 bg-background-900 border-[1px] border-background-700 dark:border-background-200 dark:bg-background-50 w-screen py-3 lg:!-mx-8 md:!-mx-4 !-mx-1"
+            class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current md:fixed relative bottom-0 bg-background-900 border-[1px] border-background-700 dark:border-background-200 dark:bg-background-50 w-screen py-3 lg:!-mx-8 md:!-mx-4 !-mx-1 z-[1001]"
         >
             <p class="px-2">
                 openshorts.dev {new Date().getFullYear()}
