@@ -456,6 +456,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     loader={<p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>}
                     endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
                     scrollThreshold={0.95}
+                    className="!overflow-visible"
                 >
                     <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
                         {
