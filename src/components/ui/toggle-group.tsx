@@ -4,6 +4,7 @@ import { type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 import { toggleVariants } from "@/components/ui/toggle"
+import { ChevronDown } from "lucide-react"
 
 const ToggleGroupContext = React.createContext<
     VariantProps<typeof toggleVariants>
@@ -20,20 +21,30 @@ function ToggleGroup({
     ...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
     VariantProps<typeof toggleVariants>) {
+    const [expanded, setExpanded] = React.useState(false);
     return (
         <ToggleGroupPrimitive.Root
             data-slot="toggle-group"
             data-variant={variant}
             data-size={size}
             className={cn(
-                "group/toggle-group flex w-fit items-center flex-wrap rounded-md",
-                className
+                "group/toggle-group flex w-fit items-center flex-wrap rounded-md py-2 transition-all duration-900 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                className,
+                expanded ? "max-h-[90vh]" : "max-h-[30vh] overflow-hidden relative"
             )}
             {...props}
         >
             <ToggleGroupContext.Provider value={{ variant, size }}>
                 {children}
             </ToggleGroupContext.Provider>
+            <div
+                onClick={() => setExpanded(!expanded)}
+                className="w-full h-20 flex items-end cursor-pointer justify-center sticky -bottom-2 left-0 bg-gradient-to-t from-white dark:from-neutral-800 to-transparent"
+            >
+                {
+                    expanded ? <ChevronDown size={36} className="text-primary-500 rounded-md hover:bg-primary-800/30 w-full transition-colors dark:text-white rotate-180 mb-2" strokeWidth={3} /> : <ChevronDown size={36} className="text-primary-500 rounded-md hover:bg-primary-800/30 w-full transition-colors dark:text-white mb-2" strokeWidth={3} />
+                }
+            </div>
         </ToggleGroupPrimitive.Root>
     )
 }

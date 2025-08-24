@@ -1,16 +1,14 @@
 import type { SearchContentType, WebsiteTag, WebsiteType } from "@/types/website";
 import WebsiteItem from "./websites/website-item";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { debugLog } from "@/lib/log";
 import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, Tags, Youtube } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, Tags, Youtube } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { MAX_PAGES_TO_LOAD, PAGE_SIZE, type SORTING_TYPE } from "@/helpers/websites.helper";
 import { Label } from "./ui/label";
@@ -352,7 +350,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     later!
                 </p>
             </div>}
-            <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 relative lg:w-fit w-full lg:col-span-1 col-span-4">
+            <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 lg:bottom-12 relative lg:w-fit w-full lg:col-span-1 col-span-4">
                 <div className="bg-white dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
                     <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
                     <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-base font-semibold shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
@@ -374,7 +372,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     </div>
                     <div className="flex flex-col space-y-1">
                         <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
-                        <ToggleGroup className="ml-2 gap-3" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
+                        <ToggleGroup className="ml-2 gap-3 max-h-[41vh] overflow-hidden relative" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
                             ...p,
                             tags: value
                         }))} value={searchContent.tags}>
@@ -393,6 +391,9 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                                     ))
                                 )
                             }
+                            {/* <div className="w-full h-12 flex items-center cursor-pointer justify-center absolute bottom-0 left-0 bg-gradient-to-t from-red-500 dark:from-neutral-800 to-transparent">
+                                <ChevronDown size={24} className="text-primary-500" strokeWidth={3} />
+                            </div> */}
                         </ToggleGroup>
                     </div>
                     {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
@@ -453,10 +454,15 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         setPage((p) => p + 1)
                     }}
                     hasMore={totalWebsites > filteredWebsites.length}
-                    loader={<p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>}
+                    loader={<>
+                        <p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>
+                    </>}
                     endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
                     scrollThreshold={0.95}
                     className="!overflow-visible"
+                // onScroll={(e) => {
+                //     debugLog("DEBUG", "scroll", e);
+                // }}
                 >
                     <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
                         {
