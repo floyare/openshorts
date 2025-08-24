@@ -200,148 +200,6 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
         startWebsitesLoading(() => fetchWebsites({ overridePage: filtersChanged ? 1 : undefined }))
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
-    // const PaginationControls = memo(() => {
-    //     if (noEntries && !isLoading) return null
-    //     return (
-    //         <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full rounded-md", websitesLoading ? "opacity-70 pointer-events-none grayscale" : "")}>
-    //             <PaginationContent>
-    //                 <PaginationItem>
-    //                     <PaginationPrevious
-    //                         onClick={() => setPage((p) => Math.max(1, p - 1))}
-    //                         isDisabled={page <= 1 || websitesLoading}
-    //                         aria-label="Previous page"
-    //                         title="Previous page"
-    //                     />
-    //                 </PaginationItem>
-    //                 {isLoading ? (
-    //                     [...Array(8).keys()].map((_, idx) => (
-    //                         <PaginationItem key={idx} className="bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none">
-    //                             <PaginationLink
-    //                                 className="!text-xl"
-    //                                 isDisabled={false}
-    //                             >
-
-    //                             </PaginationLink>
-    //                         </PaginationItem>
-    //                     ))
-    //                 ) :
-    //                     (() => {
-    //                         const [maxItems, setMaxItems] = useState(MAX_PAGES_TO_LOAD);
-    //                         const totalGroups = Math.ceil(totalPages / maxItems);
-    //                         const [currentGroup, setCurrentGroup] = useState(0);
-
-    //                         useEffect(() => {
-    //                             const newGroup = Math.floor((page - 1) / maxItems);
-    //                             setCurrentGroup(newGroup);
-    //                         }, [page, maxItems]);
-
-    //                         useEffect(() => {
-    //                             const handleResize = () => {
-    //                                 if (window.innerWidth < 640) {
-    //                                     setMaxItems(3);
-    //                                 } else if (window.innerWidth < 1024) {
-    //                                     setMaxItems(5);
-    //                                 } else {
-    //                                     setMaxItems(MAX_PAGES_TO_LOAD);
-    //                                 }
-    //                             };
-    //                             handleResize();
-    //                             window.addEventListener("resize", handleResize);
-    //                             return () => window.removeEventListener("resize", handleResize);
-    //                         }, []);
-
-    //                         const startPage = currentGroup * maxItems + 1;
-    //                         const endPage = Math.min(startPage + maxItems - 1, totalPages);
-
-    //                         const items = [];
-
-    //                         if (currentGroup > 0) {
-    //                             items.push(
-    //                                 <>
-    //                                     {maxItems > 3 && <PaginationItem key={1}>
-    //                                         <PaginationLink
-    //                                             isActive={page === 1}
-    //                                             onClick={() => setPage(1)}
-    //                                             isDisabled={websitesLoading}
-    //                                             className="!text-xl"
-    //                                         >
-    //                                             {1}
-    //                                         </PaginationLink>
-    //                                     </PaginationItem>}
-    //                                     <PaginationItem key="ellipsis-prev">
-    //                                         <PaginationLink
-    //                                             isActive={false}
-    //                                             onClick={() => setPage((p) => (currentGroup) * maxItems)}
-    //                                             isDisabled={websitesLoading}
-    //                                         >
-    //                                             ...
-    //                                         </PaginationLink>
-    //                                     </PaginationItem>
-    //                                 </>
-    //                             );
-    //                         }
-
-    //                         for (let i = startPage; i <= endPage; i++) {
-    //                             items.push(
-    //                                 <PaginationItem key={i}>
-    //                                     <PaginationLink
-    //                                         isActive={page === i}
-    //                                         onClick={() => setPage(i)}
-    //                                         isDisabled={websitesLoading}
-    //                                         className="!text-xl"
-    //                                     >
-    //                                         {i}
-    //                                     </PaginationLink>
-    //                                 </PaginationItem>
-    //                             );
-    //                         }
-
-    //                         if (currentGroup < totalGroups - 1) {
-    //                             items.push(
-    //                                 <>
-    //                                     <PaginationItem key="ellipsis-next">
-    //                                         <PaginationLink
-    //                                             isActive={false}
-    //                                             onClick={() => setPage((p) => (currentGroup + 1) * maxItems + 1)}
-    //                                             isDisabled={websitesLoading}
-    //                                         >
-    //                                             ...
-    //                                         </PaginationLink>
-    //                                     </PaginationItem>
-    //                                     {maxItems > 3 && <PaginationItem key={totalPages}>
-    //                                         <PaginationLink
-    //                                             isActive={page === totalPages}
-    //                                             onClick={() => setPage(totalPages)}
-    //                                             isDisabled={websitesLoading}
-    //                                             className="!text-xl"
-    //                                         >
-    //                                             {totalPages}
-    //                                         </PaginationLink>
-    //                                     </PaginationItem>}
-    //                                 </>
-    //                             );
-    //                         }
-
-    //                         return items;
-    //                     })().map((item, idx) => (
-    //                         <Fragment key={idx}>
-    //                             {item}
-    //                         </Fragment>
-    //                     )
-    //                     )}
-    //                 <PaginationItem>
-    //                     <PaginationNext
-    //                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-    //                         isDisabled={page >= totalPages || websitesLoading}
-    //                         aria-label="Next page"
-    //                         title="Next page"
-    //                     />
-    //                 </PaginationItem>
-    //             </PaginationContent>
-    //         </Pagination>
-    //     )
-    // })
-
     return (
         <section className="grid lg:grid-cols-5 gap-6 w-full grid-cols-1 relative">
             {(entryFetchError || (entryFetchData?.tags ? entryFetchData?.tags.length <= 0 && !isLoading : false)) && <div className="bg-red-600 text-white px-4 py-2 fixed top-0 left-0 w-full z-10">
@@ -391,9 +249,6 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                                     ))
                                 )
                             }
-                            {/* <div className="w-full h-12 flex items-center cursor-pointer justify-center absolute bottom-0 left-0 bg-gradient-to-t from-red-500 dark:from-neutral-800 to-transparent">
-                                <ChevronDown size={24} className="text-primary-500" strokeWidth={3} />
-                            </div> */}
                         </ToggleGroup>
                     </div>
                     {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
@@ -444,9 +299,6 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         </SelectContent>
                     </Select>
                 </div>
-                {/* <div className="w-full flex">
-                    <PaginationControls />
-                </div> */}
                 <InfiniteScroll
                     // TODO: add if loading is infinite then retry
                     dataLength={filteredWebsites.length}
@@ -460,9 +312,6 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
                     scrollThreshold={0.95}
                     className="!overflow-visible"
-                // onScroll={(e) => {
-                //     debugLog("DEBUG", "scroll", e);
-                // }}
                 >
                     <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
                         {
@@ -491,7 +340,6 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         }
                     </div>
                 </InfiniteScroll>
-                {/* <PaginationControls /> */}
 
                 {noEntries && (
                     <div className="flex flex-col items-center space-y-1.5 md:mb-0 mb-4">
