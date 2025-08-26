@@ -5,6 +5,24 @@ import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
 
 export const admin = {
+    resolveReport: defineAction({
+        input: z.object({
+            id: z.number()
+        }),
+        handler: async (input, ctx) => {
+            const currentUser = await auth.api.getSession({
+                headers: ctx.request.headers,
+            });
+
+            if (currentUser?.user.role !== "OWNER") throw new Error("You are not allowed to perform this action");
+
+            return await prisma.report.delete({
+                where: {
+                    id: input.id
+                }
+            })
+        }
+    }),
     getDashboardData: defineAction({
         input: z.object({}),
         handler: async (_, ctx) => {

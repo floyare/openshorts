@@ -12,6 +12,7 @@ import { debugLog } from "@/lib/log";
 import { format } from "date-fns";
 import type { BannedDetailsType } from "@/types/user";
 import { getURLHost } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 const PAGE_SIZE = 5;
 
@@ -82,7 +83,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
     const paginatedWebsites = useMemo(
         () =>
-            filteredWebsites.slice(
+            filteredWebsites.sort((a, b) => Number(b.created_at) - Number(a.created_at)).slice(
                 (websitePage - 1) * PAGE_SIZE,
                 websitePage * PAGE_SIZE
             ),
@@ -91,7 +92,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
     const paginatedUsers = useMemo(
         () =>
-            filteredUsers.slice(
+            filteredUsers.sort((a, b) => Number(b.createdAt) - Number(a.createdAt)).slice(
                 (userPage - 1) * PAGE_SIZE,
                 userPage * PAGE_SIZE
             ),
@@ -100,7 +101,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
     const paginatedReports = useMemo(
         () =>
-            filteredReport.slice(
+            filteredReport.sort((a, b) => Number(a.created_at) - Number(b.created_at)).slice(
                 (reportPage - 1) * PAGE_SIZE,
                 reportPage * PAGE_SIZE
             ),
@@ -109,7 +110,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
     const paginatedFeedbacks = useMemo(
         () =>
-            localFeedbacks.slice(
+            localFeedbacks.sort((a, b) => Number(b.created_at) - Number(a.created_at)).slice(
                 (feedbackPage - 1) * PAGE_SIZE,
                 feedbackPage * PAGE_SIZE
             ),
@@ -181,11 +182,23 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
         toast.success("User banned successfully!");
     }
 
+    const handleResolveReport = async (r: report) => {
+        const result = await actions.admin.resolveReport({ id: r.id })
+        if (result.error) {
+            toast.error("Failed to resolve report. Please try again later.");
+            debugLog("ERROR", 'Failed to resolve report: ' + result.error.message);
+            return;
+        }
+
+        toast.success("Report resolved successfully!");
+        localReportsSet((prev) => prev.filter((report) => report.id !== r.id));
+    }
+
     return (
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
                 <CardHeader>
-                    <CardTitle>Websites</CardTitle>
+                    <CardTitle>Websites <span>({websites.length})</span></CardTitle>
                     <Input
                         placeholder="Search websites..."
                         value={websiteSearch}
@@ -260,7 +273,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Users</CardTitle>
+                    <CardTitle>Users <span>({users.length})</span></CardTitle>
                     <Input
                         placeholder="Search users..."
                         value={userSearch}
@@ -339,7 +352,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Reports</CardTitle>
+                    <CardTitle>Reports <span>({reports.length})</span></CardTitle>
                     <Input
                         placeholder="Search reports..."
                         value={reportSearch}
@@ -360,6 +373,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
                                 <TableHead>Content</TableHead>
                                 <TableHead>Created at</TableHead>
                                 <TableHead>Created by</TableHead>
+                                <TableHead>Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -371,6 +385,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
                                     <TableCell><p className="max-w-xs break-words text-balance">{u.content}</p></TableCell>
                                     <TableCell>{format(u.created_at, "dd.MM.yyyy HH:mm")}</TableCell>
                                     <TableCell><a href={`/profile/${u.created_by}`} target="_blank" className="text-primary-600">{u.created_by}</a></TableCell>
+                                    <TableCell><Button className="bg-accent-400" onClick={() => handleResolveReport(u)}><Check /> Resolve</Button></TableCell>
                                 </TableRow>
                             ))}
 
@@ -410,7 +425,7 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
 
             <Card className="">
                 <CardHeader>
-                    <CardTitle>Feedback Messages</CardTitle>
+                    <CardTitle>Feedback Messages <span>({feedbacks.length})</span></CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
