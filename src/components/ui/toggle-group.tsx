@@ -22,15 +22,22 @@ function ToggleGroup({
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
     VariantProps<typeof toggleVariants>) {
     const [expanded, setExpanded] = React.useState(false);
+    const groupRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(() => {
+        if (!expanded && groupRef.current) {
+            groupRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [expanded])
     return (
         <ToggleGroupPrimitive.Root
             data-slot="toggle-group"
             data-variant={variant}
             data-size={size}
+            ref={groupRef}
             className={cn(
                 "group/toggle-group flex w-fit items-center flex-wrap rounded-md py-2 transition-all duration-900 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
                 className,
-                expanded ? "max-h-[90vh]" : "max-h-[30vh] overflow-hidden relative"
+                expanded ? "max-h-[55vh] overflow-y-auto" : "max-h-[30vh] overflow-hidden relative"
             )}
             {...props}
         >
