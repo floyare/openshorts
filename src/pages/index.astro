@@ -40,7 +40,7 @@ console.timeEnd("init_search");
             <section id="browse">
                 <WebsiteBrowser
                     currentUser={(Astro.locals.user as User) ?? undefined}
-                    client:visible
+                    client:idle
                 />
             </section>
         </div>
