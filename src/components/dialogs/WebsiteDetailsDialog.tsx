@@ -17,7 +17,7 @@ type WebsiteDetailsDialogProps = {
 const WebsiteDetailsDialog = ({ onClose, additionalProps, ...rest }: WebsiteDetailsDialogProps) => {
     return (
         <Dialog open onOpenChange={onClose}>
-            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 !z-[1001] data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
+            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
                 <div className="flex gap-2 items-center">
                     <Button variant={"outline"} className="ml-auto" onClick={() => onClose(false)}><X /></Button>
                 </div>
