@@ -112,6 +112,11 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
             content={Astro.props.description || DESCRIPTION}
         />
         <meta name="twitter:image" content="/og-bc.webp" />
+        <script
+            is:inline
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488"
+            crossorigin="anonymous"></script>
     </head>
     <body
         class:list={[
@@ -143,14 +148,5 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
         </footer>
-        <script is:inline>
-            window.requestIdleCallback(() => {
-                const s = document.createElement("script");
-                s.async = true;
-                s.src =
-                    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939390828296488";
-                document.body.appendChild(s);
-            });
-        </script>
     </body>
 </html>
