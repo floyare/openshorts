@@ -17,6 +17,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import type { AIUsageType } from "@/types/user"
 import { toast } from "sonner"
 import { isToday } from "date-fns"
+import { useAnalytics } from "shibuitracker-client/client"
 
 type AISearchDialogProps = {
     onClose: (val: boolean) => void
@@ -43,6 +44,8 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
     const userLoggedIn = useMemo(() => user, [user])
     const aiNoUsagesLeft = useMemo(() => (aiUsage && isToday(aiUsage.date) && aiUsage?.used >= MAX_AI_USAGES_PER_DAY) ?? false, [aiUsage])
 
+    const { sendEvent } = useAnalytics()
+
     useEffect(() => {
         if (debouncedSearch.length <= 0) return
         searchErrorSet(null)
@@ -50,6 +53,8 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
         searchingTransitionSet(async () => {
             const result = await actions.getWebsitesRecommendation({ content: debouncedSearch })
             debugLog("ACTION", result)
+
+            await sendEvent("custom_event", { source: "ai search invocation" })
 
             if (result.error) {
                 // not cool of making this but idk how for now
