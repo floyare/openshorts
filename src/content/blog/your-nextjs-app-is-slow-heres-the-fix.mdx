@@ -1,0 +1,104 @@
+---
+title: "Your Next.js App is Slow? Here's the Fix."
+pubDate: "2025-10-28"
+description: "A no-BS checklist for debugging and fixing a slow Next.js app. We're hunting down the real culprits: bloated bundles, oversized images, and the wrong rendering strategies. This is the practical advice you've been looking for."
+tags: ["nextjs", "performance", "frontend", "webdev", "optimization"]
+image: "https://placehold.co/600x400/14B8A6/FFFFFF?text=Fix+Your+Next.js+App"
+author: floyare
+relatedPosts:
+    - "a-devs-guide-to-not-sucking-at-graphics"
+    - "good-devs-are-lazy-how-to-automate-your-life"
+---
+
+import WebsiteItemRenderer from "../website-item-renderer.tsx"
+
+So you built your app in Next.js. The local dev server is snappy, everything works, and you deploy to Vercel. Then you open the analytics dashboard and see it: your performance score is a sad, yellow 75. Or worse. Your site *feels* slow.
+
+Next.js is packed with powerful performance features, but they aren't magic. You have to actually use them. Most of the time, a slow Next.js site comes down to a few common, very fixable mistakes.
+
+Forget the vague articles that just say "optimize your code." This is a real-world, developer-to-developer checklist of the things that will actually move the needle on your performance score.
+
+### 1. The #1 Offender: You're Abusing the `<img>` Tag
+
+If you're using a plain `<img src="...">` tag in your Next.js app, you're throwing away the biggest free performance win the framework gives you. Unoptimized images are the boat anchors of the web.
+
+**The Fix:** Use the built-in `next/image` component. Always.
+
+**Why it's a game-changer (Pros):**
+*   **Automatic Optimization:** It automatically serves images in modern, lightweight formats like WebP or AVIF. This can cut image file sizes by over 80% with no visible quality loss.
+*   **Lazy Loading by Default:** Images outside of the viewport won't be loaded until the user scrolls near them. This dramatically speeds up initial page load.
+*   **Prevents Layout Shift:** It automatically handles image sizing to prevent that annoying page jump (Cumulative Layout Shift) that kills your Lighthouse score.
+
+**The Workflow:**
+Before you even add an image to your project, run it through an optimizer. This is a crucial step for images you're managing yourself (i.e., not coming from a CMS).
+
+<WebsiteItemRenderer id="cff1fff3-0ea2-4a56-9344-2b434c0246ac" client:visible/>
+
+This tool is perfect because it runs locally in your browser, keeping your assets private. Then, implement it in your code.
+
+**The Code:**
+```jsx
+// Before: Bad. A plain old img tag.
+<img src="/images/hero.png" alt="My awesome hero image" />
+
+// After: Good. Using the Image component.
+import Image from 'next/image'
+import heroImage from '/public/images/hero.png'
+
+<Image
+  src={heroImage}
+  alt="My awesome hero image"
+  priority // Add this for images "above the fold" to load them faster!
+/>
+```
+
+Doing this alone will probably turn your score from yellow to green.
+
+### 2. The Hidden Cost: Your `node_modules` Folder is Bloated
+
+That handy chart library you installed? That cool date formatting utility? They might be costing you hundreds of kilobytes on your initial page load. You can't optimize what you can't see.
+
+**The Fix:** Use `@next/bundle-analyzer` to visually inspect your JavaScript bundles.
+
+**The Tool:** Bundle Analyzer is an npm package you add to your project. It generates an interactive treemap that shows you exactly what's inside your JS bundles. It's one of those essential tools that should be in every dev's toolkit.
+
+<WebsiteItemRenderer id="73e6e518-b903-47f2-993f-53c2e625108b" client:visible/>
+*(Omatsuri is a collection of frontend dev tools, and Bundle Analyzer is a prime example of one.)*
+
+**Why it's essential (Pros):**
+*   **Exposes the Villains:** You'll immediately see which packages are the biggest offenders. That `moment.js` library everyone used to use? It's a 300kb monster. The analyzer will make that painfully obvious.
+*   **Finds Code Duplication:** It can help you spot when you're accidentally including the same library in multiple bundles.
+
+**The catch:**
+*   **It's a Detective, Not a Cop:** The analyzer only shows you the problem. It's on you to fix it by finding a smaller alternative library (e.g., swapping `moment.js` for `date-fns`) or by code-splitting. Which brings us to...
+
+### 3. The Easy Win: You're Loading Components You Don't Need Yet
+
+You have a big, complex component on your page. Maybe it's a mapping library or a heavy chart. If it's not immediately visible to the user (e.g., it's in a modal or far down the page), you shouldn't be loading its JavaScript on the initial page load.
+
+**The Fix:** Use `next/dynamic` for anything that can wait.
+
+**The Code:**
+Let's say you're using a chart library like `EvilCharts`.
+
+<WebsiteItemRenderer id="08a1741e-8c04-491f-9bbb-076a59a81cba" client:visible/>
+
+```jsx
+// Before: The EvilCharts JS is included in the main page bundle.
+import { BarChart } from 'evil-charts'
+
+export default function MyDashboard() {
+  return <BarChart data={...} />
+}
+
+// After: The BarChart JS is now in its own file and only loaded when needed.
+import dynamic from 'next/dynamic'
+
+const BarChart = dynamic(() => import('evil-charts').then(mod => mod.BarChart), {
+  ssr: false, // Important for client-side only components
+  loading: () => <p>Loading chart...</p>
+})
+
+export default function MyDashboard() {
+  return <BarChart data={...} />
+}

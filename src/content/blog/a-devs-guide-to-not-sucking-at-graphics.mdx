@@ -1,0 +1,83 @@
+---
+title: "A Dev's Guide to Not Sucking at Graphics"
+pubDate: "2025-09-19"
+description: "Tired of your screenshots looking like crap? Here's the no-BS toolkit for creating polished mockups, optimized images, and even 3D assets without ever opening Photoshop. This is how you make your work look professional."
+tags: ["tools", "graphics", "assets", "productivity", "frontend"]
+image: "https://placehold.co/600x400/10B981/FFFFFF?text=Stop+Sucking+at+Graphics"
+author: floyare
+relatedPosts:
+    - "these-3-websites-makes-creating-graphics-a-breeze"
+    - "svg-power-up-dynamic-graphics"
+---
+
+import WebsiteItemRenderer from "../website-item-renderer.tsx"
+
+Let's be real. We're developers, not graphic designers. But we're constantly expected to produce visuals: a polished screenshot for the landing page, an optimized image for a blog post, a cool mockup for a tweet. Most of the time, our attempts look... amateurish.
+
+You don't need a design degree to fix this. You just need the right tools—ones built for speed and simplicity. Here's my personal stash for handling everyday graphic tasks without the headache.
+
+### 1. For Mockups That Look Pro: Shots.so & Device Frames
+
+**The Problem:** You took a screenshot of your new feature, but just dropping a plain rectangle onto your website looks terrible. You need to put it in a context, like a browser window or a phone.
+
+**The Solution:** Use a dedicated mockup tool. It's the fastest way to add a layer of professionalism.
+
+<WebsiteItemRenderer id="39943fd7-850e-49d8-857d-0452ca2ab95e" client:visible/>
+
+**Why it's a game-changer (Pros):**
+*   **Insanely Fast:** I'm talking seconds. You paste your screenshot, pick a background, and you're done. The speed is its best feature.
+*   **Highly "Shareable" Output:** It creates visuals that are perfect for social media, landing pages, and presentations.
+
+For a bit more power, especially when you need 3D mockups of phones or laptops:
+
+<WebsiteItemRenderer id="4c4bbe8f-3614-44ff-b983-80006651fb22" client:visible/>
+
+**Why it's also great (Pros):**
+*   **3D is a Game Changer:** Creating a 3D view of an app on a phone makes your visuals pop. It looks way more dynamic than a flat image.
+*   **Customization:** You can change the device color and angle, giving you more control over the final result.
+
+**The catch (for both):**
+*   **They're specialized:** These tools do one thing—device mockups—and they do it perfectly. They are not general-purpose image editors.
+
+### 2. For Optimizing Images: Mazanoke
+
+**The Problem:** The marketing team just sent you a 5MB PNG for the homepage banner. If you upload that, your performance score will tank. You need to shrink it without turning it into a pixelated mess.
+
+**The Solution:** Use a modern image optimizer that runs in the browser.
+
+<WebsiteItemRenderer id="cff1fff3-0ea2-4a56-9344-2b434c0246ac" client:visible/>
+
+**Why it's a game-changer (Pros):**
+*   **Privacy-Focused & Offline:** It runs entirely in your browser using WebAssembly. Your images never get uploaded to a server. This is a huge deal if you're working with sensitive or confidential designs.
+*   **Does Exactly What You Need:** It compresses, converts formats (to WebP or AVIF), and removes metadata. It’s a focused tool that does its job without unnecessary features.
+*   **Simple Interface:** No complicated settings. Just drag, drop, and download the optimized result.
+
+**The catch:**
+*   **Manual Workflow:** Like other tools in this class, it's for optimizing images one by one. For an automated pipeline, you'd integrate a tool like this into your build process or use an image CDN.
+
+### 3. For AI-Powered Image Editing: Easyedit & Cleanup.pictures
+
+**The Problem:** The product photo is perfect... except for the distracting coffee mug in the background. Or maybe you need to change the color of a shirt in a photo. These used to be complex Photoshop tasks.
+
+**The Solution:** Use simple, web-based AI tools.
+
+<WebsiteItemRenderer id="6eaee5f6-84a9-4581-96d0-9f15fc546ed0" client:visible/>
+
+**Why it's a game-changer (Pros):**
+*   **Prompt-Based Editing:** You literally just type what you want to change. "Make the background a solid blue" or "remove the person on the left." It feels like magic.
+
+For pure object removal, this one is a legend:
+
+<WebsiteItemRenderer id="15d43118-fb62-463a-b1d8-a33eacf0d122" client:visible/>
+
+**Why it's still king (Pros):**
+*   **Unbelievably Good at One Thing:** It is ridiculously effective at removing unwanted objects. Just paint over what you want gone, and the AI fills in the background. It's fast, simple, and works 95% of the time.
+
+**The catch (for both):**
+*   **Not Pixel-Perfect:** These AI tools are amazing for quick fixes, but for high-stakes, super-detailed commercial photography, a human designer with Photoshop will still have the edge in quality.
+
+### My "Graphics for Devs" Workflow
+1.  **Create:** Take a screenshot of the app feature.
+2.  **Polish:** Drop it into **Shots.so** or **Device Frames** to put it in a beautiful mockup.
+3.  **Optimize:** Before uploading, run the final mockup image through **Mazanoke** to shrink the file size.
+4.  **Edit (if needed):** If the original screenshot has some UI clutter or unwanted elements, clean it up with **Cleanup.pictures** first.
