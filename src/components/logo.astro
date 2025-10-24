@@ -4,7 +4,7 @@ const { ...props } = Astro.props;
 
 <h1
     class:list={[
-        "text-4xl font-bold flex items-center gap-4 select-none z-20",
+        "text-4xl font-bold flex items-center gap-5 select-none tracking-tighter z-20",
         props.className,
     ]}
     {...props}
@@ -15,6 +15,6 @@ const { ...props } = Astro.props;
             class="absolute bottom-[50%] rounded-md translate-y-[50%] left-[50%] -translate-x-[50%] w-[calc(100%+25px)] h-full bg-background-500 -skew-6 -z-10 py-6"
         >
         </div>
-        <span class="text-3xl">shorts</span>
+        <div class="text-3xl">shorts</div>
     </span>
 </h1>

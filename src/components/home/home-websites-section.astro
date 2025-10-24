@@ -1,0 +1,41 @@
+---
+export const prerender = true;
+import { Button } from "../ui/button";
+import HomeWebsitesBox from "./components/home-websites-box";
+
+import { prisma } from "@/lib/prisma";
+
+const websitesIcons = await prisma.websites.findMany({
+    select: {
+        url: true,
+    },
+    take: 36,
+});
+---
+
+<section class="mt-36 relative w-full">
+    <div class="flex items-center justify-between gap-24 py-18">
+        <HomeWebsitesBox
+            icons={websitesIcons.map((p) => {
+                return { url: p.url };
+            })}
+        />
+
+        <div class="flex flex-col gap-8 items-start">
+            <h2 class="text-6xl max-w-4xl font-extrabold tracking-tighter">
+                Browse through <span class="text-primary-500">250+</span> websites
+                uploaded by ours users.
+            </h2>
+            <p class="text-2xl max-w-lg">
+                and contribute to our growing community with YOUR finds.
+            </p>
+            <a href="/upload">
+                <Button
+                    size="lg"
+                    className="rounded-full text-lg font-normal py-6 px-8"
+                    >Contribute now!</Button
+                >
+            </a>
+        </div>
+    </div>
+</section>

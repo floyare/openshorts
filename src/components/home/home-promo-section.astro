@@ -1,0 +1,37 @@
+---
+import { Button } from "../ui/button";
+import {
+    Calendar,
+    ExternalLink,
+    Github,
+    Tags,
+    User,
+    Youtube,
+    Coffee,
+} from "lucide-react";
+---
+
+<section
+    class="mt-36 relative w-full"
+>
+    <div class="flex flex-col gap-4 items-center py-18">
+        <h2 class="text-6xl font-extrabold tracking-tighter">It looks promising isn't it?</h2>
+        <p class="text-2xl max-w-2xl text-center">So why wouldn’t you help Openshorts go global by sharing it to the others? It’s free!</p>
+        <div class="flex items-center justify-center gap-8 pt-8">
+            <a href="#" class="max-h-72 h-[50vh] text-center w-48 flex flex-col justify-center items-center px-8 text-3xl py-6 rounded-md bg-red-600 hover:bg-red-400 transition-all hover:-translate-y-2 text-white font-extrabold">
+                <Youtube strokeWidth={1} size={64}/>
+                Youtube
+            </a>
+
+            <a href="#" class="max-h-72 h-[50vh] text-center w-48 flex flex-col justify-center items-center px-8 text-3xl py-6 rounded-md bg-black hover:bg-black/60 transition-all hover:-translate-y-2 text-white font-extrabold">
+                <Github strokeWidth={1} size={64}/>
+                Github
+            </a>
+
+            <a href="#" class="max-h-72 h-[50vh] text-center w-48 flex flex-col justify-center items-center px-8 text-3xl py-6 rounded-md bg-orange-600 hover:bg-orange-400 transition-all hover:-translate-y-2 text-white font-extrabold">
+                <Coffee strokeWidth={1} size={64}/>
+                Buy Me a Coffee
+            </a>
+        </div>
+    </div>
+</section>

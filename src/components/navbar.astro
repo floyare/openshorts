@@ -3,11 +3,12 @@ export const prerender = false;
 import {
     ArrowRight,
     ChevronRight,
-    Compass,
+    Search,
     LoaderCircle,
     Menu,
     Newspaper,
-    UploadCloud,
+    Upload,
+    LogIn,
     X,
 } from "lucide-react";
 import Logo from "./logo.astro";
@@ -17,17 +18,55 @@ import { cn } from "@/lib/utils";
 const url = Astro.url;
 ---
 
-<nav class="w-full flex items-center justify-center" transition:name="navbar">
+<nav class="w-full flex items-center justify-between" transition:name="navbar">
+    <a href="/">
+        <Logo className="" />
+    </a>
+    <div class="flex items-center justify-center gap-8 sm:text-3xl !font-extrabold tracking-tight text-sm">
+        <a
+            href="/browse"
+            class:list={[
+                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer hover:text-text-500 focus:text-text-600 transition-colors",
+                url.pathname === "/browse"
+                    ? "text-text-400 dark:text-text-600 font-bold"
+                    : "",
+            ]}
+        >
+            <Search size={32} strokeWidth={3}/> Browse
+        </a>
+
+        <a
+            href="/upload"
+            class:list={[
+                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer hover:text-text-500 focus:text-text-600 transition-colors",
+                url.pathname === "/upload"
+                    ? "text-text-400 dark:text-text-600 font-bold"
+                    : "",
+            ]}
+        >
+            <Upload size={32} strokeWidth={3} /> Upload
+        </a>
+
+        <a
+            href="/signin"
+            class:list={[
+                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer hover:text-text-500 focus:text-text-600 transition-colors",
+                url.pathname === "/upload"
+                    ? "text-text-400 dark:text-text-600 font-bold"
+                    : "",
+            ]}
+        >
+            <LogIn size={32} strokeWidth={3} /> Sign in
+        </a>
+    </div>
+</nav>
+
+<!-- <nav class="w-full flex items-center justify-center" transition:name="navbar">
     <div class="flex items-start gap-12 justify-between w-full px-12">
         <div class="flex flex-col justify-center items-center gap-4">
             <a href="/">
                 <Logo className="" />
             </a>
-            <p>
-                search fast, create <span class="text-primary-500 font-semibold"
-                    >faster</span
-                >
-            </p>
         </div>
         <div class="relative">
             <input id="navbar-toggle" type="checkbox" class="peer sr-only" />
@@ -114,15 +153,5 @@ const url = Astro.url;
                 }
             </div>
         </div>
-        <!-- <a
-            href="/blog"
-            class="bg-background-500 text-white px-4 py-2 -mt-4 rounded-md flex items-center justify-center gap-1 flex-wrap"
-        >
-            <p class="text-center text-balance break-words">
-                ✨ Our <b>Awesome Blog</b> is Now available!
-            </p>
-
-            <ArrowRight />
-        </a> -->
     </div>
-</nav>
+</nav> -->

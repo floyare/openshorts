@@ -1,0 +1,38 @@
+---
+import { Button } from "../ui/button";
+---
+
+<section class="mt-36 relative w-full">
+    <div
+        class="flex items-center justify-between gap-24 from-background-500 from-30% to-60% to-background-300 bg-gradient-to-tr -mx-28 px-28 py-18 relative overflow-hidden"
+    >
+        <div class="flex flex-col gap-8 items-start">
+            <h2
+                class="text-6xl max-w-2xl font-extrabold tracking-tighter text-white"
+            >
+                Enhance your experience with <span class="text-accent-500"
+                    >AI</span>
+            </h2>
+            <p class="text-2xl max-w-lg text-neutral-200">
+                We know about the AI trend, so here it is... our search
+                assistant that will help you with finding what you really need.
+            </p>
+            <Button
+                size="lg"
+                variant="accent"
+                className="rounded-full text-lg font-normal py-6 px-8"
+                >Browse right now!</Button
+            >
+        </div>
+
+        <div class="">
+            <img
+                src="/home/ai-search-dialog.png"
+                width="650px"
+                height="300px"
+                class="absolute top-20 z-10 right-20 rotate-y-16 rotate-x-16 drop-shadow-2xl drop-shadow-black"
+                loading="lazy"
+            />
+        </div>
+    </div>
+</section>

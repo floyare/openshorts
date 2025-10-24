@@ -120,16 +120,16 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
     </head>
     <body
         class:list={[
-            "bg-background-950 dark:bg-neutral-950 dark:text-text-950 !py-8 lg:!px-8 md:!px-4 !px-1 text-text-50 rounded-3xl flex flex-col gap-6 relative",
+            "bg-white dark:bg-neutral-950 dark:text-text-950 !py-8 lg:!px-28 md:!px-4 !px-1 text-text-50 rounded-3xl flex flex-col gap-6 relative overflow-x-hidden",
             className,
         ]}
         {...props}
     >
         <Dialog client:only />
         <LoadingIndicator height="8px" color="var(--color-primary-600)" />
-        <Background
+        <!-- <Background
             class={"fixed top-0 left-0 !w-full !h-full opacity-35 dark: -z-10"}
-        />
+        /> -->
         <Toaster position="top-right" richColors client:visible />
         <Navbar />
         <AnalyticsProvider children={null} client:idle />
@@ -138,7 +138,7 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
             <FeedbackButton client:visible />
             <ThemeSwitcher client:visible />
         </div>
-        <footer
+        <!-- <footer
             class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current md:fixed relative bottom-0 bg-background-900 border-[1px] border-background-700 dark:border-background-200 dark:bg-background-50 w-screen py-3 lg:!-mx-8 md:!-mx-4 !-mx-1 z-[1001]"
         >
             <p class="px-2">
@@ -147,6 +147,6 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
             <a href="/tos" class="px-2"> Terms of Service </a>
             <a href="/privacy" class="px-2"> Privacy Policy </a>
             <a href="/about" class="px-2"> About project </a>
-        </footer>
+        </footer> -->
     </body>
 </html>

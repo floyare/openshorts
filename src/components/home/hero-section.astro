@@ -1,45 +1,20 @@
 ---
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import LottieAnimation from "astro-integration-lottie/Lottie.astro";
 ---
 
 <section
-    class="md:pb-48 pb-20 md:px-48 px-12 md:pt-14 pt-6 flex items-start justify-center w-full gap-2"
+    class="py-24 relative w-full"
 >
-    <div class="space-y-4">
-        <h2 class="text-5xl font-bold tracking-tighter">
-            search fast, create <span
-                class="text-text-500 font-extrabold underline decoration-4 decoration-text-500"
-                >faster.</span
-            >
-        </h2>
-        <p class="text-2xl max-w-3xl break-words text-balance">
-            Try openshorts, a powerful search engine for websites with useful
-            tools, assets and more websites that will help you find what you
-            need quickly.
-        </p>
-        <div class="flex items-center gap-3 flex-wrap">
-            <a href="#browse"
-                ><Button variant={"primary"} className="!px-8 text-xl !py-6"
-                    >Start browsing! <ArrowDown /></Button
-                ></a
-            >
-            <a href="/blog"
-                ><Button variant={"ghost"} className="!px-8 text-xl !py-6"
-                    >See our Blog!</Button
-                ></a
-            >
+    <div class="w-96 h-96 top-0 -right-20 absolute bg-primary-500/30 blur-3xl rounded-full opacity-100 -z-10"/>
+    <div class="flex flex-col items-center gap-8">
+        <h1 class="font-bold text-8xl tracking-tighter leading-23">search fast <br /> <span class="ml-24">create <span class="font-black italic text-primary-500">FASTER</span>.</span></h1>
+        <p class="text-3xl max-w-sm text-center tracking-tight">your <b>new</b> way to make the world prettier.</p>
+        <div class="flex items-center justify-center gap-4">
+            <a href="/browse"><Button size="lg" className="rounded-full text-lg font-normal py-6 !px-8 bg-primary-500 hover:bg-primary-400">Browse now! <ChevronRight /></Button></a>
+            <a href="#ai"><Button size="lg" variant="ghost" className="rounded-full text-lg font-normal py-6 px-8">Read more</Button></a>
         </div>
     </div>
-
-    <div class="relative md:block hidden">
-        <div class="relative w-52 h-52">
-            <LottieAnimation src="/search2.json" autoplay="visible" />
-        </div>
-        <div
-            class="w-64 h-64 top-[10%] left-18 absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full opacity-100 -z-10"
-        >
-        </div>
-    </div>
+    <div class="w-128 h-128 -bottom-[80%] -left-30 absolute bg-primary-500/30 blur-3xl rounded-full opacity-100 -z-10"/>
 </section>

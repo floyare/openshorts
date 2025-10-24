@@ -1,0 +1,20 @@
+---
+import Layout from "./layout.astro";
+import WebsiteBrowser from "@/components/website-browser";
+import { debugLog } from "@/lib/log";
+import type { User } from "better-auth";
+//import { actions } from "astro:actions";
+---
+
+<Layout>
+    <main class="flex flex-col gap-8">
+        <div class="flex flex-col gap-2 items-start">
+            <section id="browse">
+                <WebsiteBrowser
+                    currentUser={(Astro.locals.user as User) ?? undefined}
+                    client:idle
+                />
+            </section>
+        </div>
+    </main>
+</Layout>
