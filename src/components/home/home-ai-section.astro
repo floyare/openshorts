@@ -1,17 +1,24 @@
 ---
 import { Button } from "../ui/button";
+import ArrowRight from "@/assets/arrow_right.svg";
 ---
 
 <section class="mt-36 relative w-full">
     <div
         class="flex items-center justify-between gap-24 from-background-500 from-30% to-60% to-background-300 bg-gradient-to-tr -mx-28 px-28 py-18 relative overflow-hidden"
     >
-        <div class="flex flex-col gap-8 items-start">
+        <div
+            class="absolute top-0 left-0 w-full h-full z-0 bg-repeat"
+            style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 version=%221.1%22 xmlns:xlink=%22http://www.w3.org/1999/xlink%22 xmlns:svgjs=%22http://svgjs.dev/svgjs%22 viewBox=%220 0 700 700%22 width=%22700%22 opacity=%221%22 height=%22700%22%3E%3Cdefs%3E%3Cfilter id=%22nnnoise-filter%22 x=%22-20%25%22 y=%22-20%25%22 width=%22140%25%22 height=%22140%25%22 filterUnits=%22objectBoundingBox%22 primitiveUnits=%22userSpaceOnUse%22 color-interpolation-filters=%22linearRGB%22%3E %3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.102%22 numOctaves=%224%22 seed=%2215%22 stitchTiles=%22stitch%22 x=%220%25%22 y=%220%25%22 width=%22100%25%22 height=%22100%25%22 result=%22turbulence%22%3E%3C/feTurbulence%3E %3CfeSpecularLighting surfaceScale=%2215%22 specularConstant=%220.75%22 specularExponent=%2220%22 lighting-color=%22%237957A8%22 x=%220%25%22 y=%220%25%22 width=%22100%25%22 height=%22100%25%22 in=%22turbulence%22 result=%22specularLighting%22%3E %3CfeDistantLight azimuth=%223%22 elevation=%22100%22%3E%3C/feDistantLight%3E %3C/feSpecularLighting%3E %3C/filter%3E%3C/defs%3E%3Crect width=%22700%22 height=%22700%22 fill=%22transparent%22%3E%3C/rect%3E%3Crect width=%22700%22 height=%22700%22 fill=%22%237957a8%22 filter=%22url(%23nnnoise-filter)%22%3E%3C/rect%3E%3C/svg%3E');"
+        >
+        </div>
+        <div class="flex flex-col gap-8 items-start relative">
             <h2
                 class="text-6xl max-w-2xl font-extrabold tracking-tighter text-white"
             >
                 Enhance your experience with <span class="text-accent-500"
-                    >AI</span>
+                    >AI</span
+                >
             </h2>
             <p class="text-2xl max-w-lg text-neutral-200">
                 We know about the AI trend, so here it is... our search
@@ -23,6 +30,15 @@ import { Button } from "../ui/button";
                 className="rounded-full text-lg font-normal py-6 px-8"
                 >Browse right now!</Button
             >
+
+            <div class="absolute -top-20 -right-[40%]">
+                <p
+                    class="text-white absolute top-55 right-35 text-2xl italic font-light"
+                >
+                    Try it now!
+                </p>
+                <ArrowRight class={"invert"} width={350} />
+            </div>
         </div>
 
         <div class="">
@@ -35,4 +51,8 @@ import { Button } from "../ui/button";
             />
         </div>
     </div>
+    <!-- <div
+        class="w-[150%] h-48 bg-gradient-to-b from-background-500 to-transparent absolute top-[100%] left-[50%] translate-x-[-50%]"
+    >
+    </div> -->
 </section>
