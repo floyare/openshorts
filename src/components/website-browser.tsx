@@ -241,19 +241,20 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
                 </Container>
-                <Container className="bg-gradient-to-tr overflow-hidden relative z-10 to-primary-200/80 from-primary-500 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
-                    <div>
+                <Container className="bg-primary-500 overflow-hidden relative z-10 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
+                    {/* <div>
                         <Heart className="fill-accent-500 absolute bottom-16 right-8 opacity-60 -z-10 -rotate-6" size={32} />
                         <Heart className="fill-accent-500 absolute bottom-18 -right-2 opacity-60 -z-10 rotate-12" size={42} />
                         <Heart className="fill-accent-500 absolute -bottom-6 -right-6 opacity-60 -z-10 -rotate-12" size={96} />
+                    </div> */}
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <h2 className="font-semibold text-xl tracking-tight">Help <b>openshorts</b> go global!</h2>
+                        <p className="">Share the website with your friends and followers to help us grow!</p>
                     </div>
-                    <div className="flex flex-col items-center justify-center">
-                        <h2 className="font-semibold text-xl text-center">Help <u>openshorts</u> Go Global!</h2>
-                    </div>
-                    <div className="flex items-center gap-2 flex-wrap justify-center relative z-10">
-                        <a href="https://www.youtube.com/@floyare" target="_blank" title="floyare's Youtube channel"><Button variant={"secondary"} className="bg-red-600 hover:bg-red-500 !text-white"><Youtube size={20} /> Youtube Channel</Button></a>
-                        <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"}><Github size={20} /> Github profile</Button></a>
-                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-600 !text-white"><Coffee size={20} /> Buy me a coffee!</Button></a>
+                    <div className="flex items-center gap-2 justify-center relative z-10">
+                        <a href="https://www.youtube.com/@floyare" target="_blank" title="floyare's Youtube channel"><Button variant={"secondary"} className="bg-red-600 hover:bg-red-500 !text-white flex flex-col !gap-0 !h-fit"><Youtube size={20} /> Youtube</Button></a>
+                        <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"} className="flex flex-col !gap-0 !h-fit"><Github size={20} /> Github</Button></a>
+                        <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-500 !text-white flex flex-col !gap-0 !h-fit"><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
                 </Container>
             </aside>
