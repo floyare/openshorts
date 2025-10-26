@@ -258,7 +258,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     </div>
                 </Container>
             </aside>
-            <div className="lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14">
+            <div className="lg:min-w-3xl min-w-auto col-span-4 space-y-2 relative sm:mt-0 mt-14">
                 <Container className="sticky top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
                     <div className="flex items-center gap-3">
                         <Search />
