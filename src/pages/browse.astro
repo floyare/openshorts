@@ -8,8 +8,17 @@ import type { User } from "better-auth";
 
 <Layout>
     <main class="flex flex-col gap-8">
-        <div class="flex flex-col gap-2 items-start">
-            <section id="browse">
+        <div class="flex flex-col gap-2 items-start py-8">
+            <section id="browse" class="space-y-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight">
+                        Browse websites
+                    </h1>
+                    <p>
+                        Explore through our huge collection of useful and
+                        productive websites.
+                    </p>
+                </div>
                 <WebsiteBrowser
                     currentUser={(Astro.locals.user as User) ?? undefined}
                     client:idle

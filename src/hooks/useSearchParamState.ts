@@ -37,7 +37,7 @@ export function useSearchParamState<T>(
             params.set(key, serialize(value));
         }
 
-        window.history.replaceState(null, "", params.toString().length <= 0 ? "/" : `?${params.toString()}`);
+        window.history.replaceState(null, "", params.toString().length <= 0 ? "/browse" : `?${params.toString()}`);
     }, [key, value, defaultValue]);
 
     useEffect(() => {

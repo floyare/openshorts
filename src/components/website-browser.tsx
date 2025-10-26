@@ -6,7 +6,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, Tags, Youtube } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, Tags, TextCursorInput, Youtube } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -209,25 +209,11 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 </p>
             </div>}
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 lg:bottom-12 relative lg:w-fit w-full lg:col-span-1 col-span-4">
-                <div className="bg-white dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
-                    <h2 className="flex items-center gap-2 font-bold text-lg"><Search /> Search websites</h2>
+                <Container className="dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
+                    {/* <h2 className="flex items-center gap-2 font-bold text-lg">Browse websites</h2> */}
                     <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl lg:!text-sm sm:!text-xl !text-base font-semibold shimmer-background xl:w-full lg:w-fit w-full" onClick={() => callDialog("ai-search")}>
                         <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-extrabold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
                     </Button>
-                    <div className="flex flex-col space-y-1">
-                        <Input
-                            type="text"
-                            placeholder="Includes phrase..."
-                            value={searchContent.search}
-                            className=""
-                            onChange={(e) =>
-                                searchContentSet((p) => ({
-                                    ...p,
-                                    search: e.target.value,
-                                }))
-                            }
-                        />
-                    </div>
                     <div className="flex flex-col space-y-1">
                         <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
                         <ToggleGroup className="ml-2 gap-3 max-h-[41vh] overflow-hidden relative" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
@@ -243,7 +229,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                                     ))
                                 ) : (
                                     tagsList.map((tag, idx) => (
-                                        <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle flex items-center p-4 !flex-0 dark:text-text-950")} disabled={tag.count <= 0}>
+                                        <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle bg-white border-1 border-primary-800 flex items-center p-4 !flex-0 dark:text-text-950")} disabled={tag.count <= 0}>
                                             <p className="flex items-center gap-2">{tag.name} <span className="group-data-[state=on]/toggle:!text-white text-xs dark:text-secondary-700 text-secondary-500">({tag.count})</span></p>
                                         </ToggleGroupItem>
                                     ))
@@ -254,7 +240,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
                         <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
-                </div>
+                </Container>
                 <Container className="bg-gradient-to-tr overflow-hidden relative z-10 to-primary-200/80 from-primary-500 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
                     <div>
                         <Heart className="fill-accent-500 absolute bottom-16 right-8 opacity-60 -z-10 -rotate-6" size={32} />
@@ -271,86 +257,98 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     </div>
                 </Container>
             </aside>
-            <Container
-                className={cn("lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14 dark:bg-neutral-900 dark:border-neutral-700"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
-            >
-                <SkewedHighlight className="absolute sm:-top-12 sm:-left-8 z-[1000] -top-20 left-[50%] sm:translate-x-0 translate-x-[-50%] text-center w-max">
-                    <h2
-                        className="text-xl font-semibold text-text-950 flex items-center justify-center gap-1 w-full"
-                    >
-                        <Compass /> Explore websites
-                    </h2>
-                </SkewedHighlight>
-                {/* {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
+            <div className="lg:min-w-3xl min-w-auto col-span-4 space-y-4 relative sm:mt-0 mt-14">
+                <Container className="sticky top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
+                    <div className="flex items-center gap-3">
+                        <Search />
+                        <Input
+                            type="text"
+                            placeholder="Search by phrase..."
+                            value={searchContent.search}
+                            className=""
+                            onChange={(e) =>
+                                searchContentSet((p) => ({
+                                    ...p,
+                                    search: e.target.value,
+                                }))
+                            }
+                        />
+                    </div>
+                    <div className="bg-white dark:bg-neutral-800 border-background-900 border-[1px] rounded-sm w-fit ml-auto relative">
+                        <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
+                            <SelectTrigger size="default" className="text-lg w-full dark:text-text-950 dark:border-neutral-700" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
+                                <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="new"><CalendarArrowDown /> Newest</SelectItem>
+                                    <SelectItem value="old"><CalendarArrowUp /> Oldest</SelectItem>
+                                    <SelectItem value="alphabet"><ArrowDownAZ /> Alphabetically</SelectItem>
+                                    <SelectItem value="likes"><Heart /> Most likes</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </Container>
+                <Container
+                    className={cn(" dark:bg-neutral-900 dark:border-neutral-700"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
+                >
+                    {/* {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
                     <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                 </div>} */}
-                <div className="bg-white dark:bg-neutral-800 border-background-900 border-[1px] rounded-sm w-fit ml-auto relative">
-                    <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
-                        <SelectTrigger size="default" className="text-lg w-full dark:text-text-950 dark:border-neutral-700" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
-                            <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="new"><CalendarArrowDown /> Newest</SelectItem>
-                                <SelectItem value="old"><CalendarArrowUp /> Oldest</SelectItem>
-                                <SelectItem value="alphabet"><ArrowDownAZ /> Alphabetically</SelectItem>
-                                <SelectItem value="likes"><Heart /> Most likes</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <InfiniteScroll
-                    // TODO: add if loading is infinite then retry
-                    dataLength={filteredWebsites.length}
-                    next={() => {
-                        setPage((p) => p + 1)
-                    }}
-                    hasMore={totalWebsites > filteredWebsites.length}
-                    loader={<>
-                        <p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>
-                    </>}
-                    endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
-                    scrollThreshold={0.95}
-                    className="!overflow-visible"
-                >
-                    <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
-                        {
-                            isLoading ? (
-                                [...Array(PAGE_SIZE).keys()].map((_, idx) => (
-                                    <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none" key={idx}>
+                    <InfiniteScroll
+                        // TODO: add if loading is infinite then retry
+                        dataLength={filteredWebsites.length}
+                        next={() => {
+                            setPage((p) => p + 1)
+                        }}
+                        hasMore={totalWebsites > filteredWebsites.length}
+                        loader={<>
+                            <p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>
+                        </>}
+                        endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
+                        scrollThreshold={0.95}
+                        className="!overflow-visible"
+                    >
+                        <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-cols-1 gap-1.5">
+                            {
+                                isLoading ? (
+                                    [...Array(PAGE_SIZE).keys()].map((_, idx) => (
+                                        <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none" key={idx}>
 
-                                    </div>
-                                ))
-                            ) : (
-                                filteredWebsites.map((website, idx) => {
-                                    if (adPositionIndex === idx) {
+                                        </div>
+                                    ))
+                                ) : (
+                                    filteredWebsites.map((website, idx) => {
+                                        if (adPositionIndex === idx) {
+                                            return (
+                                                <Fragment key={idx}>
+                                                    <AdElement />
+                                                    <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
+                                                </Fragment>
+                                            )
+                                        }
+
                                         return (
-                                            <Fragment key={idx}>
-                                                <AdElement />
-                                                <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                            </Fragment>
+                                            <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
                                         )
-                                    }
-
-                                    return (
-                                        <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                    )
-                                })
-                            )
-                        }
-                    </div>
-                </InfiniteScroll>
-
-                {noEntries && (
-                    <div className="flex flex-col items-center space-y-1.5 md:mb-0 mb-4">
-                        <FileQuestion className="text-primary-500" size={48} />
-                        <div className="text-center">
-                            <h3 className="text-lg font-semibold">No websites found!</h3>
-                            <p>Try adjusting your search preferences</p>
+                                    })
+                                )
+                            }
                         </div>
-                    </div>
-                )}
-            </Container>
+                    </InfiniteScroll>
+
+                    {noEntries && (
+                        <div className="flex flex-col items-center space-y-1.5 md:mb-0 mb-4">
+                            <FileQuestion className="text-primary-500" size={48} />
+                            <div className="text-center">
+                                <h3 className="text-lg font-semibold">No websites found!</h3>
+                                <p>Try adjusting your search preferences</p>
+                            </div>
+                        </div>
+                    )}
+                </Container>
+            </div>
         </section>
     );
 }

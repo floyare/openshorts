@@ -16,13 +16,20 @@ import NavigationState from "./navigation-state.astro";
 import { cn } from "@/lib/utils";
 
 const url = Astro.url;
+
+// TODO: make the navbar dissapear when scrolling down but appear on scroll to the top or when hovering the top of the page
 ---
 
-<nav class="w-full flex items-center justify-between" transition:name="navbar">
+<nav
+    class="w-full flex items-center justify-between sticky top-12"
+    transition:name="navbar"
+>
     <a href="/">
         <Logo className="" />
     </a>
-    <div class="flex items-center justify-center gap-8 sm:text-3xl !font-extrabold tracking-tight text-sm">
+    <div
+        class="flex items-center justify-center gap-8 sm:text-3xl !font-extrabold tracking-tight text-sm"
+    >
         <a
             href="/browse"
             class:list={[
@@ -32,7 +39,7 @@ const url = Astro.url;
                     : "",
             ]}
         >
-            <Search size={32} strokeWidth={3}/> Browse
+            <Search size={32} strokeWidth={3} /> Browse
         </a>
 
         <a

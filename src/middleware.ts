@@ -4,7 +4,7 @@ import { debugLog } from "./lib/log";
 
 // TODO: zmienic to zeby nie brac autha z middleware tylko tam gdzie potrzebne i to async
 export const onRequest = defineMiddleware(async (context, next) => {
-    const authPaths = ['/', '/profile', '/website'];
+    const authPaths = ['/', '/profile', '/browse', '/website'];
     if (!authPaths.some(p => new URL(context.request.url).pathname.startsWith(p))) {
         return next();
     }
