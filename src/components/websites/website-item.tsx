@@ -74,7 +74,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     }
 
     return (
-        <div {...props} className={cn("px-6 py-4 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
+        <div {...props} className={cn("px-6 py-4 3xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full h-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} onMouseDown={(e) => {
@@ -87,7 +87,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             //`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`
                         } alt={`${name} favicon`} size={48} />
                         <h3 className="font-bold text-2xl flex items-center gap-1 relative w-full">
-                            <span className="truncate inline-block 2xl:!max-w-[7.4vw] xl:!max-w-[16.5vw] !max-w-[55vw]">{highlight(name)}</span>
+                            <span className="truncate inline-block 2xl:!max-w-[7.4vw] xl:!max-w-[16.5vw] lg:!max-w-[20vw] !max-w-[55vw]">{highlight(name)}</span>
                             <ExternalLink className="text-text-600" size={18} />
                         </h3>
                     </a>
