@@ -25,6 +25,7 @@ import { Fragment } from "react";
 import useSWR from "swr";
 
 import InfiniteScroll from "react-infinite-scroll-component";
+import useIsMobile from "@/hooks/useIsMobile";
 
 type BrowserProps = {
     //entryWebsites: WebsiteType[],
@@ -122,6 +123,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
     })
 
     const { callDialog } = useDialogManager(dialogs)
+    const { isMobile, isLoading: isMobleLoading } = useIsMobile()
 
     const adPositionIndex = useMemo(() => Math.floor(Math.random() * 10), [page])
 
@@ -201,20 +203,20 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
     return (
-        <section className="grid 3xl:grid-cols-5 2xl:grid-cols-4 lg:grid-cols-3 gap-2 w-full grid-cols-1 relative">
+        <section className="grid 3xl:grid-cols-5 2xl:grid-cols-4 lg:grid-cols-3 lg:gap-2 gap-0 w-full grid-cols-1 relative">
             {(entryFetchError || (entryFetchData?.tags ? entryFetchData?.tags.length <= 0 && !isLoading : false)) && <div className="bg-red-600 text-white px-4 py-2 fixed top-0 left-0 w-full z-10">
                 <p className="text-center">
                     Failed while connecting to the database, try again
                     later!
                 </p>
             </div>}
-            <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 lg:bottom-12 relative lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4">
+            <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 lg:bottom-12 relative lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4" >
                 <Container className="dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
                     {/* <h2 className="flex items-center gap-2 font-bold text-lg">Browse websites</h2> */}
-                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 xl:!text-xl sm:!text-xl !text-base font-semibold shimmer-background xl:w-full w-full" onClick={() => callDialog("ai-search")}>
+                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background xl:w-full w-full" onClick={() => callDialog("ai-search")}>
                         <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-extrabold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
                     </Button>
-                    <div className="flex flex-col space-y-1">
+                    {!isMobile && <div className="flex flex-col space-y-1">
                         <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
                         <ToggleGroup className="ml-2 gap-3 max-h-[41vh] overflow-hidden relative" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
                             ...p,
@@ -236,17 +238,12 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                                 )
                             }
                         </ToggleGroup>
-                    </div>
-                    {currentUser && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
+                    </div>}
+                    {currentUser && !isMobile && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
                         <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
                 </Container>
-                <Container className="bg-primary-500 overflow-hidden relative z-10 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
-                    {/* <div>
-                        <Heart className="fill-accent-500 absolute bottom-16 right-8 opacity-60 -z-10 -rotate-6" size={32} />
-                        <Heart className="fill-accent-500 absolute bottom-18 -right-2 opacity-60 -z-10 rotate-12" size={42} />
-                        <Heart className="fill-accent-500 absolute -bottom-6 -right-6 opacity-60 -z-10 -rotate-12" size={96} />
-                    </div> */}
+                {!isMobile && <Container className="bg-primary-500 overflow-hidden relative z-10 border-[1px] border-primary-400 text-white grid place-items-center-safe gap-3">
                     <div className="flex flex-col items-center justify-center text-center">
                         <h2 className="font-semibold text-xl tracking-tight">Help <b>openshorts</b> go global!</h2>
                         <p className="">Share the website with your friends and followers to help us grow!</p>
@@ -256,10 +253,10 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         <a href="https://github.com/floyare" target="_blank" title="floyare's Github profile"><Button variant={"secondary"} className="flex flex-col !gap-0 !h-fit"><Github size={20} /> Github</Button></a>
                         <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-500 !text-white flex flex-col !gap-0 !h-fit"><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
-                </Container>
+                </Container>}
             </aside>
             <div className="3xl:min-w-3xl 2xl:min-w-3xl xl:min-w-2xl lg:min-w-lg 3xl:col-span-4 2xl:col-span-3 lg:col-span-2 min-w-auto space-y-2 relative sm:mt-0 mt-14">
-                <Container className="sticky top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
+                {!isMobile && <Container className="sticky top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
                     <div className="flex items-center gap-3">
                         <Search />
                         <Input
@@ -290,9 +287,9 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                             </SelectContent>
                         </Select>
                     </div>
-                </Container>
+                </Container>}
                 <Container
-                    className={cn(" dark:bg-neutral-900 dark:border-neutral-700"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
+                    className={cn(" dark:bg-neutral-900 dark:border-neutral-700 lg:mt-0 mt-4"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
                 >
                     {/* {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
                     <LoaderCircle size={48} className="text-primary-500 animate-spin" />
