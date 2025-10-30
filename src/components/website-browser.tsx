@@ -6,7 +6,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, Tags, TextCursorInput, Youtube } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, SquareChevronRight, Tags, TextCursorInput, Youtube } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -211,9 +211,10 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 </p>
             </div>}
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 lg:bottom-12 relative lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4" >
-                <Container className="dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex flex-col space-y-5">
+                <Container className="dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex lg:flex-col lg:gap-0 gap-3 flex-wrap flex-row space-y-5">
                     {/* <h2 className="flex items-center gap-2 font-bold text-lg">Browse websites</h2> */}
-                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background xl:w-full w-full" onClick={() => callDialog("ai-search")}>
+                    {isMobile && <Button variant={"outline"} className="!py-7 !m-0 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 lg:!w-full w-fit grow"><SquareChevronRight /> Filters</Button>}
+                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background lg:!w-full w-fit grow" onClick={() => callDialog("ai-search")}>
                         <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-extrabold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
                     </Button>
                     {!isMobile && <div className="flex flex-col space-y-1">
@@ -255,7 +256,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     </div>
                 </Container>}
             </aside>
-            <div className="3xl:min-w-3xl 2xl:min-w-3xl xl:min-w-2xl lg:min-w-lg 3xl:col-span-4 2xl:col-span-3 lg:col-span-2 min-w-auto space-y-2 relative sm:mt-0 mt-14">
+            <div className="3xl:min-w-3xl 2xl:min-w-3xl xl:min-w-2xl lg:min-w-lg 3xl:col-span-4 2xl:col-span-3 lg:col-span-2 min-w-auto space-y-2 relative">
                 {!isMobile && <Container className="sticky top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
                     <div className="flex items-center gap-3">
                         <Search />
