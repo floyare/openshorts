@@ -4,17 +4,42 @@ import { Button } from "../ui/button";
 import LottieAnimation from "astro-integration-lottie/Lottie.astro";
 ---
 
-<section
-    class="py-24 relative w-full"
->
-    <div class="w-96 h-96 top-0 -right-20 absolute bg-primary-500/30 blur-3xl rounded-full opacity-100 -z-10"/>
+<section class="py-24 relative w-full">
+    <div
+        class="w-96 h-96 top-0 -right-20 absolute bg-primary-500/30 blur-3xl rounded-full opacity-100 -z-10"
+    >
+    </div>
     <div class="flex flex-col items-center gap-8">
-        <h1 class="font-bold text-8xl tracking-tighter leading-23">search fast <br /> <span class="ml-24">create <span class="font-black italic text-primary-500">FASTER</span>.</span></h1>
-        <p class="text-3xl max-w-sm text-center tracking-tight">your <b>new</b> way to make the world prettier.</p>
+        <h1 class="font-bold text-8xl tracking-tighter leading-23">
+            search fast <br />
+            <span class="ml-24"
+                >create <span class="font-black italic text-primary-500"
+                    >FASTER</span
+                >.</span>
+        </h1>
+        <p class="text-3xl max-w-sm text-center tracking-tight">
+            your <b>new</b> way to make the world prettier.
+        </p>
         <div class="flex items-center justify-center gap-4">
-            <a href="/browse"><Button size="lg" className="rounded-full text-lg font-normal py-6 !px-8 bg-primary-500 hover:bg-primary-400">Browse now! <ChevronRight /></Button></a>
-            <a href="#ai"><Button size="lg" variant="ghost" className="rounded-full text-lg font-normal py-6 px-8">Read more</Button></a>
+            <a href="/browse"
+                ><Button
+                    size="lg"
+                    className="rounded-full text-lg font-normal py-6 !px-8 bg-primary-500 !text-white hover:bg-primary-400"
+                    >Browse now! <ChevronRight /></Button
+                ></a
+            >
+            <a href="#ai"
+                ><Button
+                    size="lg"
+                    variant="ghost"
+                    className="rounded-full text-lg font-normal py-6 px-8"
+                    >Read more</Button
+                ></a
+            >
         </div>
     </div>
-    <div class="w-128 h-128 -bottom-[80%] -left-30 absolute bg-primary-500/30 blur-3xl rounded-full opacity-100 -z-10"/>
+    <div
+        class="w-128 h-128 -bottom-[80%] -left-30 absolute bg-primary-500/30 blur-3xl rounded-full opacity-100 -z-10"
+    >
+    </div>
 </section>

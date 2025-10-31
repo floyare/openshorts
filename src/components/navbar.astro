@@ -10,6 +10,7 @@ import {
     Upload,
     LogIn,
     X,
+    Home,
 } from "lucide-react";
 import Logo from "./logo.astro";
 import NavigationState from "./navigation-state.astro";
@@ -44,16 +45,24 @@ import NavbarLink from "./navbar-link.astro";
 
     <div
         class={cn(
-            "xl:flex hidden xl:flex-row flex-col xl:relative items-center justify-center xl:gap-8 gap-0 !font-extrabold tracking-tight text-3xl",
-            "peer-checked:flex peer-checked:absolute peer-checked:w-full peer-checked:top-20 peer-checked:left-0 !z-[1050] peer-checked:bg-neutral-800 peer-checked:rounded-md peer-checked:border-1 peer-checked:border-neutral-700 peer-checked:overflow-hidden",
+            "xl:flex hidden xl:flex-row flex-col xl:relative items-center justify-center xl:gap-8 gap-0 !font-extrabold tracking-tight text-2xl",
+            "peer-checked:flex peer-checked:absolute peer-checked:w-full peer-checked:top-20 peer-checked:left-0 !z-[1050] peer-checked:bg-neutral-50 dark:peer-checked:bg-neutral-800 peer-checked:rounded-md peer-checked:border-1 peer-checked:border-neutral-300 dark:peer-checked:border-neutral-700 peer-checked:overflow-hidden",
         )}
     >
+        <NavbarLink url={"/"}>
+            <Home size={32} strokeWidth={3} /> Home
+        </NavbarLink>
+
         <NavbarLink url={"/browse"}>
             <Search size={32} strokeWidth={3} /> Browse
         </NavbarLink>
 
         <NavbarLink url={"/upload"}>
             <Upload size={32} strokeWidth={3} /> Upload
+        </NavbarLink>
+
+        <NavbarLink url={"/blog"}>
+            <Newspaper size={32} strokeWidth={3} /> Blog
         </NavbarLink>
 
         <NavbarLink url={"/signin"}>
