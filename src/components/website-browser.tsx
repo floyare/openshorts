@@ -6,7 +6,7 @@ import { actions } from "astro:actions";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import Container from "./container";
-import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Github, Heart, LoaderCircle, Search, Sparkles, SquareChevronRight, Tags, TextCursorInput, Youtube } from "lucide-react";
+import { ArrowDownAZ, CalendarArrowDown, CalendarArrowUp, ChevronDown, Coffee, Compass, FileQuestion, Filter, Github, Heart, LoaderCircle, Search, SortAsc, Sparkles, SquareChevronRight, Tags, TextCursorInput, Youtube } from "lucide-react";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -26,6 +26,7 @@ import useSWR from "swr";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 import useIsMobile from "@/hooks/useIsMobile";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 
 type BrowserProps = {
     //entryWebsites: WebsiteType[],
@@ -211,12 +212,88 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 </p>
             </div>}
             <aside className="flex flex-col gap-2 h-fit lg:sticky lg:top-4 lg:bottom-12 relative lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4" >
-                <Container className="dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex lg:flex-col lg:gap-0 gap-3 flex-wrap flex-row space-y-5">
+                <Container className="dark:bg-neutral-800 dark:text-text-950 p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex lg:flex-col lg:gap-6 gap-3 flex-wrap flex-row space-y-5">
                     {/* <h2 className="flex items-center gap-2 font-bold text-lg">Browse websites</h2> */}
-                    {isMobile && <Button variant={"outline"} className="!py-7 !m-0 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 lg:!w-full w-fit grow"><SquareChevronRight /> Filters</Button>}
-                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background lg:!w-full w-fit grow" onClick={() => callDialog("ai-search")}>
+                    <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background lg:!w-full w-fit grow mb-0" onClick={() => callDialog("ai-search")}>
                         <Sparkles className="text-accent-500 drop-shadow-lg drop-shadow-secondary-700/40 shrink" /> Try the <b className="text-accent-600 font-extrabold drop-shadow-lg drop-shadow-accent-500/40">AI Search</b>
                     </Button>
+
+                    {isMobile && (
+                        <Drawer direction="left">
+                            <DrawerTrigger asChild>
+                                <Button variant={"outline"} className="!py-7 !m-0 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 lg:!w-full w-fit grow"><Filter /> Filters</Button>
+                            </DrawerTrigger>
+                            <DrawerContent>
+                                <DrawerHeader>
+                                    <DrawerTitle className="flex items-center gap-3"><Filter /> Filters</DrawerTitle>
+                                    <DrawerDescription>Adjust your filters to result with more specific search</DrawerDescription>
+                                </DrawerHeader>
+                                <div className="flex flex-col gap-6 px-3 pt-6">
+                                    <label className="space-y-2">
+                                        <p className="flex items-center gap-1"><Search /> Search input</p>
+                                        <div className="flex items-center gap-3">
+                                            <Input
+                                                type="text"
+                                                placeholder="Search by phrase..."
+                                                value={searchContent.search}
+                                                className=""
+                                                onChange={(e) =>
+                                                    searchContentSet((p) => ({
+                                                        ...p,
+                                                        search: e.target.value,
+                                                    }))
+                                                }
+                                            />
+                                        </div>
+                                    </label>
+
+                                    <label className="space-y-2">
+                                        <p className="flex items-center gap-1"><SortAsc /> Sorting</p>
+                                        <div className="flex items-center gap-3">
+                                            <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
+                                                <SelectTrigger size="default" className="text-lg w-full dark:text-text-950 dark:border-neutral-700" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
+                                                    <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        <SelectItem value="new"><CalendarArrowDown /> Newest</SelectItem>
+                                                        <SelectItem value="old"><CalendarArrowUp /> Oldest</SelectItem>
+                                                        <SelectItem value="alphabet"><ArrowDownAZ /> Alphabetically</SelectItem>
+                                                        <SelectItem value="likes"><Heart /> Most likes</SelectItem>
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </label>
+
+
+                                    <label className="space-y-2">
+                                        <p className="flex items-center gap-1"><Tags /> Tags</p>
+                                        <ToggleGroup className="ml-2 gap-3 max-h-[35vh] overflow-hidden relative" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
+                                            ...p,
+                                            tags: value
+                                        }))} value={searchContent.tags}>
+                                            {
+                                                isLoading ? (
+                                                    [...Array(17).keys()].map((_, idx) => (
+                                                        <ToggleGroupItem value={idx.toString()} style={{ minWidth: `${Math.round((Math.random() + 0.6) * idx) * 7}px !important` }} key={idx} tabIndex={0} className={"flex items-center p-4 !flex-0 dark:text-text-950 bg-gray-200 dark:bg-neutral-700 !animate-pulse pointer-events-none"}>
+
+                                                        </ToggleGroupItem>
+                                                    ))
+                                                ) : (
+                                                    tagsList.map((tag, idx) => (
+                                                        <ToggleGroupItem value={tag.name} key={idx} tabIndex={0} className={cn("group/toggle bg-white border-1 border-primary-800 flex items-center p-4 !flex-0 dark:text-text-950")} disabled={tag.count <= 0}>
+                                                            <p className="flex items-center gap-2">{tag.name} <span className="group-data-[state=on]/toggle:!text-white text-xs dark:text-secondary-700 text-secondary-500">({tag.count})</span></p>
+                                                        </ToggleGroupItem>
+                                                    ))
+                                                )
+                                            }
+                                        </ToggleGroup>
+                                    </label>
+                                </div>
+                            </DrawerContent>
+                        </Drawer>
+                    )}
                     {!isMobile && <div className="flex flex-col space-y-1">
                         <p className="flex items-center gap-1"><Tags size={18} /> Tags:</p>
                         <ToggleGroup className="ml-2 gap-3 max-h-[41vh] overflow-hidden relative" type="multiple" variant={"outline"} disabled={websitesLoading} onValueChange={(value) => searchContentSet((p) => ({
