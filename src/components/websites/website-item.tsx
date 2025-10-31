@@ -106,7 +106,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             {website.tags.length > MAX_TAGS_TO_DISPLAY && <span className="text-secondary-600 text-sm font-semibold cursor-help" title={website.tags.slice(website.tags.length - (website.tags.length - MAX_TAGS_TO_DISPLAY), website.tags.length + 1).map((t) => t).toString()}>+{website.tags.length - MAX_TAGS_TO_DISPLAY}</span>}
                         </div>
                         <div className="flex md:items-end items-center gap-1">
-                            <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
+                            <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 dark:text-text-800 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
                             <Button disabled={!(!!currentUser?.user)} className={cn("ml-auto", !(!!currentUser?.user) ? "cursor-not-allowed" : "cursor-pointer")} onClick={async () => {
                                 await callDialog("report-dialog", { url: website.url })
                             }} size={"icon"} variant={"ghost"} title={!(!!currentUser?.user) ? "You must be logged in to report this website" : "Report a problem with this website"}><Flag className="text-red-400" size={24} /></Button>
@@ -117,7 +117,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
                     <div className="flex items-center gap-1">
                         {/* TODO:  zrobic lepsze te animacje i serio tylko onclick */}
-                        <Button variant={isWebsiteLiked ? "primary" : "secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")}>
+                        <Button variant={isWebsiteLiked ? "primary" : "secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500 dark:border-secondary-700 dark:bg-neutral-900", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")}>
                             {
                                 likeActionPending ? <LoaderCircle className="animate-spin" /> :
                                     <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-white group-hover:fill-text-900" : "", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")} />
@@ -126,7 +126,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         </Button>
                         <Button
                             variant={"secondary"}
-                            className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500"
+                            className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500 dark:border-secondary-700 dark:bg-neutral-900"
                             onClick={async () => await callDialog("website-details", { website })}
                             disabled={
                                 getActiveDialogs().some((p) => p.dialogKeyId === "website-details") || props.disableCommentsDialog
