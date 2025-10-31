@@ -14,57 +14,51 @@ import {
 import Logo from "./logo.astro";
 import NavigationState from "./navigation-state.astro";
 import { cn } from "@/lib/utils";
-
-const url = Astro.url;
+import NavbarLink from "./navbar-link.astro";
 
 // TODO: make the navbar dissapear when scrolling down but appear on scroll to the top or when hovering the top of the page
 ---
 
 <nav
-    class="w-full flex items-center justify-between sticky top-12"
+    class="w-full flex items-center justify-between sticky top-12 z-100"
     transition:name="navbar"
 >
     <a href="/">
         <Logo className="" />
     </a>
-    <div
-        class="flex items-center justify-center gap-8 sm:text-3xl !font-extrabold tracking-tight text-sm"
+    <input id="navbar-toggle" type="checkbox" class="peer sr-only" />
+
+    <label
+        for="navbar-toggle"
+        class="block xl:!hidden cursor-pointer peer-checked:hidden"
     >
-        <a
-            href="/browse"
-            class:list={[
-                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer hover:text-text-500 focus:text-text-600 transition-colors",
-                url.pathname === "/browse"
-                    ? "text-text-400 dark:text-text-600 font-bold"
-                    : "",
-            ]}
-        >
+        <Menu size={48} className="!text-text-50 dark:!text-white" />
+    </label>
+
+    <label
+        for="navbar-toggle"
+        class="hidden xl:!hidden cursor-pointer peer-checked:block"
+    >
+        <X size={48} className="!text-text-50 dark:!text-white" />
+    </label>
+
+    <div
+        class={cn(
+            "xl:flex hidden xl:flex-row flex-col xl:relative items-center justify-center xl:gap-8 gap-0 !font-extrabold tracking-tight text-3xl",
+            "peer-checked:flex peer-checked:absolute peer-checked:w-full peer-checked:top-20 peer-checked:left-0 !z-[1050] peer-checked:bg-neutral-800 peer-checked:rounded-md peer-checked:border-1 peer-checked:border-neutral-700 peer-checked:overflow-hidden",
+        )}
+    >
+        <NavbarLink url={"/browse"}>
             <Search size={32} strokeWidth={3} /> Browse
-        </a>
+        </NavbarLink>
 
-        <a
-            href="/upload"
-            class:list={[
-                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer hover:text-text-500 focus:text-text-600 transition-colors",
-                url.pathname === "/upload"
-                    ? "text-text-400 dark:text-text-600 font-bold"
-                    : "",
-            ]}
-        >
+        <NavbarLink url={"/upload"}>
             <Upload size={32} strokeWidth={3} /> Upload
-        </a>
+        </NavbarLink>
 
-        <a
-            href="/signin"
-            class:list={[
-                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer hover:text-text-500 focus:text-text-600 transition-colors",
-                url.pathname === "/upload"
-                    ? "text-text-400 dark:text-text-600 font-bold"
-                    : "",
-            ]}
-        >
+        <NavbarLink url={"/signin"}>
             <LogIn size={32} strokeWidth={3} /> Sign in
-        </a>
+        </NavbarLink>
     </div>
 </nav>
 
