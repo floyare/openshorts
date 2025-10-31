@@ -91,7 +91,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                             <ExternalLink className="text-text-600" size={18} />
                         </h3>
                     </a>
-                    <p className="w-full max-w-3xs overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">
+                    <p className="w-full sm:max-w-3xs max-w-full overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words sm:text-balance">
                         {description ? highlight(description) : "No description"}
                     </p>
                     <div className="mt-auto flex flex-col gap-2">
@@ -115,9 +115,9 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                 </div>
                 <div className="flex flex-col items-end gap-2 sm:w-max w-full">
                     <WebsitePreview src={image ?? ""} className="rounded-sm grow w-full border-[1px] border-secondary-700" size={{ width: 120, height: 200 }} />
-                    <div className="flex items-center gap-1">
+                    <div className="flex sm:items-center items-stretch gap-1 sm:w-fit w-full">
                         {/* TODO:  zrobic lepsze te animacje i serio tylko onclick */}
-                        <Button variant={isWebsiteLiked ? "primary" : "secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative flex items-center justify-center group gap-2 border-[1px] border-secondary-500 dark:border-secondary-700 dark:bg-neutral-900", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")}>
+                        <Button variant={isWebsiteLiked ? "primary" : "secondary"} disabled={likeActionPending || !canBeLiked || !currentUser?.user} title={!currentUser?.user ? "You must be logged in to like this website" : undefined} onClick={() => likeActionPendingSet(handleLike)} className={cn("relative sm:w-fit w-max sm:grow-0 sm:py-2 py-6 grow flex items-center justify-center group gap-2 border-[1px] border-secondary-500 dark:border-secondary-700 dark:bg-neutral-900", !currentUser?.user ? "cursor-not-allowed" : "cursor-pointer", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")}>
                             {
                                 likeActionPending ? <LoaderCircle className="animate-spin" /> :
                                     <Heart className={cn("text-text-600 cursor-pointer shrink-0 group-hover:fill-text-700/80", isWebsiteLiked ? "fill-white group-hover:fill-text-900" : "", isWebsiteLiked && (likes !== website.likesCount || website.isLiked) ? "liked__website" : "")} />
@@ -126,7 +126,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         </Button>
                         <Button
                             variant={"secondary"}
-                            className="relative flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500 dark:border-secondary-700 dark:bg-neutral-900"
+                            className="relative sm:w-fit w-max sm:grow-0 grow sm:py-2 py-6 flex items-center justify-center cursor-pointer group gap-2 border-[1px] border-secondary-500 dark:border-secondary-700 dark:bg-neutral-900"
                             onClick={async () => await callDialog("website-details", { website })}
                             disabled={
                                 getActiveDialogs().some((p) => p.dialogKeyId === "website-details") || props.disableCommentsDialog

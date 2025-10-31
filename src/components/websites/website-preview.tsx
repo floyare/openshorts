@@ -60,7 +60,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
     return (
         <div
             {...props}
-            className={cn("relative flex items-center justify-center bg-background-900 rounded-sm ", props.className)}
+            className={cn("relative flex items-center justify-center bg-background-900 dark:bg-neutral-700 dark:border-neutral-600 sm:w-fit !w-full", props.className)}
             style={{ width: size.width, height: size.height }}
             ref={previewDivRef}
         >
@@ -73,13 +73,13 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                 </span>
             )}
             {!error && src && src.trim() !== "" && (
-                <div className="relative w-full h-full flex justify-center items-center">
+                <div className="relative w-full h-full flex justify-center items-center rounded-sm">
                     <img
                         src={src}
                         alt={alt}
                         width={size.width}
                         height={size.height}
-                        className={`sm:object-contain object-cover ${loading ? "hidden" : "block"} w-full h-full cursor-zoom-in overflow-hidden rounded-sm`}
+                        className={`sm:object-contain object-cover sm:grow-0 grow object-top ${loading ? "hidden" : "block"} shrink-0 w-full bg-green-400 h-full cursor-zoom-in overflow-hidden rounded-sm`}
                         onLoad={() => setLoading(false)}
                         onError={() => {
                             setLoading(false);
