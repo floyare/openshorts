@@ -12,7 +12,7 @@ import type { websites } from "@prisma/client";
 import Container from "../container";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
-import { LoaderCircle, Lock, MessageSquareText } from "lucide-react";
+import { LoaderCircle, Lock, MessageSquareText, SendHorizonal } from "lucide-react";
 import type { User } from "better-auth/types";
 import { authClient } from "@/lib/auth-client";
 
@@ -152,23 +152,22 @@ const WebsiteComments = (props: CommentsProps) => {
     })
 
     return (
-        <Container className="!bg-background-950 dark:!bg-neutral-900 dark:!border-neutral-700 overflow-hidden px-6 relative space-y-4 grow h-full max-w-md">
-            <p className="flex items-center gap-1"><MessageSquareText /> Comments ({comments?.length ?? 0})</p>
+        <Container className="!bg-background-950 dark:!bg-neutral-900 dark:!border-neutral-700 overflow-hidden px-6 relative space-y-4 grow h-full sm:max-w-md max-w-full">
+            <p className="flex items-center gap-2"><MessageSquareText size={20} className="text-neutral-500" /> Comments <span className="text-neutral-400">({comments?.length ?? 0})</span></p>
             <div className="flex flex-col gap-4">
                 <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className={cn(
-                        "flex flex-col items-center gap-2 relative min-w-3xs max-w-2xs",
+                        "flex items-stretch gap-2 relative min-w-3xs max-w-2xs",
                     )}>
-                        <Textarea disabled={!userLoggedIn} placeholder="Write a comment..." className="w-full max-h-38 max-w-2xs bg-white" maxLength={MAX_COMMENT_LENGTH} minLength={MIN_COMMENT_LENGTH} {...register("content", { required: true })} />
+                        <Textarea disabled={!userLoggedIn} placeholder="Write a comment..." className="w-full resize-none max-h-38 max-w-2xs bg-white" maxLength={MAX_COMMENT_LENGTH} minLength={MIN_COMMENT_LENGTH} {...register("content", { required: true })} />
                         {errors.content && <span className="text-red-500">{errors.content.message}</span>}
-                        <Button variant={"default"} disabled={isSubmitting || !userLoggedIn} type="submit" className="w-full">{
-                            !userLoggedIn ? <><Lock /> You must be logged in</> : isSubmitting ? <><LoaderCircle className="animate-spin" /> Posting...</> : <><MessageSquareText /> Post comment</>
+                        <Button variant={"default"} disabled={isSubmitting || !userLoggedIn} type="submit" className="w-fit grow !h-full">{
+                            !userLoggedIn ? <><Lock /></> : isSubmitting ? <><LoaderCircle className="animate-spin" /></> : <><SendHorizonal /></>
                         }</Button>
                     </form>
                 </FormProvider>
 
                 {postResult && <Alert className="!max-w-2xs" variant={postResult.type === "success" ? "success" : "error"}>{postResult.content}</Alert>}
-                <div className="w-full h-[1px] bg-neutral-600" />
                 {isLoading ? (<div className="space-y-2 max-h-84 overflow-y-auto">
                     <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" />
                     <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" />
@@ -178,9 +177,9 @@ const WebsiteComments = (props: CommentsProps) => {
                     error ? (<p className="text-red-500 max-w-3xs break-words text-balance">
                         Failed to obtain comments: {error.message}
                     </p>) : (
-                        !comments || comments?.length <= 0 ? <p className="text-text-500">No comments yet</p> : (
+                        !comments || comments?.length <= 0 ? <p className="text-text-500 dark:text-text-700">No comments yet</p> : (
                             <>
-                                <div className="space-y-2 max-h-84 overflow-y-auto px-2" ref={animationParent}>
+                                <div className="space-y-2 max-h-84 overflow-y-auto" ref={animationParent}>
                                     {
                                         slicedComments?.map((comment, index) => {
 
@@ -190,7 +189,7 @@ const WebsiteComments = (props: CommentsProps) => {
                                                     <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
                                                     <div>
                                                         <p className="text-black dark:!text-text-950 max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">{comment.content}</p>
-                                                        <p className="text-text-400 dark:text-text-600 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 text-xs" title={comment.created_at.toString()}>• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
+                                                        <p className="text-text-400 dark:text-text-700 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 dark:text-neutral-400 text-xs" title={comment.created_at.toString()}>• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>
                                                     </div>
                                                 </div>
                                             )

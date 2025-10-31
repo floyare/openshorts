@@ -6,7 +6,7 @@ type AlertVariant = "info" | "success" | "warning" | "error";
 
 const variantProps: Record<AlertVariant, { className: string, icon: any }> = {
     success: {
-        className: "text-green-700 bg-green-300/70 p-3 rounded-md border-[1px] border-green-500",
+        className: "text-green-700 dark:text-green-900 bg-green-300/70 p-3 rounded-md border-[1px] border-green-500",
         icon: CheckCircleIcon
     },
     error: {
