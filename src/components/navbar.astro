@@ -21,11 +21,11 @@ import NavbarLink from "./navbar-link.astro";
 ---
 
 <nav
-    class="w-full flex items-center justify-between sticky top-12 z-100"
+    class="w-full flex items-center justify-between sticky lg:top-12 top-2 z-100 rounded-md bg-white border-1 border-primary-800 dark:bg-neutral-900 dark:border-neutral-800 lg:px-6 px-2 py-4"
     transition:name="navbar"
 >
     <a href="/">
-        <Logo className="" />
+        <Logo className="lg:scale-100 scale-80" />
     </a>
     <input id="navbar-toggle" type="checkbox" class="peer sr-only" />
 
@@ -46,7 +46,7 @@ import NavbarLink from "./navbar-link.astro";
     <div
         class={cn(
             "xl:flex hidden xl:flex-row flex-col xl:relative items-center justify-center xl:gap-8 gap-0 !font-extrabold tracking-tight text-2xl",
-            "peer-checked:flex peer-checked:absolute peer-checked:w-full peer-checked:top-20 peer-checked:left-0 !z-[1050] peer-checked:bg-neutral-50 dark:peer-checked:bg-neutral-800 peer-checked:rounded-md peer-checked:border-1 peer-checked:border-neutral-300 dark:peer-checked:border-neutral-700 peer-checked:overflow-hidden",
+            "peer-checked:flex peer-checked:absolute peer-checked:w-full peer-checked:top-22 peer-checked:left-0 !z-[1052] peer-checked:bg-neutral-50 dark:peer-checked:bg-neutral-800 peer-checked:rounded-md peer-checked:border-1 peer-checked:border-neutral-300 dark:peer-checked:border-neutral-700 peer-checked:overflow-hidden",
         )}
     >
         <NavbarLink url={"/"}>
