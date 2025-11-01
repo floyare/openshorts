@@ -109,12 +109,12 @@ const WebsiteComments = (props: CommentsProps) => {
     }
 
     const [page, setPage] = useState(1)
-    const MAX_COMMENTS_VIEW = 6
+    const MAX_COMMENTS_VIEW = 2
     const totalComments = comments?.length ? Math.ceil(comments?.length / MAX_COMMENTS_VIEW) : 0
     const slicedComments = comments?.slice((page * MAX_COMMENTS_VIEW) - MAX_COMMENTS_VIEW, page * MAX_COMMENTS_VIEW)
 
     const PaginationControls = memo(() => {
-        if (totalComments <= MAX_COMMENTS_VIEW) return null
+        if (totalComments < MAX_COMMENTS_VIEW) return null
         return (
             <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full rounded-md")}>
                 <PaginationContent>
@@ -152,19 +152,19 @@ const WebsiteComments = (props: CommentsProps) => {
     })
 
     return (
-        <Container className="!bg-background-950 dark:!bg-neutral-900 dark:!border-neutral-700 overflow-hidden px-6 relative space-y-4 grow h-full sm:max-w-md max-w-full">
+        <Container className="!bg-white border-1 dark:!bg-neutral-900 dark:!border-neutral-700 overflow-hidden px-6 relative space-y-4 grow h-full sm:max-w-md max-w-full">
             <p className="flex items-center gap-2"><MessageSquareText size={20} className="text-neutral-500" /> Comments <span className="text-neutral-400">({comments?.length ?? 0})</span></p>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
                 <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className={cn(
                         "flex items-stretch gap-2 relative min-w-3xs max-w-2xs",
                     )}>
                         <Textarea disabled={!userLoggedIn} placeholder="Write a comment..." className="w-full resize-none max-h-38 max-w-2xs bg-white" maxLength={MAX_COMMENT_LENGTH} minLength={MIN_COMMENT_LENGTH} {...register("content", { required: true })} />
-                        {errors.content && <span className="text-red-500">{errors.content.message}</span>}
                         <Button variant={"default"} disabled={isSubmitting || !userLoggedIn} type="submit" className="w-fit grow !h-full">{
                             !userLoggedIn ? <><Lock /></> : isSubmitting ? <><LoaderCircle className="animate-spin" /></> : <><SendHorizonal /></>
                         }</Button>
                     </form>
+                    {errors.content && <span className="text-red-500">{errors.content.message}</span>}
                 </FormProvider>
 
                 {postResult && <Alert className="!max-w-2xs" variant={postResult.type === "success" ? "success" : "error"}>{postResult.content}</Alert>}
@@ -179,7 +179,7 @@ const WebsiteComments = (props: CommentsProps) => {
                     </p>) : (
                         !comments || comments?.length <= 0 ? <p className="text-text-500 dark:text-text-700">No comments yet</p> : (
                             <>
-                                <div className="space-y-2 max-h-84 overflow-y-auto" ref={animationParent}>
+                                <div className="space-y-2 max-h-84 overflow-y-auto bg-neutral-200/70 dark:bg-neutral-800/50 -mx-6 px-6 -mb-4 py-6" ref={animationParent}>
                                     {
                                         slicedComments?.map((comment, index) => {
 
@@ -196,11 +196,13 @@ const WebsiteComments = (props: CommentsProps) => {
                                         })
                                     }
                                 </div>
-                                <PaginationControls />
                             </>
                         )
                     )
                 )}
+            </div>
+            <div className="pt-2">
+                <PaginationControls />
             </div>
         </Container>
     )
