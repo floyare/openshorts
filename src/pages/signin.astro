@@ -8,19 +8,19 @@ import { LogIn } from "lucide-react";
 
 <Layout subtitle="Sign in">
     <section class="grid place-items-center md:gap-4 gap-8 my-6">
-        <h2
-            class="text-3xl font-semibold flex items-center gap-2 md:flex-row flex-col"
-        >
-            <LogIn className="text-primary-600" strokeWidth={3} size={32} /> Sign
-            in using your
-            <span class="underline decoration-[6px] decoration-primary-600"
-                >favourite platform!</span
+        <div class="text-center">
+            <h2
+                class="text-4xl font-semibold flex items-center gap-2 md:flex-row flex-col tracking-tight"
             >
-        </h2>
-        <Container
-            className="bg-white dark:bg-neutral-900 dark:border-neutral-700"
-        >
+                <LogIn className="text-primary-600" strokeWidth={3} size={32} />
+                You are the <span class="font-black italic text-text-500"
+                    >FOUNDATION</span
+                > of this website
+            </h2>
+            <p class="text-xl">Join us right now and share your goodies!</p>
+        </div>
+        <div>
             <SignInProviders client:idle />
-        </Container>
+        </div>
     </section>
 </Layout>

@@ -51,7 +51,7 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
                 })}
             </div>
             <div className={cn(
-                "flex flex-wrap gap-2 max-w-full bg-background-950 dark:bg-neutral-800 dark:border-neutral-700 dark:text-text-950 rounded-md border-[1px] border-background-800 max-h-36 overflow-auto p-2 transition-all",
+                "flex flex-wrap gap-2 max-w-full bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:text-text-950 rounded-md border-[1px] border-background-800 max-h-36 overflow-auto p-2 transition-all",
                 !canAddMore ? "grayscale-100 pointer-events-none opacity-65" : ""
             )}>
                 {DEFINED_TAGS

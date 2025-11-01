@@ -63,28 +63,24 @@ const UploadForm = () => {
 
     return (
         <section>
+            <header className="text-3xl font-extrabold tracking-tight">
+                Upload a website
+            </header>
+            <p>We are sure other users are willing to know about your new website!</p>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className={cn(
-                    "flex flex-col gap-4 bg-background-900 dark:bg-neutral-900 dark:border-neutral-700 p-4 rounded-md border-[1px] border-background-800 sm:min-w-xl min-w-auto transition-all relative my-8 max-w-3xs",
+                    "flex flex-col gap-4 bg-background-900/30 dark:bg-neutral-900 dark:border-neutral-700 p-4 rounded-md border-[1px] border-background-800 sm:min-w-xl min-w-auto transition-all relative my-4 max-w-3xs",
                     isSubmitting ? "opacity-60 animate-pulse pointer-events-none" : ""
                 )}>
-                    <SkewedHighlight className="absolute -top-20 -left-8 z-10">
-                        <h2
-                            className="text-xl font-semibold text-text-950 flex items-center gap-1"
-                        >
-                            <UploadCloud /> Upload website
-                        </h2>
-                    </SkewedHighlight>
-
                     <div className="space-y-2">
                         <Label><Link size={18} /> Website URL</Label>
-                        <Input placeholder={"https://example.com"} {...register("url", { required: true })} />
+                        <Input className="dark:border-neutral-700" placeholder={"https://example.com"} {...register("url", { required: true })} />
                         {errors.url && <span className="text-red-500">{errors.url.message}</span>}
                     </div>
 
                     <div className="space-y-2">
                         <Label><Text /> Description</Label>
-                        <Textarea placeholder={"Example description of a page..."} style={{ maxHeight: "150px" }} maxLength={120} {...register("description", { required: true })} />
+                        <Textarea className="bg-white" placeholder={"Example description of a page..."} style={{ maxHeight: "150px" }} maxLength={120} {...register("description", { required: true })} />
                         {errors.description && <span className="text-red-500">{errors.description.message}</span>}
                     </div>
 
@@ -107,7 +103,7 @@ const UploadForm = () => {
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>
                         </div>
                     )}
-                    <p className="text-sm text-center text-neutral-700">By clicking "Upload" button, you agree with our <a href="/tos" className="font-bold underline">Terms of Service</a>.</p>
+                    <p className="text-sm text-center text-neutral-700 dark:text-neutral-400">By clicking "Upload" button, you agree with our <a href="/tos" className="font-bold underline">Terms of Service</a>.</p>
                     <Button type="submit" variant={"primary"} disabled={isSubmitting}>{isSubmitting ? <><LoaderCircle className="animate-spin" /> Uploading...</> : <><UploadCloud /> Upload</>}</Button>
                 </form>
             </FormProvider>

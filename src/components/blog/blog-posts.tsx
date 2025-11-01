@@ -63,7 +63,7 @@ const BlogPosts = (props: BlogPostsProps) => {
 
     return (
         <>
-            <Container className="flex flex-row flex-wrap items-start md:items-center gap-4 p-4 my-2 w-full sticky lg:top-34 top-24 z-100 backdrop-blur-2xl">
+            <Container className="flex dark:bg-neutral-900 dark:border-neutral-700 flex-row flex-wrap items-start md:items-center gap-4 p-4 my-2 w-full sticky lg:top-34 top-24 z-100 backdrop-blur-2xl">
                 <label>
                     <p className="flex items-center gap-1 mb-1"><Search size={20} /> Search</p>
                     <Input
@@ -96,7 +96,7 @@ const BlogPosts = (props: BlogPostsProps) => {
                         <a
                             key={post.file}
                             href={"/blog/" + getSlug(post.file)}
-                            className={cn("flex items-center relative md:min-w-xl min-w-full bg-neutral-50 border-1 border-neutral-400 dark:bg-neutral-900 px-8 py-6 rounded-md no-underline gap-8 hover:border-primary-500 transition-colors", isFirst ? "border-primary-400" : "")}
+                            className={cn("flex items-center relative md:min-w-xl min-w-full bg-neutral-50 border-1 border-neutral-400 dark:border-neutral-800 dark:bg-neutral-900 px-8 py-6 rounded-md no-underline gap-8 hover:!border-primary-600 transition-colors", isFirst ? "border-primary-400" : "")}
                         >
                             {isFirst && <div className="absolute -top-4 -right-4 bg-primary-500 font-bold px-6 py-2 text-white rounded-full z-10">NEW</div>}
                             <div className="flex flex-col gap-3">
