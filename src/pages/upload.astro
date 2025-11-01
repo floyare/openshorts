@@ -19,30 +19,35 @@ const currentUser = await auth.api.getSession({
             currentUser ? (
                 <UploadForm client:idle />
             ) : (
-                <Container className="bg-neutral-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-text-950 flex flex-col gap-8 items-center md:px-8 px-4 md:py-6 py-5">
-                    <JoinUs
-                        width={500}
-                        height={350}
-                        class={"md:max-w-fit max-w-3xs md:max-h-max max-h-48"}
-                    />
-                    <div class="text-center md:space-y-0 space-y-4">
-                        <h1 class="text-3xl">
-                            Join the <b class="text-primary-500">openshorts.</b>{" "}
-                            Right now!
-                        </h1>
-                        <p class="text-neutral-800 dark:text-text-950 text-balance">
-                            Share your goodies with others and explore what
-                            others shared just for you!
-                        </p>
+                <Container className="bg-neutral-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-text-950 flex flex-wrap gap-8 items-center md:px-8 px-4 md:py-6 py-5">
+                    <div class="space-y-4 xl:order-1 order-2">
+                        <div class="lg:space-y-2 space-y-4 max-w-lg">
+                            <h1 class="text-3xl font-extrabold tracking-tight">
+                                Join the{" "}
+                                <b class="text-primary-500">openshorts.</b>{" "}
+                                Right now!
+                            </h1>
+                            <p class="text-neutral-800 dark:text-text-950 text-balance text-lg">
+                                Log in, share your goodies with others and
+                                explore what others shared just for you!
+                            </p>
+                        </div>
+                        <a href="/signin">
+                            <Button
+                                variant={"primary"}
+                                className="!px-6 !py-6 text-xl w-full"
+                            >
+                                <LogIn /> Sign in
+                            </Button>
+                        </a>
                     </div>
-                    <a href="/signin">
-                        <Button
-                            variant={"primary"}
-                            className="!px-6 !py-6 text-xl"
-                        >
-                            <LogIn /> Sign in
-                        </Button>
-                    </a>
+                    <JoinUs
+                        width={300}
+                        height={200}
+                        class={
+                            "md:max-w-fit max-w-3xs md:max-h-max max-h-48 xl:order-2 order-1"
+                        }
+                    />
                 </Container>
             )
         }

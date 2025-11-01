@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import Container from "../container";
 import { MultiSelect } from "../ui/multi-select";
 import { cn } from "@/lib/utils";
+import { Search, Tags } from "lucide-react";
 
 type BlogPostsProps = {
     posts: any[]
@@ -62,9 +63,9 @@ const BlogPosts = (props: BlogPostsProps) => {
 
     return (
         <>
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 max-w-3xl">
+            <Container className="flex flex-row flex-wrap items-start md:items-center gap-4 p-4 my-2 w-full sticky lg:top-34 top-24 z-100 backdrop-blur-2xl">
                 <label>
-                    <p>Search</p>
+                    <p className="flex items-center gap-1 mb-1"><Search size={20} /> Search</p>
                     <Input
                         className="bg-white max-w-xs"
                         placeholder="Search posts..."
@@ -73,18 +74,18 @@ const BlogPosts = (props: BlogPostsProps) => {
                     />
                 </label>
                 <label>
-                    <p>Tags</p>
+                    <p className="flex items-center gap-1 mb-1"><Tags size={20} /> Tags</p>
                     <div className="w-full">
                         <MultiSelect
                             options={allTags.map((tag) => ({ label: tag, value: tag }))}
                             value={selectedTags}
                             onValueChange={setSelectedTags}
                             placeholder="Select tags..."
-                            className="min-w-[200px] bg-white hover:bg-neutral-50"
+                            className="min-w-[200px] bg-white hover:bg-neutral-50 border-primary-800"
                         />
                     </div>
                 </label>
-            </div>
+            </Container>
             <div className="flex flex-wrap justify-center gap-2 p-4">
                 {filteredPosts.length === 0 && (
                     <div className="text-neutral-500 py-8">No posts found.</div>
@@ -95,7 +96,7 @@ const BlogPosts = (props: BlogPostsProps) => {
                         <a
                             key={post.file}
                             href={"/blog/" + getSlug(post.file)}
-                            className={cn("flex items-center relative md:min-w-xl min-w-full bg-white dark:bg-neutral-950 px-8 py-6 rounded-md no-underline gap-8 border-[1px] border-transparent hover:border-primary-500 transition-colors", isFirst ? "border-primary-400" : "")}
+                            className={cn("flex items-center relative md:min-w-xl min-w-full bg-neutral-50 border-1 border-neutral-400 dark:bg-neutral-900 px-8 py-6 rounded-md no-underline gap-8 hover:border-primary-500 transition-colors", isFirst ? "border-primary-400" : "")}
                         >
                             {isFirst && <div className="absolute -top-4 -right-4 bg-primary-500 font-bold px-6 py-2 text-white rounded-full z-10">NEW</div>}
                             <div className="flex flex-col gap-3">
@@ -106,7 +107,7 @@ const BlogPosts = (props: BlogPostsProps) => {
                                     )}
                                 </p>
                                 <div className="space-y-2">
-                                    <b className="flex items-center gap-2 text-xl max-w-md text-balance break-words">
+                                    <b className="flex items-center gap-2 text-xl font-extrabold tracking-tight max-w-md text-balance break-words">
                                         {post.frontmatter.title}{" "}
                                     </b>
                                     <p className="max-w-md text-balance break-words">
@@ -117,7 +118,7 @@ const BlogPosts = (props: BlogPostsProps) => {
                                     {post.frontmatter.tags.map((tag: string) => (
                                         <li key={tag}>
                                             <div
-                                                className={`rounded-full px-4 py-1 ${selectedTags.includes(tag)
+                                                className={`rounded-full px-3 text-sm py-1 ${selectedTags.includes(tag)
                                                     ? "bg-primary-500 text-white"
                                                     : "bg-secondary-600 text-white"
                                                     }`}
