@@ -27,6 +27,7 @@ import useSWR from "swr";
 import InfiniteScroll from "react-infinite-scroll-component";
 import useIsMobile from "@/hooks/useIsMobile";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
+import FooterContent from "./footer/footer-content";
 
 type BrowserProps = {
     //entryWebsites: WebsiteType[],
@@ -332,6 +333,9 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-500 !text-white flex flex-col !gap-0 !h-fit"><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
                 </Container>}
+                <footer className="fixed lg:relative lg:left-0 lg:translate-x-0 lg:bg-transparent lg:border-transparent bottom-0 left-[50%] translate-x-[-50%] w-full lg:w-auto lg:!mx-0 !mx-2 bg-background-900/30 py-4 border-1 border-background-800 lg:backdrop-blur-none backdrop-blur-lg rounded-md mt-2 lg:mt-0">
+                    <FooterContent />
+                </footer>
             </aside>
             <div className="3xl:min-w-3xl 2xl:min-w-3xl xl:min-w-2xl lg:min-w-lg 3xl:col-span-4 2xl:col-span-3 lg:col-span-2 min-w-auto space-y-2 relative">
                 {!isMobile && <Container className="dark:bg-neutral-900 dark:border-neutral-700 sticky lg:top-34 top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
@@ -369,9 +373,6 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 <Container
                     className={cn("dark:bg-neutral-900 dark:border-neutral-700 lg:mt-0 mt-2"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
                 >
-                    {/* {websitesLoading && <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-4 z-20 rounded-md shadow-2xl shadow-black border-[1px] border-primary-300">
-                    <LoaderCircle size={48} className="text-primary-500 animate-spin" />
-                </div>} */}
                     <InfiniteScroll
                         // TODO: add if loading is infinite then retry
                         dataLength={filteredWebsites.length}
@@ -379,9 +380,9 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                             setPage((p) => p + 1)
                         }}
                         hasMore={totalWebsites > filteredWebsites.length}
-                        loader={<>
-                            <p className="text-center my-4"><LoaderCircle className="animate-spin" /></p>
-                        </>}
+                        loader={<div className="w-full text-center py-4 flex items-center justify-center">
+                            <p className="flex items-center gap-2"><LoaderCircle className="animate-spin" /> Loading...</p>
+                        </div>}
                         endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
                         scrollThreshold={0.95}
                         className="!overflow-visible"

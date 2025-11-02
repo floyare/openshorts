@@ -19,6 +19,7 @@ import LoadingIndicator from "astro-loading-indicator/component";
 import WebsiteSchema from "@/constants/schemas/WebsiteSchema.astro";
 import FeedbackButton from "@/components/feedback-button";
 import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
+import FooterContent from "@/components/footer/footer-content";
 ---
 
 <html lang="en">
@@ -138,6 +139,13 @@ import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
             <FeedbackButton client:visible />
             <ThemeSwitcher client:visible />
         </div>
+        {
+            !Astro.url.pathname.endsWith("browse") && (
+                <footer class="bg-background-900/30 py-4 border-1 border-background-800 rounded-md">
+                    <FooterContent />
+                </footer>
+            )
+        }
         <!-- <footer
             class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current md:fixed relative bottom-0 bg-background-900 border-[1px] border-background-700 dark:border-background-200 dark:bg-background-50 w-screen py-3 lg:!-mx-8 md:!-mx-4 !-mx-1 z-[1001]"
         >

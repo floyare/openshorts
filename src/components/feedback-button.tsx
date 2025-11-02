@@ -9,7 +9,7 @@ const FeedbackButton = () => {
     const { callDialog } = useDialogManager(dialogs)
     return (
         <>
-            <Button onClick={() => callDialog("feedback-dialog")}>
+            <Button onClick={() => callDialog("feedback-dialog")} className="md:flex hidden">
                 <MessageCircle /> Send feedback
             </Button>
         </>
