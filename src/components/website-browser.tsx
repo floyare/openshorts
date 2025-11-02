@@ -204,6 +204,16 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
         startWebsitesLoading(() => fetchWebsites({ overridePage: filtersChanged ? 1 : undefined }))
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
+    useEffect(() => {
+        if (typeof window === "undefined") return
+
+        const searchParams = window.location.search
+        if (searchParams.includes("show_ai_dialog")) {
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+            callDialog("ai-search")
+        }
+    }, [])
+
     return (
         <section className="grid 3xl:grid-cols-5 2xl:grid-cols-4 lg:grid-cols-3 lg:gap-2 gap-0 w-full grid-cols-1 relative">
             {(entryFetchError || (entryFetchData?.tags ? entryFetchData?.tags.length <= 0 && !isLoading : false)) && <div className="bg-red-600 text-white px-4 py-2 fixed top-0 left-0 w-full z-10">

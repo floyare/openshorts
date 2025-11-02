@@ -1,9 +1,10 @@
 ---
+import { ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import ArrowRight from "@/assets/arrow_right.svg";
 ---
 
-<section class="xl:mt-36 md:mt-96 mt-56 relative w-full">
+<section class="xl:mt-36 md:mt-96 mt-56 relative w-full scroll-mt-32" id="ai">
     <div
         class="flex items-center xl:justify-between justify-center gap-24 from-background-500 from-30% to-60% to-background-300 bg-gradient-to-tr lg:-mx-28 -mx-4 px-28 py-18 relative xl:overflow-hidden overflow-visible"
     >
@@ -26,28 +27,30 @@ import ArrowRight from "@/assets/arrow_right.svg";
                 We know about the AI trend, so here it is... our search
                 assistant that will help you with finding what you really need.
             </p>
-            <Button
-                size="lg"
-                variant="accent"
-                className="rounded-full text-lg font-normal py-6 px-8"
-                >Browse right now!</Button
-            >
-
-            <div class="absolute -top-20 -right-[40%] 2xl:block hidden">
-                <p
-                    class="text-white absolute top-55 right-35 text-2xl italic font-light"
+            <a href="/browse?show_ai_dialog=true">
+                <Button
+                    size="lg"
+                    variant="accent"
+                    className="rounded-full text-lg font-normal py-6 !px-12"
+                    >Try the AI Search <ChevronRight /></Button
                 >
-                    Try it now!
-                </p>
-                <ArrowRight class={"invert"} width={350} />
-            </div>
+
+                <div class="absolute -top-20 -right-[40%] 2xl:block hidden">
+                    <p
+                        class="text-white absolute top-55 right-35 text-2xl italic font-light"
+                    >
+                        Try it now!
+                    </p>
+                    <ArrowRight class={"invert"} width={350} />
+                </div>
+            </a>
         </div>
 
         <img
             src="/home/ai-search-dialog.png"
             width="650px"
             height="300px"
-            class="absolute lg:scale-100 scale-80 xl:top-20 md:-top-90 -top-60 xl:z-10 -z-10 xl:right-20 left-[50%] xl:translate-x-0 translate-x-[-50%] rotate-y-16 rotate-x-16 drop-shadow-2xl drop-shadow-black rounded-md"
+            class="absolute lg:scale-100 scale-80 xl:top-20 md:-top-90 -top-60 xl:z-10 right-[50%] -z-10 xl:right-20 xl:translate-x-0 translate-x-[50%] rotate-y-16 rotate-x-16 drop-shadow-2xl drop-shadow-black rounded-md"
             loading="lazy"
         />
     </div>
