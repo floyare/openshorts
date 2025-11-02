@@ -86,7 +86,7 @@ const BlogPosts = (props: BlogPostsProps) => {
                     </div>
                 </label>
             </Container>
-            <div className="flex flex-wrap justify-center gap-2 p-4">
+            <div className="flex flex-wrap justify-center gap-2 p-2">
                 {filteredPosts.length === 0 && (
                     <div className="text-neutral-500 py-8">No posts found.</div>
                 )}
