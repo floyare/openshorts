@@ -101,9 +101,6 @@ importers:
       astro:
         specifier: ^5.9.3
         version: 5.11.0(@types/node@24.0.13)(@upstash/redis@1.35.1)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.2)(typescript@5.8.3)(uploadthing@7.7.3(h3@1.15.3)(tailwindcss@4.1.11))
-      astro-integration-lottie:
-        specifier: ^0.3.2
-        version: 0.3.2(lottie-web@5.13.0)
       astro-loading-indicator:
         specifier: ^0.7.0
         version: 0.7.0(astro@5.11.0(@types/node@24.0.13)(@upstash/redis@1.35.1)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.2)(typescript@5.8.3)(uploadthing@7.7.3(h3@1.15.3)(tailwindcss@4.1.11)))
@@ -1792,11 +1789,6 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
-
-  astro-integration-lottie@0.3.2:
-    resolution: {integrity: sha512-YPE5XjWNbu+kKTlNm4+buvL6oZDwaECiS4Mo4m3kZnykZjHOJPNoStsIN2wLgJmryRUqPZxeKiIA+tIrT6HD1Q==}
-    peerDependencies:
-      lottie-web: ^5.10.0
 
   astro-loading-indicator@0.7.0:
     resolution: {integrity: sha512-oNSUYbHq8Aaol0zcVuBzGz+qrqKsviOvKl1xaaKo3DLkEef7HCzHQAgTgWv4lB1iYFWa5GaieQvlxBO4KjzKZg==}
@@ -5488,10 +5480,6 @@ snapshots:
       tslib: 2.8.1
 
   astring@1.9.0: {}
-
-  astro-integration-lottie@0.3.2(lottie-web@5.13.0):
-    dependencies:
-      lottie-web: 5.13.0
 
   astro-loading-indicator@0.7.0(astro@5.11.0(@types/node@24.0.13)(@upstash/redis@1.35.1)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.2)(typescript@5.8.3)(uploadthing@7.7.3(h3@1.15.3)(tailwindcss@4.1.11))):
     dependencies:

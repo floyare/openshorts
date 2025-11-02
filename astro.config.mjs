@@ -2,7 +2,6 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
-import lottie from "astro-integration-lottie";
 //import node from '@astrojs/node';
 
 import vercel from '@astrojs/vercel';
@@ -71,7 +70,6 @@ export default defineConfig({
         //     }
         // }),
         mdx(),
-        lottie()
     ],
     trailingSlash: 'never',
     output: 'static',
