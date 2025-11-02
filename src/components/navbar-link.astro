@@ -1,6 +1,6 @@
 ---
 const siteUrl = Astro.url;
-const { url } = Astro.props;
+const { url, className } = Astro.props;
 ---
 
 <a
@@ -10,6 +10,7 @@ const { url } = Astro.props;
         siteUrl.pathname === url
             ? "text-text-400 dark:text-text-600 font-bold"
             : "",
+        className,
     ]}
 >
     <slot />

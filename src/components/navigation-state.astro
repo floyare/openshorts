@@ -1,33 +1,57 @@
 ---
 import { LogIn, User } from "lucide-react";
+import NavbarLink from "./navbar-link.astro";
+import ResponsiveImage from "./responsive-image";
+import { undefined } from "astro:schema";
+import { Popover } from "./ui/popover";
 
 const url = Astro.url;
+console.warn(Astro.locals.user);
 ---
 
 {
     Astro.locals.user ? (
-        <a
-            href="/profile"
-            class:list={[
-                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors",
-                url.pathname.includes("/profile")
-                    ? "text-text-400 dark:text-text-600 font-bold"
-                    : "",
-            ]}
-        >
-            <User size={32} /> Profile
-        </a>
+        <>
+            <div class="relative lg:block hidden">
+                <input
+                    id="usermenu-toggle"
+                    type="checkbox"
+                    class="peer sr-only"
+                />
+                <label for="usermenu-toggle">
+                    <ResponsiveImage
+                        src={Astro.locals.user.image}
+                        alt="User avatar"
+                        width={64}
+                        height={64}
+                        className="rounded-full cursor-pointer select-none"
+                        client:idle
+                    />
+                </label>
+
+                <div class="absolute top-[110%] left-[50%] translate-x-[-50%] bg-white w-48 flex-col gap-2 rounded-md border-1 border-neutral-300 py-2 peer-checked:flex hidden">
+                    <NavbarLink url={"/profile"} className="!w-full">
+                        <User size={32} strokeWidth={3} /> Profile
+                    </NavbarLink>
+                    <NavbarLink url={"/signout"} className="!w-full">
+                        <LogIn size={32} strokeWidth={3} /> Sign out
+                    </NavbarLink>
+                </div>
+            </div>
+
+            <span class="lg:hidden block !w-full">
+                <NavbarLink url={"/profile"}>
+                    <User size={32} strokeWidth={3} /> Profile
+                </NavbarLink>
+                <NavbarLink url={"/signout"}>
+                    <LogIn size={32} strokeWidth={3} /> Sign out
+                </NavbarLink>
+            </span>
+        </>
     ) : (
-        <a
-            href="/signin"
-            class:list={[
-                "flex gap-2 xl:p-2 p-4 px-8 items-center cursor-pointer sm:text-xl text-sm hover:text-text-500 focus:text-text-600 transition-colors text-center",
-                url.pathname === "/signin"
-                    ? "!text-text-400 dark:text-text-600 font-bold"
-                    : "",
-            ]}
-        >
-            <LogIn size={32} /> Sign In
-        </a>
+        // </a>
+        <NavbarLink url={"/signin"}>
+            <LogIn size={32} strokeWidth={3} /> Sign in
+        </NavbarLink>
     )
 }
