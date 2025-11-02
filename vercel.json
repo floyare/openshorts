@@ -1,6 +1,6 @@
 {
     "trailingSlash": false,
     "git": {
-        "deploymentEnabled": false
+        "deploymentEnabled": true
     }
 }
