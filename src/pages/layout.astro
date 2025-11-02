@@ -11,7 +11,6 @@ import { Font } from "astro:assets";
 import Navbar from "@/components/navbar.astro";
 import { Toaster } from "@/components/ui/sonner";
 const { subtitle = "", description, class: className, ...props } = Astro.props;
-import Background from "@/assets/bc.svg";
 import { Dialog } from "easy-dialogs";
 import { ClientRouter } from "astro:transitions";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -128,9 +127,6 @@ import FooterContent from "@/components/footer/footer-content";
     >
         <Dialog client:only />
         <LoadingIndicator height="8px" color="var(--color-primary-600)" />
-        <!-- <Background
-            class={"fixed top-0 left-0 !w-full !h-full opacity-35 dark: -z-10"}
-        /> -->
         <Toaster position="top-right" richColors client:visible />
         <Navbar />
         <AnalyticsProvider children={null} client:idle />
@@ -146,15 +142,5 @@ import FooterContent from "@/components/footer/footer-content";
                 </footer>
             )
         }
-        <!-- <footer
-            class="text-sm text-text-500 dark:text-text-900 flex justify-center items-center divide-x divide-current md:fixed relative bottom-0 bg-background-900 border-[1px] border-background-700 dark:border-background-200 dark:bg-background-50 w-screen py-3 lg:!-mx-8 md:!-mx-4 !-mx-1 z-[1001]"
-        >
-            <p class="px-2">
-                openshorts.dev {new Date().getFullYear()}
-            </p>
-            <a href="/tos" class="px-2"> Terms of Service </a>
-            <a href="/privacy" class="px-2"> Privacy Policy </a>
-            <a href="/about" class="px-2"> About project </a>
-        </footer> -->
     </body>
 </html>

@@ -1,12 +1,14 @@
 ---
 import Layout from "./layout.astro";
 import WebsiteBrowser from "@/components/website-browser";
-import { debugLog } from "@/lib/log";
 import type { User } from "better-auth";
 //import { actions } from "astro:actions";
 ---
 
-<Layout>
+<Layout
+    subtitle="Browse websites"
+    description="Explore through our huge collection of useful and productive websites uploaded by other users."
+>
     <main class="flex flex-col gap-8">
         <div class="flex flex-col gap-2 items-start py-8">
             <section id="browse" class="space-y-4 w-full">
