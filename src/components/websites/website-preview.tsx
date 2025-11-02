@@ -69,7 +69,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                     className="absolute inset-0 flex items-center justify-center animate-spin"
                     style={{ fontSize: fontSize }}
                 >
-                    <LoaderCircle className="text-primary-600" />
+                    <LoaderCircle className="text-primary-600 dark:text-neutral-400" />
                 </span>
             )}
             {!error && src && src.trim() !== "" && (
@@ -115,7 +115,7 @@ const WebsitePreview: React.FC<WebsitePreviewProps> = ({
                         className="absolute inset-0 flex items-center justify-center"
                         style={{ fontSize: fontSize }}
                     >
-                        <FileQuestion className="text-secondary-300" />
+                        <FileQuestion className="text-secondary-300 dark:text-neutral-400" />
                     </span>
                 ))}
         </div>
