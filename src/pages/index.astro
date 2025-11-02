@@ -2,15 +2,11 @@
 export const prerender = true;
 
 import Layout from "./layout.astro";
-import WebsiteBrowser from "@/components/website-browser";
-import { debugLog } from "@/lib/log";
-import type { User } from "better-auth";
 import HeroSection from "@/components/home/hero-section.astro";
 import HomeWebsitesSection from "@/components/home/home-websites-section.astro";
-import HomeAISection from "@/components/home/home-ai-section.astro"
-import HomePromoSection from "@/components/home/home-promo-section.astro"
+import HomeAISection from "@/components/home/home-ai-section.astro";
+import HomePromoSection from "@/components/home/home-promo-section.astro";
 //import { actions } from "astro:actions";
-
 ---
 
 <Layout>
@@ -20,12 +16,6 @@ import HomePromoSection from "@/components/home/home-promo-section.astro"
             <HomeWebsitesSection />
             <HomeAISection />
             <HomePromoSection />
-            <!-- <section id="browse">
-                <WebsiteBrowser
-                    currentUser={(Astro.locals.user as User) ?? undefined}
-                    client:idle
-                />
-            </section> -->
         </div>
     </main>
 </Layout>

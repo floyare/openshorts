@@ -12,18 +12,20 @@ import {
 ---
 
 <section class="mt-36 relative w-full">
-    <div class="flex flex-col gap-4 items-center py-18">
-        <h2 class="text-6xl font-extrabold tracking-tighter">
+    <div class="flex flex-col gap-4 items-center text-center py-18">
+        <h2 class="md:text-6xl text-4xl font-extrabold tracking-tighter">
             It looks promising isn't it?
         </h2>
-        <p class="text-2xl max-w-2xl text-center">
+        <p class="md:text-2xl text-xl max-w-2xl text-center">
             So why wouldn’t you help Openshorts go global by sharing it to the
             others? It’s FREE!
         </p>
-        <div class="flex items-center justify-center gap-8 pt-8">
+        <div
+            class="flex items-center flex-wrap justify-center md:gap-8 gap-2 pt-8"
+        >
             <a
                 href="#"
-                class="max-h-72 h-[50vh] text-center w-48 flex flex-col justify-center items-center px-8 text-3xl py-6 rounded-md bg-red-600 hover:bg-red-400 transition-all hover:-translate-y-2 text-white font-extrabold"
+                class="md:max-h-72 max-h-52 h-[50vh] text-center md:w-48 w-28 flex flex-col justify-center items-center md:px-8 md:py-6 py-2 px-2 md:text-3xl text-xl rounded-md bg-red-600 hover:bg-red-400 transition-all hover:-translate-y-2 text-white font-extrabold"
             >
                 <Youtube strokeWidth={1} size={64} />
                 Youtube
@@ -31,7 +33,7 @@ import {
 
             <a
                 href="#"
-                class="max-h-72 h-[50vh] text-center w-48 flex flex-col justify-center items-center px-8 text-3xl py-6 rounded-md bg-black hover:bg-black/60 transition-all hover:-translate-y-2 text-white font-extrabold"
+                class="md:max-h-72 max-h-52 h-[50vh] text-center md:w-48 w-28 flex flex-col justify-center items-center md:px-8 md:py-6 py-2 px-2 md:text-3xl text-xl rounded-md bg-black hover:bg-black/60 transition-all hover:-translate-y-2 text-white font-extrabold"
             >
                 <Github strokeWidth={1} size={64} />
                 Github
@@ -39,7 +41,7 @@ import {
 
             <a
                 href="#"
-                class="max-h-72 h-[50vh] text-center w-48 flex flex-col justify-center items-center px-8 text-3xl py-6 rounded-md bg-orange-600 hover:bg-orange-400 transition-all hover:-translate-y-2 text-white font-extrabold"
+                class="md:max-h-72 max-h-52 h-[50vh] text-center md:w-48 w-28 flex flex-col justify-center items-center md:px-8 md:py-6 py-2 px-2 md:text-3xl text-xl rounded-md bg-orange-600 hover:bg-orange-400 transition-all hover:-translate-y-2 text-white font-extrabold"
             >
                 <Coffee strokeWidth={1} size={64} />
                 Buy Me a Coffee

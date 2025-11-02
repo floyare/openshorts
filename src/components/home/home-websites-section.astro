@@ -13,16 +13,20 @@ const websitesIcons = await prisma.websites.findMany({
 });
 ---
 
-<section class="mt-36 relative w-full">
-    <div class="flex items-center justify-between gap-24 py-18">
+<section class="md:mt-36 mt-8 relative w-full">
+    <div
+        class="flex flex-wrap items-center justify-between md:gap-24 gap-4 py-18"
+    >
         <HomeWebsitesBox
             icons={websitesIcons.map((p) => {
                 return { url: p.url };
             })}
         />
 
-        <div class="flex flex-col gap-8 items-start">
-            <h2 class="text-6xl max-w-4xl font-extrabold tracking-tighter">
+        <div class="flex flex-col gap-8 items-start md:px-0 px-4">
+            <h2
+                class="md:text-6xl text-4xl max-w-4xl font-extrabold tracking-tighter"
+            >
                 Browse through <span class="text-primary-500">250+</span> websites
                 uploaded by ours users.
             </h2>
