@@ -6,7 +6,11 @@ const { title, description, pubDate, author, image, url } = Astro.props;
 <Schema
     item={{
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": "BlogPosting",
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": url,
+        },
         headline: title,
         description,
         datePublished:
