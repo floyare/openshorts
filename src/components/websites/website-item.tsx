@@ -1,4 +1,4 @@
-import { ExternalLink, Flag, Heart, LoaderCircle, MessageSquareText } from "lucide-react";
+import { ExternalLink, Flag, Heart, LayoutList, LoaderCircle, MessageSquareText } from "lucide-react";
 import type { WebsiteType } from "@/types/website";
 import WebsiteIcon from "./website-icon";
 import WebsitePreview from "./website-preview";
@@ -74,7 +74,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     }
 
     return (
-        <div {...props} className={cn("px-6 py-4 3xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
+        <article {...props} className={cn("px-6 py-4 3xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full h-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} onMouseDown={(e) => {
@@ -107,9 +107,12 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         </div>
                         <div className="flex md:items-end items-center gap-1">
                             <p className="text-neutral-500">Uploaded by: <a href={`/profile/${website.created_by}`} title={"Visit " + website.created_by + "'s profile"} className="text-text-600 dark:text-text-800 font-bold hover:text-text-700 transition-colors truncate max-w-2xs">{website.created_by}</a></p>
-                            <Button disabled={!(!!currentUser?.user)} className={cn("ml-auto", !(!!currentUser?.user) ? "cursor-not-allowed" : "cursor-pointer")} onClick={async () => {
-                                await callDialog("report-dialog", { url: website.url })
-                            }} size={"icon"} variant={"ghost"} title={!(!!currentUser?.user) ? "You must be logged in to report this website" : "Report a problem with this website"}><Flag className="text-red-400" size={24} /></Button>
+                            <div className="ml-auto">
+                                <Button disabled={!(!!currentUser?.user)} className={cn(!(!!currentUser?.user) ? "cursor-not-allowed" : "cursor-pointer")} onClick={async () => {
+                                    await callDialog("report-dialog", { url: website.url })
+                                }} size={"icon"} variant={"ghost"} title={!(!!currentUser?.user) ? "You must be logged in to report this website" : "Report a problem with this website"}><Flag className="text-red-400" size={24} /></Button>
+                                <a href={`/browse/${website.name.toLowerCase()}`}><Button variant={"ghost"} size={'icon'} title="Show detailed view"><LayoutList /></Button></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +141,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     );
 }
 

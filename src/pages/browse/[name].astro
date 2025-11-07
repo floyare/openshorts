@@ -6,7 +6,16 @@ import WebsiteItem from "@/components/websites/website-item";
 import WebsiteComments from "@/components/websites/website-comments";
 import WebsiteEntrySchema from "@/constants/schemas/WebsiteEntrySchema.astro";
 import { format } from "date-fns";
-import { ChevronRight } from "lucide-react";
+
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import BreadcrumbSchema from "@/constants/schemas/BreadcrumbSchema.astro";
 
 export async function getStaticPaths() {
     const websites = await prisma.websites.findMany({
@@ -43,6 +52,22 @@ if (!website) {
 }
 ---
 
+<BreadcrumbSchema
+    items={[
+        {
+            "@type": "ListItem",
+            position: 1,
+            name: "Browse websites",
+            item: `${import.meta.env.SITE}/browse/`,
+        },
+        {
+            "@type": "ListItem",
+            position: 2,
+            name: website.name,
+            item: `${import.meta.env.SITE}/browse/${website.name.toLowerCase()}`,
+        },
+    ]}
+/>
 <WebsiteEntrySchema
     name={website.name}
     description={website.description}
@@ -58,18 +83,39 @@ if (!website) {
         " @ openshorts.dev " +
         new Date().getFullYear()}
 >
-    <section class="flex flex-col gap-2 justify-center items-center flex-wrap">
-        <div class="flex gap-2">
-            <div class="bg-background-400 text-white py-2 px-6 rounded-md">
-                <b>Detailed view of {website.name}</b>
-                <p>Uploaded at: {format(website.created_at, "dd.MM.yyyy")}</p>
+    <article class="flex flex-col gap-6 justify-center flex-wrap">
+        <Breadcrumb>
+            <BreadcrumbList>
+                <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                    <BreadcrumbLink href="/browse"
+                        >Browse websites</BreadcrumbLink
+                    >
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                    <BreadcrumbPage>{website.name}</BreadcrumbPage>
+                </BreadcrumbItem>
+            </BreadcrumbList>
+        </Breadcrumb>
+
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight">
+                Detailed view of <strong>{website.name}</strong>
+            </h1>
+            <div>
+                <p>
+                    Description: <i>{website.description}</i>
+                </p>
+                <p>
+                    Created at: <b
+                        >{format(website.created_at, "dd.MM.yyyy HH:mm")}</b
+                    >
+                </p>
             </div>
-            <a
-                href="/#browse"
-                class="bg-accent-500 text-white text-shadow-xs text-shadow-black/60 py-2 px-6 font-bold rounded-md flex gap-2 items-center cursor-pointer"
-            >
-                Check out other Amazing Websites HERE! <ChevronRight />
-            </a>
         </div>
 
         <div class="flex gap-2 justify-center items-start flex-wrap w-full">
@@ -92,5 +138,5 @@ if (!website) {
                 client:idle
             />
         </div>
-    </section>
+    </article>
 </Layout>
