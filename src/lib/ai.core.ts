@@ -1,27 +1,60 @@
-import { tryCatch } from '@/lib/utils';
+import { isValidBrowser, tryCatch } from '@/lib/utils';
 import { GoogleGenAI } from "@google/genai"
-import { prisma } from "./prisma"
+import { prisma, redis } from "./prisma"
 import { getLikeCountsForWebsites } from "./websites.core"
 import { debugLog } from "./log"
 import { auth } from "./auth"
 import type { AIUsageType } from "@/types/user"
 import { isToday } from "date-fns"
-import { MAX_AI_USAGES_PER_DAY } from "@/helpers/ai.helper"
+import { MAX_AI_USAGES_PER_DAY, MAX_AI_USAGES_TRIAL_USER } from "@/helpers/ai.helper"
 import { isUserBanned } from "./user.core"
 import type { WebsiteType } from "@/types/website"
+import type { ActionAPIContext, AstroActionContext } from 'astro:actions';
 
-export const getWebsitesRecommendation = async ({ headers, content }: { headers: Headers, content: string }) => {
+/*
+    1. somehow register new trial user using api and set the cookie if valid user agent
+    2. use the trial user id to track ai usage
+*/
+
+const COOKIE_TRIAL_USER_KEY = "ops_trial_user"
+
+export const getWebsitesRecommendation = async ({ headers, content, context }: { headers: Headers, content: string, context: ActionAPIContext }) => {
     const currentUser = await auth.api.getSession({
         headers: headers
     })
 
-    if (!currentUser) throw new Error("You must be logged in to perform this action")
+    // * register trial user
+    let trialUser = context.cookies.get(COOKIE_TRIAL_USER_KEY)?.value
 
-    const isBanned = await isUserBanned({ currentUser: currentUser.user })
+    if (!isValidBrowser(headers)) throw new Error("Internal server error. Try again later.")
+
+    if (!currentUser && !trialUser) {
+        const trialUserId = crypto.randomUUID()
+        context.cookies.set(COOKIE_TRIAL_USER_KEY, trialUserId)
+        trialUser = trialUserId
+    }
+
+    //if (!currentUser) throw new Error("You must be logged in to perform this action")
+
+    const isBanned = currentUser ? await isUserBanned({ currentUser: currentUser.user }) : false
     if (isBanned) throw new Error("You are banned from using this feature.")
 
-    const aiUsage: AIUsageType | null = currentUser.user.ai_usage as AIUsageType | null
+    let aiUsage: AIUsageType | null = currentUser ? currentUser.user.ai_usage as AIUsageType | null : null
+
+    aiUsage = currentUser ? aiUsage : await redis.get(`trial_ops_ai:${trialUser}`).then((trialUsage) => {
+        if (trialUsage) return { date: new Date(), used: parseInt(trialUsage as string) } as AIUsageType
+
+        if (trialUser) {
+            const trialUserId = crypto.randomUUID()
+            context.cookies.set(COOKIE_TRIAL_USER_KEY, trialUserId)
+            trialUser = trialUserId
+        }
+
+        return null
+    })
+
     if (aiUsage && (isToday(aiUsage.date) && aiUsage.used >= MAX_AI_USAGES_PER_DAY)) throw new Error("You've reached maximum daily usage of AI Search. Try again tommorow.")
+    if (aiUsage && aiUsage.used >= MAX_AI_USAGES_TRIAL_USER && !currentUser) throw new Error("You've reached maximum daily usage of AI Search. Sign up for free account to get more usage.")
 
     const websites = await prisma.websites.findMany({
         include: {
@@ -108,19 +141,23 @@ export const getWebsitesRecommendation = async ({ headers, content }: { headers:
         used: aiUsage.used + 1
     })
 
-    await prisma.user.update({
+    currentUser ? await prisma.user.update({
         where: {
             id: currentUser.user.id
         },
         data: {
             ai_usage: updatedUsage
         }
-    })
+    }) : (async () => {
+        await redis.set(`trial_ops_ai:${trialUser}`, updatedUsage.used, { keepTtl: true })
+        if (trialUser && !aiUsage) await redis.expire(`trial_ops_ai:${trialUser}`, 86400)
+    })()
 
     //const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
     return {
         response: (fullWebsites.filter((p) => {
             return response.data?.text?.includes(p.name)
-        }) ?? []) as WebsiteType[], usage: updatedUsage
+        }) ?? []) as WebsiteType[],
+        usage: updatedUsage
     }
 }

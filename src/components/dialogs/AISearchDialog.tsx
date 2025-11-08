@@ -1,4 +1,4 @@
-import { Bug, CircleHelp, LoaderCircle, Lock, LogIn, Search, ShieldMinus, Sparkles, X } from "lucide-react"
+import { Bug, CircleHelp, LoaderCircle, Lock, LogIn, Search, Send, ShieldMinus, Sparkles, X } from "lucide-react"
 import Container from "../container"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
@@ -11,7 +11,7 @@ import WebsiteItem from "../websites/website-item"
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Dialog, DialogContent } from "../ui/dialog"
 import { debugLog } from "@/lib/log"
-import { CLIENT_AI_USAGE_STORAGE_KEY, MAX_AI_USAGES_PER_DAY, MAX_PROMPT_LENGTH } from "@/helpers/ai.helper"
+import { CLIENT_AI_USAGE_STORAGE_KEY, MAX_AI_USAGES_PER_DAY, MAX_AI_USAGES_TRIAL_USER, MAX_PROMPT_LENGTH } from "@/helpers/ai.helper"
 import { authClient } from "@/lib/auth-client"
 import { useLocalStorage } from "@uidotdev/usehooks";
 import type { AIUsageType } from "@/types/user"
@@ -26,10 +26,25 @@ type AISearchDialogProps = {
     }
 }
 
+const trialUserUsagesStorageKey = "PLEASEDONOTCHANGE_AI_IS_EXPENSIVE_ops_trial_user_ai_usages"
+
 const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogProps) => {
     const [searchInput, searchInputSet] = useState("")
-    const debouncedSearch = useDebounce(searchInput, 1300)
-    const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(CLIENT_AI_USAGE_STORAGE_KEY, null)
+    //const debouncedSearch = useDebounce(searchInput, 1300)
+    const [searchRan, searchRanSet] = useState(false)
+
+    const isTrialUserAvailable = () => {
+        const trialUserUsages = localStorage.getItem(trialUserUsagesStorageKey)
+        if (!trialUserUsages) return true
+
+        try {
+            const parsed = JSON.parse(trialUserUsages) as { date: string, used: number }
+            if (!isToday(new Date(parsed.date))) return true
+            return parsed.used < MAX_AI_USAGES_PER_DAY
+        } catch (e) {
+            return true
+        }
+    }
 
     const [websitesResult, websitesResultSet] = useState<WebsiteType[]>([
         // { "id": "f1822ee9-ee6b-4fb6-ae0f-9a7b25c0b040", "name": "Cleanup", "description": "Use cleanup.pictures to remove unwanted objects, people, or defects. ", "url": "https://cleanup.pictures/", "image": null, "tags": ["AI", "TOOLS"], "created_by": "floyare", "isLiked": true, "likesCount": 1 },
@@ -41,17 +56,21 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
     const [searchError, searchErrorSet] = useState<string | null>(null)
     const { data: user, isPending } = authClient.useSession()
 
-    const userLoggedIn = useMemo(() => user, [user])
-    const aiNoUsagesLeft = useMemo(() => (aiUsage && isToday(aiUsage.date) && aiUsage?.used >= MAX_AI_USAGES_PER_DAY) ?? false, [aiUsage])
+    // todo: add override of the userLogeedIn for trial user based on the some kind of Id and 2-3 free usages
+    const trialUserEnabled = useMemo(() => user ? false : isTrialUserAvailable(), [user])
+    const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(trialUserEnabled ? trialUserUsagesStorageKey : CLIENT_AI_USAGE_STORAGE_KEY, null)
+
+    const userLoggedIn = useMemo(() => user || !!trialUserEnabled, [user, trialUserEnabled])
+    const aiNoUsagesLeft = useMemo(() => (aiUsage && isToday(aiUsage.date) && aiUsage?.used >= (trialUserEnabled ? MAX_AI_USAGES_TRIAL_USER : MAX_AI_USAGES_PER_DAY)) ?? false, [aiUsage])
 
     const { sendEvent } = useAnalytics()
 
-    useEffect(() => {
-        if (debouncedSearch.length <= 0) return
+    const runSearch = () => {
+        if (searchInput.length <= 0) return
         searchErrorSet(null)
 
         searchingTransitionSet(async () => {
-            const result = await actions.getWebsitesRecommendation({ content: debouncedSearch })
+            const result = await actions.getWebsitesRecommendation({ content: searchInput })
             debugLog("ACTION", result)
 
             await sendEvent("custom_event", { source: "ai search invocation" })
@@ -59,7 +78,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
             if (result.error) {
                 // not cool of making this but idk how for now
                 // TODO: make this check better
-                if (result.error.message === "You've reached maximum daily usage of Search AI. Try again tommorow.") {
+                if (result.error.message === "You've reached maximum daily usage of Search AI. Try again tommorow." || result.error.message === "You've reached maximum daily usage of AI Search. Sign up for free account to get more usage.") {
                     aiUsageSet({ date: new Date, used: MAX_AI_USAGES_PER_DAY })
                 }
 
@@ -71,12 +90,18 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
 
             aiUsageSet(result.data.usage)
             if (result.data.usage.used >= MAX_AI_USAGES_PER_DAY) {
-                toast.info("You've reached maximum AI Search for today. See you again tommorow!")
+                toast.info("You've reached maximum AI Search for today. See you again tommorow!", { duration: 5000 })
+            }
+
+            if (trialUserEnabled && result.data.usage.used >= MAX_AI_USAGES_TRIAL_USER) {
+                toast.info("You've reached maximum AI Search for today. Sign up for free account to get more usage!", { duration: 5000 })
             }
 
             websitesResultSet(result.data.response ?? [])
+
+            searchRanSet(true)
         })
-    }, [debouncedSearch])
+    }
 
     const [animationParent] = useAutoAnimate()
 
@@ -92,7 +117,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>
 
-                        <div className="max-w-lg w-full relative overflow-hidden rounded-md">
+                        <div className="max-w-lg w-full relative overflow-hidden rounded-md flex items-center gap-1">
                             {(!userLoggedIn || aiNoUsagesLeft) && (
                                 <div className="absolute top-0 left-0 w-full h-full grid place-items-center bg-background-200/10 z-10">
                                     <Lock size={28} className="text-primary-600 bg-white border-[1px] border-primary-400 p-1 rounded-sm" />
@@ -106,7 +131,13 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                                 value={searchInput}
                                 onChange={(e) => searchInputSet(e.target.value)}
                                 maxLength={MAX_PROMPT_LENGTH}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        runSearch()
+                                    }
+                                }}
                             />
+                            <Button variant={"secondary"} disabled={isSearching || !userLoggedIn || aiNoUsagesLeft} onClick={runSearch}><Send /></Button>
                         </div>
                     </div>
                     <div className={cn("flex flex-col md:items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto md:max-h-[70vh] items-center max-h-[50vh]")}>
@@ -118,7 +149,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                         {isSearching && <div className="absolute inset-0 z-10 w-[100%] h-[100%] bg-background-700/60 animate-pulse" ref={animationParent} />}
 
                         {!isSearching && websitesResult.length <= 0 ? (
-                            debouncedSearch.length > 0 && !searchError ? (
+                            searchInput.length > 0 && searchRan && !searchError ? (
                                 <div className="flex justify-center">
                                     <p className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><CircleHelp /> No results! Try changing your prompt.</p>
                                 </div>
@@ -141,7 +172,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                                         )
                                     ) : (
                                         <div className="flex flex-col justify-center items-center gap-2">
-                                            <div className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Lock /> <p>You must be logged in to use <b>AI Search</b> feature!</p></div>
+                                            <div className="text-sm text-neutral-500 flex items-center gap-1 flex-col"><Lock /> <p>You must be logged in to use <b>AI Search</b> feature again!</p></div>
                                             <a href="/signin"><Button variant={"primary"}><LogIn /> Sign in</Button></a>
                                         </div>
                                     )

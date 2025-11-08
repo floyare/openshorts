@@ -134,7 +134,7 @@ export const server = {
         handler: async (input, ctx) => {
             const limit = await validateLimit(ctx.clientAddress, 3)
             if (!limit.success) throw new Error("Ratelimited!")
-            return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers }) as { response: WebsiteType[], usage: AIUsageType }
+            return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers, context: ctx }) as { response: WebsiteType[], usage: AIUsageType }
         }
     }),
     fetchWebsiteComments: defineAction({

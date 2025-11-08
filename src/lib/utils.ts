@@ -42,3 +42,18 @@ export const getURLHost = (url: string) => {
     const hostnameOnly = hostParts.slice(0, -1).join('.');
     return hostnameOnly
 }
+
+export const isValidBrowser = (headers: Headers) => {
+    const userAgent = headers.get("user-agent") || "";
+    const accept = headers.get("accept") || "";
+    const secFetchSite = headers.get("sec-fetch-site");
+    const secFetchMode = headers.get("sec-fetch-mode");
+    const secFetchDest = headers.get("sec-fetch-dest");
+
+    return (userAgent.length > 0 &&
+        /\b(Chrome|Mozilla|Safari|Edge|OPR|Trident)\b/i.test(userAgent) &&
+        accept.includes("application/json") &&
+        secFetchSite !== null &&
+        secFetchMode !== null &&
+        secFetchDest !== null)
+}
