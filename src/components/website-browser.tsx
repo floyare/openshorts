@@ -224,7 +224,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     later!
                 </p>
             </div>}
-            <aside className="flex flex-col gap-2 h-fit sticky lg:top-34 top-24 lg:bottom-12 lg:z-50 z-90 lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4" >
+            <aside className="flex flex-col gap-2 h-fit sticky lg:top-38 top-24 lg:bottom-12 lg:z-50 z-90 lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4" >
                 <Container className="dark:bg-neutral-900 dark:text-text-950 backdrop-blur-2xl p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex lg:flex-col lg:gap-6 gap-3 flex-wrap flex-row space-y-5">
                     {/* <h2 className="flex items-center gap-2 font-bold text-lg">Browse websites</h2> */}
                     <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background lg:!w-full w-fit grow mb-0" onClick={async () => {
@@ -353,7 +353,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 </footer>
             </aside>
             <div className="3xl:min-w-3xl 2xl:min-w-3xl xl:min-w-2xl lg:min-w-lg 3xl:col-span-4 2xl:col-span-3 lg:col-span-2 min-w-auto space-y-2 relative">
-                {!isMobile && <Container className="dark:bg-neutral-900 dark:border-neutral-700 sticky lg:top-34 top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
+                {!isMobile && <Container className="dark:bg-neutral-900 dark:border-neutral-700 sticky lg:top-38 top-4 z-10 flex items-center justify-between backdrop-blur-3xl">
                     <div className="flex items-center gap-3">
                         <Search />
                         <Input
