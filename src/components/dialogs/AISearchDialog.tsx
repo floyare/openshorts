@@ -56,12 +56,12 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
     const [searchError, searchErrorSet] = useState<string | null>(null)
     const { data: user, isPending } = authClient.useSession()
 
-    // todo: add override of the userLogeedIn for trial user based on the some kind of Id and 2-3 free usages
     const trialUserEnabled = useMemo(() => user ? false : isTrialUserAvailable(), [user])
     const [aiUsage, aiUsageSet] = useLocalStorage<AIUsageType | null>(trialUserEnabled ? trialUserUsagesStorageKey : CLIENT_AI_USAGE_STORAGE_KEY, null)
 
     const userLoggedIn = useMemo(() => user || !!trialUserEnabled, [user, trialUserEnabled])
     const aiNoUsagesLeft = useMemo(() => (aiUsage && isToday(aiUsage.date) && aiUsage?.used >= (trialUserEnabled ? MAX_AI_USAGES_TRIAL_USER : MAX_AI_USAGES_PER_DAY)) ?? false, [aiUsage])
+    const [trialUsageEnded, trialUsageEndedSet] = useState(aiNoUsagesLeft)
 
     const { sendEvent } = useAnalytics()
 
@@ -73,7 +73,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
             const result = await actions.getWebsitesRecommendation({ content: searchInput })
             debugLog("ACTION", result)
 
-            await sendEvent("custom_event", { source: "ai search invocation" })
+            await sendEvent("custom_event", { source: trialUserEnabled ? "AI Search - Trial invocation" : "AI Search - Invocation" })
 
             if (result.error) {
                 // not cool of making this but idk how for now
@@ -94,7 +94,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
             }
 
             if (trialUserEnabled && result.data.usage.used >= MAX_AI_USAGES_TRIAL_USER) {
-                toast.info("You've reached maximum AI Search for today. Sign up for free account to get more usage!", { duration: 5000 })
+                trialUsageEndedSet(true)
             }
 
             websitesResultSet(result.data.response ?? [])
@@ -139,6 +139,10 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                             />
                             <Button variant={"secondary"} disabled={isSearching || !userLoggedIn || aiNoUsagesLeft} onClick={runSearch}><Send /></Button>
                         </div>
+                        {trialUsageEnded && <div className="flex flex-col items-center gap-2">
+                            <p className="text-white max-w-lg text-center">You've reached maximum AI Search for today. <b>Sign up for free account to get more usage!</b></p>
+                            <a href="/signin"><Button variant={"secondary"} onClick={() => onClose(true)} className="!px-8"><LogIn /> Sign up</Button></a>
+                        </div>}
                     </div>
                     <div className={cn("flex flex-col md:items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto md:max-h-[70vh] items-center max-h-[50vh]")}>
                         {isSearching && <div className={cn("bg-white dark:bg-neutral-700 p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
