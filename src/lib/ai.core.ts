@@ -10,6 +10,7 @@ import { MAX_AI_USAGES_PER_DAY, MAX_AI_USAGES_TRIAL_USER } from "@/helpers/ai.he
 import { isUserBanned } from "./user.core"
 import type { WebsiteType } from "@/types/website"
 import type { ActionAPIContext, AstroActionContext } from 'astro:actions';
+import { createHash } from "crypto";
 
 /*
     1. somehow register new trial user using api and set the cookie if valid user agent
@@ -18,21 +19,37 @@ import type { ActionAPIContext, AstroActionContext } from 'astro:actions';
 
 const COOKIE_TRIAL_USER_KEY = "ops_trial_user"
 
+export function generateFingerprint(context: ActionAPIContext): string {
+    const ip = context.clientAddress || context.request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+        context.request.headers.get('x-real-ip') ||
+        'unknown';
+
+    const userAgent = context.request.headers.get('user-agent') || '';
+
+    const fingerprint = createHash('sha256')
+        .update(`${ip}:${userAgent}:${"{<ZnRF$luONA6oU7,F!==HDQ__l-G5oCU=7UAB=_RM<5^JT@iZ;A,I(Zuq1K[Zq]"}`)
+        .digest('hex');
+
+    return fingerprint;
+}
+
 export const getWebsitesRecommendation = async ({ headers, content, context }: { headers: Headers, content: string, context: ActionAPIContext }) => {
     const currentUser = await auth.api.getSession({
         headers: headers
     })
 
     // * register trial user
-    let trialUser = context.cookies.get(COOKIE_TRIAL_USER_KEY)?.value
+    //let trialUser = context.cookies.get(COOKIE_TRIAL_USER_KEY)?.value
+    let trialUserFingerprint = !currentUser ? generateFingerprint(context) : null
 
     if (!isValidBrowser(headers)) throw new Error("Internal server error. Try again later.")
 
-    if (!currentUser && !trialUser) {
-        const trialUserId = crypto.randomUUID()
-        context.cookies.set(COOKIE_TRIAL_USER_KEY, trialUserId)
-        trialUser = trialUserId
-    }
+    // if (!currentUser && !trialUserFingerprint) {
+    //     // todo: make this check better to not be able to exploit it
+    //     const trialUserId = crypto.randomUUID()
+    //     context.cookies.set(COOKIE_TRIAL_USER_KEY, trialUserId)
+    //     trialUser = trialUserId
+    // }
 
     //if (!currentUser) throw new Error("You must be logged in to perform this action")
 
@@ -41,14 +58,14 @@ export const getWebsitesRecommendation = async ({ headers, content, context }: {
 
     let aiUsage: AIUsageType | null = currentUser ? currentUser.user.ai_usage as AIUsageType | null : null
 
-    aiUsage = currentUser ? aiUsage : await redis.get(`trial_ops_ai:${trialUser}`).then((trialUsage) => {
+    aiUsage = currentUser ? aiUsage : await redis.get(`trial_ops_ai:${trialUserFingerprint}`).then((trialUsage) => {
         if (trialUsage) return { date: new Date(), used: parseInt(trialUsage as string) } as AIUsageType
 
-        if (trialUser) {
-            const trialUserId = crypto.randomUUID()
-            context.cookies.set(COOKIE_TRIAL_USER_KEY, trialUserId)
-            trialUser = trialUserId
-        }
+        // if (trialUser) {
+        //     const trialUserId = crypto.randomUUID()
+        //     context.cookies.set(COOKIE_TRIAL_USER_KEY, trialUserId)
+        //     trialUser = trialUserId
+        // }
 
         return null
     })
@@ -149,8 +166,8 @@ export const getWebsitesRecommendation = async ({ headers, content, context }: {
             ai_usage: updatedUsage
         }
     }) : (async () => {
-        await redis.set(`trial_ops_ai:${trialUser}`, updatedUsage.used, { keepTtl: true })
-        if (trialUser && !aiUsage) await redis.expire(`trial_ops_ai:${trialUser}`, 86400)
+        await redis.incr(`trial_ops_ai:${trialUserFingerprint}`)
+        if (trialUserFingerprint && !aiUsage) await redis.expire(`trial_ops_ai:${trialUserFingerprint}`, 86400)
     })()
 
     //const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
