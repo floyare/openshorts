@@ -203,7 +203,11 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
             return
         }
 
-        startWebsitesLoading(() => fetchWebsites({ overridePage: filtersChanged ? 1 : undefined }))
+        startWebsitesLoading(() => {
+            fetchWebsites({ overridePage: filtersChanged ? 1 : undefined }).then(() => {
+                sendEvent("custom_event", { source: "Basic search invocation" })
+            })
+        })
     }, [page, debouncedSearch, searchContent.tags, sortingSelected, showOnlyLiked]);
 
     useEffect(() => {
