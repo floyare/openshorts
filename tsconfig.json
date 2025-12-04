@@ -8,11 +8,6 @@
     "dist"
   ],
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "node",
-    "target": "es2023",
-    "strict": true,
-    "esModuleInterop": true,
     "jsx": "react-jsx",
     "strictNullChecks": true,
     "allowJs": true,

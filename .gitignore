@@ -25,5 +25,3 @@ pnpm-debug.log*
 vercel/
 
 .vercel/
-
-src/generated/
