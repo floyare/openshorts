@@ -114,7 +114,7 @@ export const getWebsitesRecommendation = async ({ headers, content, context }: {
         //commentsCount: w.commentsCount
     })))
 
-    //const ai = new GoogleGenAI({ apiKey: import.meta.env.GEMINI_API_KEY })
+    const ai = new GoogleGenAI({ apiKey: import.meta.env.GEMINI_API_KEY })
     const predefinedStructure = [
         "(YOUR JOB IS TO RECOMMEND WEBSITES BASED ON THE REQUEST, THE BEST 4 WEBSITES BASED ON USER'S REQUIREMENTS, SORT THEM BY THE MOST 'LIKESCOUNT' BUT IF THE USERS REQUEST PROMPT BEST RESULT DOES NOT HAVE MOST LIKES THEN RETURN IT AS FIRST ANYWAYS, PICK ONLY BEST MATCHES BASED ON USER'S REQUEST)",
         "(RETURN RECOMMENDED WEBSITES IN STRING ARRAY FORMAT WITH FULL NAME'S ARRAY)",
@@ -132,41 +132,45 @@ export const getWebsitesRecommendation = async ({ headers, content, context }: {
         content
     ].toString().length, " length prompt")
 
-    const response = await tryCatch(axios.post("https://openrouter.ai/api/v1/chat/completions", {
-        "model": "amazon/nova-2-lite-v1:free",
-        "messages": [
-            {
-                "role": "user",
-                "content": [...predefinedStructure, content].toString().replaceAll("\"", "")
-            }
+    let response: any = await tryCatch(ai.models.generateContent({
+        model: "gemini-2.5-flash-lite-preview-09-2025",
+        contents: [
+            ...predefinedStructure,
+            content
         ],
-        //"reasoning": { "enabled": false }
-    }, {
-        headers: {
-            "Authorization": `Bearer ${import.meta.env.AI_API_KEY}`,
-            "Content-Type": "application/json"
+        config: {
+            maxOutputTokens: 60,
+            responseMimeType: "application/json",
         }
     }))
 
-    // const response = await tryCatch(ai.models.generateContent({
-    //     model: "gemini-2.0-flash-001",
-    //     contents: [
-    //         ...predefinedStructure,
-    //         content
-    //     ],
-    //     config: {
-    //         maxOutputTokens: 100,
-    //         responseMimeType: "application/json",
-    //     }
-    // }))
-
     if (response.error) {
-        debugLog("ERROR", "AI Generation failed: ", response.error.message)
-        debugLog("ERROR", response)
-        throw new Error("Failed while generating AI response. Try again later!")
+        debugLog("ERROR", 'Gemini response failed! Using fallback, details: ', response.error)
+        const fallbackResponse = await tryCatch(axios.post("https://openrouter.ai/api/v1/chat/completions", {
+            "model": "amazon/nova-2-lite-v1:free",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [...predefinedStructure, content].toString().replaceAll("\"", "")
+                }
+            ],
+            //"reasoning": { "enabled": false }
+        }, {
+            headers: {
+                "Authorization": `Bearer ${import.meta.env.AI_API_KEY}`,
+                "Content-Type": "application/json"
+            }
+        }))
+
+        response = fallbackResponse
+
+        if (fallbackResponse.error) {
+            debugLog("ERROR", "Fallback response failed!: ", fallbackResponse.error.message)
+            throw new Error("Failed while generating AI response. Try again later!")
+        }
     }
 
-    debugLog("WARN", response.data?.data, response.data?.data.choices.at(0))
+    //debugLog("WARN", response.data?.data, response.data?.data.choices.at(0))
 
     const updatedUsage: AIUsageType = (!aiUsage || (!isToday(aiUsage.date)) ? {
         date: new Date(),
@@ -191,7 +195,7 @@ export const getWebsitesRecommendation = async ({ headers, content, context }: {
     //const extractedJson = response.text?.replaceAll("```json", "").replaceAll("```", "") ?? "[]"
     return {
         response: (fullWebsites.filter((p) => {
-            return JSON.parse(response.data?.data.choices.at(0).message.content)?.includes(p.name)
+            return response.data?.data ? JSON.parse(response.data?.data.choices.at(0).message.content)?.includes(p.name) : response.data?.text?.includes(p.name)
         }) ?? []) as WebsiteType[],
         usage: updatedUsage
     }
