@@ -8,6 +8,7 @@ const FooterContent = () => {
                 <a href="/tos" className="px-2"> Terms of Service </a>
                 <a href="/privacy" className="px-2"> Privacy Policy </a>
                 <a href="/about" className="px-2"> About the project </a>
+                <a href="/faq" className="px-2"> FAQ</a>
             </div>
         </div>
     );

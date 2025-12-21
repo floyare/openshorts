@@ -1,0 +1,29 @@
+---
+import Container from "@/components/container";
+import Layout from "./layout.astro";
+import { Image } from "astro:assets";
+import { Compass, Share2 } from "lucide-react";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import FAQSection from "@/components/faq/faq-section";
+---
+
+<Layout
+    subtitle="FAQ"
+    description="Everything you need to know about openshorts.dev"
+>
+    <section class="flex flex-col items-center py-4">
+        <div class="text-center">
+            <h1 class="text-3xl font-extrabold tracking-tighter">
+                Frequently Asked Questions (FAQ)
+            </h1>
+            <h2>Find answers to common questions about openshorts.dev</h2>
+        </div>
+
+        <FAQSection client:idle />
+    </section>
+</Layout>
