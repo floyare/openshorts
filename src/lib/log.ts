@@ -47,8 +47,18 @@ function isBrowser(): boolean {
     return typeof window !== "undefined" && typeof window.document !== "undefined";
 }
 
+const isDev = (() => {
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+        return import.meta.env.NODE_ENV;
+    }
+    if (typeof process !== 'undefined' && process.env) {
+        return process.env.NODE_ENV === 'development';
+    }
+    return false;
+})();
+
 export function debugLog(level: LogLevel, ...args: unknown[]): void {
-    if (import.meta.env.NODE_ENV && import.meta.env.NODE_ENV !== 'development') {
+    if (!isDev && level === "DEBUG") {
         return;
     }
 
