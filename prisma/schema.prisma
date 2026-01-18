@@ -19,6 +19,7 @@ model websites {
   created_by          String
   last_preview_update DateTime     @default(now()) @db.Timestamp(6)
   hidden              Boolean      @default(false)
+  embedding           Unsupported("vector(768)")?
   comment             comment[]
   report              report[]
   user_likes          user_likes[]

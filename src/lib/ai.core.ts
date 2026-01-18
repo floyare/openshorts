@@ -13,6 +13,7 @@ import type { ActionAPIContext, AstroActionContext } from 'astro:actions';
 import { createHash } from "crypto";
 import axios from 'axios';
 import { Groq } from 'groq-sdk';
+import { getVectorBasedRecommendations } from './ai-vector.core';
 
 /*
     1. somehow register new trial user using api and set the cookie if valid user agent
@@ -170,6 +171,12 @@ export const getWebsitesRecommendation = async ({ headers, content, context }: {
     const currentUser = await auth.api.getSession({
         headers: headers
     })
+
+    // await getVectorBasedRecommendations({
+    //     input: content
+    // })
+
+    // return
 
     let trialUserFingerprint = !currentUser ? generateFingerprint(context) : null
     if (!isValidBrowser(headers)) throw new Error("Internal server error. Try again later.")
