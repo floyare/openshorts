@@ -114,6 +114,7 @@ export const uploadWebsite = async ({
         throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
     }
 
+    // todo: add vectors values
     await prisma.websites.create({
         data: {
             image: uploadResult.data.ufsUrl,
