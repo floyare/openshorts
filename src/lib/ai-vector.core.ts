@@ -71,7 +71,7 @@ export const getVectorBasedRecommendations = async ({ headers, input, context }:
 
     //debugLog("DEBUG", 'VECTORS', vectorMatches)
 
-    if (vectorMatches.length === 0) return [];
+    //if (vectorMatches.length === 0) return [];
 
     const matchIds = vectorMatches.map(m => m.id);
 
@@ -104,8 +104,10 @@ export const getVectorBasedRecommendations = async ({ headers, input, context }:
     const updatedUsage = await tryCatch(updateUsage({ aiUsage, currentUser, trialUserFingerprint }))
     if (updatedUsage.error) throw new Error(updatedUsage.error.message)
 
+    const uniqueWebsites = Array.from(new Map(sortedWebsites.filter(Boolean).map(web => [web!.id, web])).values());
+
     return {
-        response: sortedWebsites.map((web: any) => ({
+        response: uniqueWebsites.map((web: any) => ({
             ...web,
             commentsCount: web._count.comment,
             likesCount: web._count.user_likes,
