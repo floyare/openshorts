@@ -10,6 +10,8 @@ import { debugLog } from "./log";
 import { isUserBanned } from "./user.core";
 import axios from "axios";
 import sharp from "sharp";
+import { generateEmbedding } from "./ai-vector.core";
+import type { categories } from "@prisma/client";
 
 const utapi = new UTApi({
     token: import.meta.env.UPLOADTHING_TOKEN,
@@ -114,18 +116,43 @@ export const uploadWebsite = async ({
         throw new Error('Failed while uploading website screen: ' + (uploadResult.error?.message ?? "data empty"));
     }
 
-    // todo: add vectors values
-    await prisma.websites.create({
-        data: {
-            image: uploadResult.data.ufsUrl,
-            url,
-            description,
-            tags,
-            category: "UI_UX", // TODO: something with categories
-            name: capitalizeFirstLetter(hostnameOnly),
-            created_by: currentUser.user.name
-        },
-    });
+    const websiteName = capitalizeFirstLetter(hostnameOnly)
 
-    return true
+    const textToEmbed = `
+            Name: ${websiteName}
+            Description: ${description || ''}
+            Tags: ${tags.join(", ")}
+        `.trim();
+
+    const vector = await tryCatch(generateEmbedding(textToEmbed));
+    if (vector.error) throw new Error("Failed while generating embed: " + (vector.error.message))
+
+    const websiteData = {
+        image: uploadResult.data.ufsUrl,
+        url,
+        description,
+        tags,
+        category: "UI_UX" as categories, // TODO: something with categories
+        name: websiteName,
+        created_by: currentUser.user.name,
+    }
+
+    const newWebsite = await tryCatch(prisma.$transaction(async (tx) => {
+        const site = await tx.websites.create({
+            data: websiteData,
+        });
+
+        const vectorString = JSON.stringify(vector.data);
+        await tx.$executeRaw`
+        UPDATE websites
+        SET embedding = ${vectorString}::vector
+        WHERE id = ${site.id}::uuid
+    `;
+
+        return site;
+    }));
+
+    if (newWebsite.error) throw new Error("Website transaction failed: " + newWebsite.error.message)
+
+    return newWebsite.data
 }

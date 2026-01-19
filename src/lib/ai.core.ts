@@ -108,7 +108,7 @@ async function callGroq(prompt: string, instructions?: string[]) {
     return response.data.choices[0].message.content
 }
 
-async function updateUsage({
+export async function updateUsage({
     aiUsage,
     currentUser,
     trialUserFingerprint

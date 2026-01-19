@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import TagsSelector from "./tags-selector";
 import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lucide-react";
 import SkewedHighlight from "../skewed-highlight";
-import { lazy, useRef } from "react";
+import { lazy, useRef, useState } from "react";
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
 const Textarea = lazy(() => import("../ui/textarea"));
@@ -33,9 +33,11 @@ const UploadForm = () => {
     })
 
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError, reset } = methods
+    const [previewNotUploaded, previewNotUploadedSet] = useState(false)
     const recaptchaRef = useRef<TurnstileInstance>(null);
 
     const onSubmit: SubmitHandler<UploadFormInputs> = async (data) => {
+        previewNotUploadedSet(false)
         const { url, description, tags } = data;
         const uploadData = {
             url,
@@ -53,9 +55,13 @@ const UploadForm = () => {
 
         const result = await actions.uploadWebsite(uploadData);
         debugLog("INFO", "Upload result: ", result);
+
         if (result.error) {
             setError("root", { type: "manual", message: result.error.message || "Upload failed" });
+            return
         }
+
+        if (!result.data.image) previewNotUploadedSet(true)
 
         recaptchaRef.current?.reset()
         reset()
@@ -98,11 +104,15 @@ const UploadForm = () => {
                     </div>}
 
                     {errors.root && <span className="text-red-500">{errors.root.message}</span>}
-                    {isSubmitSuccessful && !errors.root && (
+                    {isSubmitSuccessful && !errors.root && (previewNotUploaded ? (
+                        <div className="text-orange-700 bg-orange-300/70 p-3 rounded-md border-[1px] border-orange-500">
+                            <p className="flex items-center gap-2"><CheckCircleIcon /> Website has been uploaded without it's preview.</p>
+                        </div>
+                    ) : (
                         <div className="text-green-700 bg-green-300/70 p-3 rounded-md border-[1px] border-green-500">
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>
                         </div>
-                    )}
+                    ))}
                     <p className="text-sm text-center text-neutral-700 dark:text-neutral-400">By clicking "Upload" button, you agree with our <a href="/tos" className="font-bold underline">Terms of Service</a>.</p>
                     <Button type="submit" variant={"primary"} disabled={isSubmitting}>{isSubmitting ? <><LoaderCircle className="animate-spin" /> Uploading...</> : <><UploadCloud /> Upload</>}</Button>
                 </form>

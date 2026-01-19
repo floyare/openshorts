@@ -1,7 +1,7 @@
 import { MAX_PROMPT_LENGTH } from '@/helpers/ai.helper';
 import { uploadSchema } from '@/helpers/upload.helper';
 import { commentSchema, reportSchema } from '@/helpers/websites.helper';
-import { getWebsitesRecommendation } from '@/lib/ai.core';
+//import { getWebsitesRecommendation } from '@/lib/ai.core';
 import { debugLog } from '@/lib/log';
 import { getBestUploads, getProfileStats } from '@/lib/profile.core';
 import { validateLimit } from '@/lib/ratelimiter';
@@ -19,6 +19,7 @@ import { MAX_FEEDBACK_LENGTH, MIN_FEEDBACK_LENGTH } from '@/helpers/globals.help
 import { tryCatch } from '@/lib/utils';
 import axios from 'axios';
 import type { user_likes } from '@prisma/client';
+import { getVectorBasedRecommendations } from '@/lib/ai-vector.core';
 
 type SearchWebsitesProps = Parameters<typeof searchWebsites>[0];
 
@@ -134,7 +135,8 @@ export const server = {
         handler: async (input, ctx) => {
             const limit = await validateLimit(ctx.clientAddress, 3)
             if (!limit.success) throw new Error("Ratelimited!")
-            return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers, context: ctx }) as { response: WebsiteType[], usage: AIUsageType }
+            return getVectorBasedRecommendations({ headers: ctx.request.headers, context: ctx, input: input.content }) as unknown as Promise<{ response: WebsiteType[], usage: AIUsageType }>
+            //return await getWebsitesRecommendation({ content: input.content, headers: ctx.request.headers, context: ctx }) as { response: WebsiteType[], usage: AIUsageType }
         }
     }),
     fetchWebsiteComments: defineAction({
