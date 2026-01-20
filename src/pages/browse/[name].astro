@@ -1,5 +1,5 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import { prisma } from "@/lib/prisma";
 import Layout from "../layout.astro";
 import WebsiteItem from "@/components/websites/website-item";
@@ -17,15 +17,10 @@ import {
 } from "@/components/ui/breadcrumb";
 import BreadcrumbSchema from "@/constants/schemas/BreadcrumbSchema.astro";
 
-export async function getStaticPaths() {
-    const websites = await prisma.websites.findMany({
-        select: { name: true },
-    });
-
-    return websites.map((website) => ({
-        params: { name: website.name.toLowerCase() },
-    }));
-}
+Astro.response.headers.set(
+    "Cache-Control",
+    "public, s-maxage=120, stale-while-revalidate=60",
+);
 
 const website = await prisma.websites.findFirst({
     where: {

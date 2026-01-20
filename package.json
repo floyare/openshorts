@@ -13,7 +13,7 @@
         "@astrojs/mdx": "^4.3.0",
         "@astrojs/node": "^9.2.2",
         "@astrojs/react": "^4.3.0",
-        "@astrojs/sitemap": "^3.4.1",
+        "@astrojs/sitemap": "^3.7.0",
         "@astrojs/vercel": "^8.1.5",
         "@digi4care/astro-google-tagmanager": "^1.6.0",
         "@formkit/auto-animate": "^0.8.2",

@@ -31,6 +31,7 @@ export default defineConfig({
     integrations: [
         react(),
         sitemap({
+            customSitemaps: ["https://www.openshorts.dev/sitemap-websites.xml"],
             customPages: await fetch("https://www.openshorts.dev/api/get-profiles", {headers: {
                 'x-key': PROFILE_FETCH_KEY
             }}).then(async(users) => { 
