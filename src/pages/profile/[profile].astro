@@ -71,7 +71,7 @@ const banDetails =
                 </SkewedHighlight>
                 <div class="flex items-center gap-6">
                     <Image
-                        src={profileData?.image!}
+                        src={profileData?.image ?? "/favicon.png"}
                         alt="Profile image"
                         class="rounded-full w-32 h-32"
                         width={128}
