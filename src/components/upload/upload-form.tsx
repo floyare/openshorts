@@ -12,6 +12,7 @@ import { CheckCircleIcon, Link, LoaderCircle, Tags, Text, UploadCloud } from "lu
 import SkewedHighlight from "../skewed-highlight";
 import { lazy, useRef, useState } from "react";
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import { useAnalytics } from "shibuitracker-client/client";
 
 const Textarea = lazy(() => import("../ui/textarea"));
 
@@ -35,6 +36,7 @@ const UploadForm = () => {
     const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError, reset } = methods
     const [previewNotUploaded, previewNotUploadedSet] = useState(false)
     const recaptchaRef = useRef<TurnstileInstance>(null);
+    const { sendEvent } = useAnalytics()
 
     const onSubmit: SubmitHandler<UploadFormInputs> = async (data) => {
         previewNotUploadedSet(false)
@@ -57,11 +59,14 @@ const UploadForm = () => {
         debugLog("INFO", "Upload result: ", result);
 
         if (result.error) {
+            // todo: add openrouter or shibui error tracking
             setError("root", { type: "manual", message: result.error.message || "Upload failed" });
             return
         }
 
         if (!result.data.image) previewNotUploadedSet(true)
+
+        await sendEvent("custom_event", { source: "Uploaded website" })
 
         recaptchaRef.current?.reset()
         reset()
