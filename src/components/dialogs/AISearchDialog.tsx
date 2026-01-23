@@ -85,6 +85,18 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                 debugLog("ERROR", result)
                 searchErrorSet(result.error.message)
                 websitesResultSet([])
+
+                if (!result.error.message.startsWith("You've reached maximum")) {
+                    await sendEvent("error", {
+                        message: "AI Search failed",
+                        details: {
+                            error: result.error,
+                            searchInput
+                        },
+                        caller: "AISearchDIalog runSearch()"
+                    })
+                }
+
                 return
             }
 

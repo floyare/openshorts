@@ -168,6 +168,23 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     // TODO: somehow on error cancel every filter change
                     debugLog("ERROR", "Failed to fetch websites: ", data.error);
                     toast.error("Failed to get websites: " + (data.error.message ?? "Unknown error"))
+
+                    await sendEvent("error", {
+                        message: "Failed to fetch websites",
+                        details: {
+                            error: data.error,
+                            searchContent,
+                            currentPage,
+                            overridePage,
+                            debouncedSearch,
+                            sortingSelected,
+                            showOnlyLiked,
+                            isMobile,
+                            isSearchTheSame,
+                        },
+                        caller: "WebsiteBrowser fetchWebsites()"
+                    })
+
                     return;
                 }
 

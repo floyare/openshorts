@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { REPORT_TEXT_MAX_LENGTH, REPORT_TEXT_MIN_LENGTH, REPORT_TYPES, type ReportOption } from "@/helpers/websites.helper"
 import { actions } from "astro:actions"
 import { debugLog } from "@/lib/log"
+import { useAnalytics } from "shibuitracker-client/client"
 
 const Textarea = lazy(() => import("../ui/textarea"));
 
@@ -25,6 +26,8 @@ const ReportWebsiteDialog = ({
     const [selectedReportOption, selectedReportOptionSet] = useState<ReportOption | null>(null)
     const [otherReasonText, otherReasonTextSet] = useState<string>("")
     const [isPending, setTransition] = useTransition()
+
+    const { sendEvent } = useAnalytics()
 
     const handleReportSubmit = async () => {
         if (isPending) return
@@ -47,6 +50,17 @@ const ReportWebsiteDialog = ({
         if (result.error) {
             toast.error("Failed while reporting this website")
             debugLog("ERROR", "Failed while reporting this website:", result.error)
+
+            await sendEvent("error", {
+                message: "Website reporting failed",
+                details: {
+                    error: result.error,
+                    additionalProps,
+                    selectedReportOption,
+                    otherReasonText
+                },
+                caller: "ReportWebsiteDialog handleReportSubmit()"
+            })
             return
         }
 

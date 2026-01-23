@@ -5,6 +5,7 @@ import { useState, useTransition } from "react"
 import { Input } from "../ui/input"
 import { actions } from "astro:actions"
 import { toast } from "sonner"
+import { useAnalytics } from "shibuitracker-client/client"
 
 type EditDialogWebsiteProps = {
     onClose: (val: boolean) => void
@@ -19,6 +20,8 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
     const [removingPending, setRemovingTransition] = useTransition()
     const [updatingPending, setUpdatingransition] = useTransition()
 
+    const { sendEvent } = useAnalytics()
+
     //const [animationParent] = useAutoAnimate()
 
     const handlePreviewUpdate = () => {
@@ -26,6 +29,14 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
             const result = await actions.updateWebsitePreview({ url: additionalProps.url })
             if (result.error) {
                 toast.error(result.error.message)
+                await sendEvent("error", {
+                    message: "Website preview update failed",
+                    details: {
+                        error: result.error,
+                        additionalProps
+                    },
+                    caller: "EditDialogWebsite handlePreviewUpdate()"
+                })
                 return
             }
 
@@ -45,6 +56,15 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
                 onClose(true)
             } else {
                 toast.error("Failed to remove website")
+                await sendEvent("error", {
+                    message: "Website removal failed",
+                    details: {
+                        error: result.error,
+                        canRemoveWebsite,
+                        additionalProps
+                    },
+                    caller: "EditDialogWebsite handleRemove()"
+                })
             }
         })
     }

@@ -59,8 +59,15 @@ const UploadForm = () => {
         debugLog("INFO", "Upload result: ", result);
 
         if (result.error) {
-            // todo: add openrouter or shibui error tracking
             setError("root", { type: "manual", message: result.error.message || "Upload failed" });
+            await sendEvent("error", {
+                message: "Website upload failed",
+                details: {
+                    error: result.error,
+                    uploadData
+                },
+                caller: "UploadForm onSubmit"
+            })
             return
         }
 

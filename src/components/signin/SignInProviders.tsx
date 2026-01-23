@@ -2,16 +2,29 @@ import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 import { Button } from "../ui/button";
+import { useAnalytics } from "shibuitracker-client/client";
 
 const ProviderItem = (({ name, provider }: { name: string, provider: any }) => {
     const [isPending, setIsPending] = useState(false)
+    const { sendEvent } = useAnalytics()
 
     return (
         <Button onClick={() => {
             setIsPending(true)
             authClient.signIn.social({
                 provider: provider
-            })
+            }).catch(async (error) => {
+                console.error("Sign-in error:", error);
+                setIsPending(false)
+                await sendEvent("error", {
+                    message: "Failed to sign-in",
+                    details: {
+                        error,
+                        provider,
+                    },
+                    caller: "SignInProviders ProviderItem onClick()"
+                })
+            });
         }} className="flex relative items-center justify-center gap-4 text-xl w-max bg-neutral-900 text-white p-6 rounded-lg cursor-pointer hover:bg-neutral-800 transition-colors duration-200">
             {isPending && <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
                 <LoaderCircle className="animate-spin" size={48} />
