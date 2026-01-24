@@ -421,7 +421,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         next={() => {
                             setPage((p) => p + 1)
                         }}
-                        hasMore={totalWebsites > filteredWebsites.length}
+                        hasMore={totalPages >= page && page <= MAX_PAGES_TO_LOAD}
                         loader={<div className="w-full text-center py-4 flex items-center justify-center">
                             <p className="flex items-center gap-2"><LoaderCircle className="animate-spin" /> Loading...</p>
                         </div>}
