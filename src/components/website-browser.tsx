@@ -416,12 +416,11 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     className={cn("dark:bg-neutral-900 dark:border-neutral-700 lg:mt-0 mt-2"/*, websitesLoading ? "opacity-70 pointer-events-none animate-pulse" : ""*/)}
                 >
                     <InfiniteScroll
-                        // TODO: add if loading is infinite then retry
                         dataLength={filteredWebsites.length}
                         next={() => {
                             setPage((p) => p + 1)
                         }}
-                        hasMore={totalPages >= page && page <= MAX_PAGES_TO_LOAD}
+                        hasMore={totalPages >= page}
                         loader={<div className="w-full text-center py-4 flex items-center justify-center">
                             <p className="flex items-center gap-2"><LoaderCircle className="animate-spin" /> Loading...</p>
                         </div>}
@@ -439,18 +438,13 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                                     ))
                                 ) : (
                                     filteredWebsites.map((website, idx) => {
-                                        if (adPositionIndex === idx) {
-                                            return (
-                                                <Fragment key={idx}>
-                                                    <AdElement />
-                                                    <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                                </Fragment>
-                                            )
-                                        }
-
+                                        const shouldShowAd = (idx + 1) % 10 === 0;
                                         return (
-                                            <WebsiteItem website={website} key={website.id} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
-                                        )
+                                            <Fragment key={website.id}>
+                                                <WebsiteItem website={website} highlightedText={debouncedSearch.toLowerCase().split(/\s+/)} />
+                                                {shouldShowAd && <AdElement />}
+                                            </Fragment>
+                                        );
                                     })
                                 )
                             }
