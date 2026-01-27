@@ -40,7 +40,7 @@ const AdElement: React.FC<Props> = ({ className, ...rest }) => {
                 </p>
             </div>
 
-            <div className="flex flex-col items-center gap-3 relative z-10 shrink-0">
+            <div className="flex flex-col items-center gap-3 relative shrink-0">
                 <a
                     href="https://www.buymeacoffee.com/floyare"
                     target="_blank"
