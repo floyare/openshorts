@@ -2,7 +2,7 @@ import { MAX_TAGS_PER_UPLOAD } from "@/helpers/upload.helper";
 import { DEFINED_TAGS } from "@/helpers/websites.helper";
 import { cn } from "@/lib/utils";
 import { Plus, X } from "lucide-react";
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -10,12 +10,14 @@ type TagsSelectorProps = {};
 
 const TagsSelector = ({ }: TagsSelectorProps) => {
     const { register, setValue, formState } = useFormContext();
+    const localSubmitCount = useRef<number>(0)
 
     useEffect(() => {
-        if (formState.isSubmitSuccessful) {
+        if (formState.isSubmitSuccessful && formState.submitCount > localSubmitCount.current) {
             selectedTagsSet([]);
+            localSubmitCount.current = formState.submitCount
         }
-    }, [formState.isSubmitSuccessful]);
+    }, [formState.isSubmitSuccessful, formState.submitCount]);
 
     const [selectedTags, selectedTagsSet] = useState<string[]>([]);
 
