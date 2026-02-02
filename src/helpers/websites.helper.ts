@@ -55,7 +55,8 @@ export const DEFINED_TAGS = [
     "CMS",
     "API",
     "AUDIO",
-    "VIDEO"
+    "VIDEO",
+    "APPS"
 ];
 
 export type SORTING_TYPE = "new" | "old" | "alphabet" | "likes"
