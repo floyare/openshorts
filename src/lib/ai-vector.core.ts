@@ -21,10 +21,10 @@ export async function generateEmbedding(input: string): Promise<number[]> {
 
     const ai = new GoogleGenAI({ apiKey })
     const response = await ai.models.embedContent({
-        model: "text-embedding-004",
+        model: "gemini-embedding-001",
         contents: [
             { role: "user", parts: [{ text: cleanedInput }] }
-        ]
+        ],
     })
 
     const vectors = response.embeddings ? response.embeddings[0].values : (() => { throw new Error("Embeddings are empty") })()

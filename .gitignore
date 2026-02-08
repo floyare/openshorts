@@ -25,3 +25,6 @@ pnpm-debug.log*
 vercel/
 
 .vercel/
+
+# only for specific scenario when its needed for @/ path resolving for backfill script
+vite.config.ts

@@ -4,6 +4,9 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// pnpx vite-node scripts/backfill-website-vectors.ts
+// pnpx tsx scripts/backfill-website-vectors.ts
+
 async function main() {
     const websites = await prisma.websites.findMany();
     debugLog("ACTION", `starting backfill for ${websites.length} websites...`);
