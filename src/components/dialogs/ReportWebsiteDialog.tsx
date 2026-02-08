@@ -54,7 +54,9 @@ const ReportWebsiteDialog = ({
             await sendEvent("error", {
                 message: "Website reporting failed",
                 details: {
-                    error: result.error,
+                    error: {
+                        ...result.error
+                    },
                     additionalProps,
                     selectedReportOption,
                     otherReasonText

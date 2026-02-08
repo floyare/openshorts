@@ -172,7 +172,9 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                     await sendEvent("error", {
                         message: "Failed to fetch websites",
                         details: {
-                            error: data.error,
+                            error: {
+                                ...data.error
+                            },
                             searchContent,
                             currentPage,
                             overridePage,

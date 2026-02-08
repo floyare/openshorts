@@ -32,7 +32,9 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
                 await sendEvent("error", {
                     message: "Website preview update failed",
                     details: {
-                        error: result.error,
+                        error: {
+                            ...result.error
+                        },
                         additionalProps
                     },
                     caller: "EditDialogWebsite handlePreviewUpdate()"
@@ -59,7 +61,9 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
                 await sendEvent("error", {
                     message: "Website removal failed",
                     details: {
-                        error: result.error,
+                        error: {
+                            ...result.error
+                        },
                         canRemoveWebsite,
                         additionalProps
                     },

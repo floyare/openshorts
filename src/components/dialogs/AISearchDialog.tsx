@@ -90,7 +90,9 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                     await sendEvent("error", {
                         message: "AI Search failed",
                         details: {
-                            error: result.error,
+                            error: {
+                                ...result.error,
+                            },
                             searchInput
                         },
                         caller: "AISearchDIalog runSearch()"

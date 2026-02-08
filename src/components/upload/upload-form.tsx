@@ -63,7 +63,9 @@ const UploadForm = () => {
             await sendEvent("error", {
                 message: "Website upload failed",
                 details: {
-                    error: result.error,
+                    error: {
+                        ...result.error
+                    },
                     uploadData
                 },
                 caller: "UploadForm onSubmit"

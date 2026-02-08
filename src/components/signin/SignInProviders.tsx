@@ -19,7 +19,7 @@ const ProviderItem = (({ name, provider }: { name: string, provider: any }) => {
                 await sendEvent("error", {
                     message: "Failed to sign-in",
                     details: {
-                        error,
+                        ...error,
                         provider,
                     },
                     caller: "SignInProviders ProviderItem onClick()"
