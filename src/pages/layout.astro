@@ -120,7 +120,7 @@ import FooterContent from "@/components/footer/footer-content";
     </head>
     <body
         class:list={[
-            "bg-white dark:bg-neutral-950 dark:text-text-950 !py-8 lg:!px-28 md:!px-4 !px-1 text-text-50 rounded-3xl flex flex-col gap-6 relative overflow-x-hidden",
+            "bg-white dark:bg-neutral-950 dark:text-text-950 !py-8 lg:!px-28 md:!px-4 !px-1 text-text-50 corner-squircle rounded-3xl flex flex-col gap-6 relative overflow-x-hidden",
             className,
         ]}
         {...props}
@@ -137,7 +137,7 @@ import FooterContent from "@/components/footer/footer-content";
         </div>
         {
             !Astro.url.pathname.endsWith("browse") && (
-                <footer class="bg-background-900/30 py-4 border-1 border-background-800 rounded-md w-full">
+                <footer class="bg-background-900/30 py-4 border-1 border-background-800 corner-squircle rounded-md w-full">
                     <FooterContent />
                 </footer>
             )

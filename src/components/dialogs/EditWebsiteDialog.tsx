@@ -89,7 +89,7 @@ const EditDialogWebsite = ({ onClose, additionalProps, ...rest }: EditDialogWebs
                         <Button variant={"destructive"} onClick={() => deleteConfirmationShownSet(true)} disabled={deleteConfirmationShown}><Trash /> Remove website</Button>
                     </div>
 
-                    {deleteConfirmationShown && <div className="space-y-3 mt-2 border-[1px] border-red-500 p-3 rounded-sm bg-red-400/20 animate-in">
+                    {deleteConfirmationShown && <div className="space-y-3 mt-2 border-[1px] border-red-500 p-3 corner-squircle rounded-sm bg-red-400/20 animate-in">
                         <p className="text-red-500 w-full text-balance">Are you sure you want to remove this website? This action is irreversible!</p>
                         <Input className="bg-white" placeholder="Enter full website url..." onChange={(e) => e.target.value === additionalProps.url ? canRemoveWebsiteSet(true) : canRemoveWebsiteSet(false)} />
                         <div className="flex gap-2 items-center">

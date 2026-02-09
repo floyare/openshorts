@@ -116,7 +116,7 @@ const WebsiteComments = (props: CommentsProps) => {
     const PaginationControls = memo(() => {
         if (totalComments < MAX_COMMENTS_VIEW) return null
         return (
-            <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full rounded-md")}>
+            <Pagination className={cn("transition-all bg-white text-text-50 dark:bg-neutral-800 dark:text-text-950 px-4 py-1 sm:w-fit w-full corner-squircle rounded-md")}>
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
@@ -169,10 +169,10 @@ const WebsiteComments = (props: CommentsProps) => {
 
                 {postResult && <Alert className="!max-w-2xs" variant={postResult.type === "success" ? "success" : "error"}>{postResult.content}</Alert>}
                 {isLoading ? (<div className="space-y-2 max-h-84 overflow-y-auto">
-                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" />
-                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" />
-                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" />
-                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse rounded-md" />
+                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse corner-squircle rounded-md" />
+                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse corner-squircle rounded-md" />
+                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse corner-squircle rounded-md" />
+                    <div className="w-full h-18 bg-background-800 dark:bg-neutral-700 animate-pulse corner-squircle rounded-md" />
                 </div>) : (
                     error ? (<p className="text-red-500 max-w-3xs break-words text-balance">
                         Failed to obtain comments: {error.message}
@@ -185,8 +185,8 @@ const WebsiteComments = (props: CommentsProps) => {
 
                                             // TODO: fix users avatar on error / not found no fallback
                                             return (
-                                                <div key={index} className="flex items-start gap-2 bg-white dark:!bg-neutral-800 dark:!border-neutral-700 py-3 px-4 rounded-md">
-                                                    <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar image"} className="w-12 h-12 rounded-full border-[2px] border-primary-400" />
+                                                <div key={index} className="flex items-start gap-2 bg-white dark:!bg-neutral-800 dark:!border-neutral-700 py-3 px-4 corner-squircle rounded-md">
+                                                    <img src={comment.user.image ?? "/favicon.png"} alt={comment.created_by + "'s avatar image"} className="w-12 h-12 corner-squircle rounded-full border-[2px] border-primary-400" />
                                                     <div>
                                                         <p className="text-black dark:!text-text-950 max-w-[12rem] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:6] [-webkit-box-orient:vertical] break-words text-balance">{comment.content}</p>
                                                         <p className="text-text-400 dark:text-text-700 text-sm"><a href={"/profile/" + comment.created_by}>{comment.created_by}</a> <span className="text-neutral-600 dark:text-neutral-400 text-xs" title={comment.created_at.toString()}>• {formatDistanceToNow(comment.created_at, { includeSeconds: true, addSuffix: true })}</span></p>

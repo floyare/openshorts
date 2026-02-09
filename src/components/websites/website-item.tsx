@@ -74,14 +74,14 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
     }
 
     return (
-        <article {...props} className={cn("px-6 py-4 3xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
+        <article {...props} className={cn("px-6 py-4 3xl:max-w-lg max-w-full corner-squircle rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative", className)}>
             <div className="grid sm:grid-cols-[1fr_auto] grid-cols-1 gap-1 !w-full h-full">
                 <div className="flex flex-col gap-2 w-full">
                     <a href={website.url} onMouseDown={(e) => {
                         if (e.button === 1) {
                             sendEvent("custom_event", { source: "navigate - " + website.url })
                         }
-                    }} target="_blank" title={`Visit ${website.name}`} className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors rounded-sm w-full">
+                    }} target="_blank" title={`Visit ${website.name}`} className="flex items-center gap-2 cursor-pointer hover:bg-primary-700/20 transition-colors corner-squircle rounded-sm w-full">
                         <WebsiteIcon src={
                             `https://s2.googleusercontent.com/s2/favicons?domain=${url}&sz=128`
                             //`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url}&size=128`
@@ -98,7 +98,7 @@ function WebsiteItem({ website, highlightedText = [], className, ...props }: Web
                         <div className="flex items-center gap-1 flex-wrap">
                             {
                                 website.tags.slice(0, MAX_TAGS_TO_DISPLAY).map((tag, index) => (
-                                    <div className="bg-secondary-600 text-white text-sm font-semibold px-2 py-1 rounded-sm" key={index}>
+                                    <div className="bg-secondary-600 text-white text-sm font-semibold px-2 py-1 corner-squircle rounded-sm" key={index}>
                                         {tag.toUpperCase()}
                                     </div>
                                 ))

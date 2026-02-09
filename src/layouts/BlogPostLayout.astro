@@ -93,7 +93,7 @@ if (!profileData) throw new Error("Author not found");
                 >
                     <img
                         src={frontmatter.image}
-                        class="w-full max-w-xs rounded-lg"
+                        class="w-full max-w-xs corner-squircle rounded-lg"
                         width={500}
                         alt={frontmatter.title}
                     />
@@ -137,7 +137,7 @@ if (!profileData) throw new Error("Author not found");
                         <div class="flex items-center flex-wrap gap-1">
                             {
                                 frontmatter.tags.map((tag: string) => (
-                                    <div class="bg-secondary-600 text-white rounded-full px-3 py-1 text-sm">
+                                    <div class="bg-secondary-600 text-white corner-squircle rounded-full px-3 py-1 text-sm">
                                         {tag}
                                     </div>
                                 ))
@@ -152,7 +152,7 @@ if (!profileData) throw new Error("Author not found");
                         </p>
 
                         <div
-                            class="bg-background-950 dark:bg-neutral-900 rounded-sm px-4 py-6 border-[1px] border-background-800 dark:border-neutral-700"
+                            class="bg-background-950 dark:bg-neutral-900 corner-squircle rounded-sm px-4 py-6 border-[1px] border-background-800 dark:border-neutral-700"
                         >
                             <div class="flex items-center gap-4">
                                 <Image
@@ -186,14 +186,14 @@ if (!profileData) throw new Error("Author not found");
                                     >
                                         <a
                                             href={"https://www.youtube.com/@floyare"}
-                                            class="text-black transition-colors flex items-center gap-1 bg-accent-800 rounded-md px-3 py-1 border-[1px] border-accent-700"
+                                            class="text-black transition-colors flex items-center gap-1 bg-accent-800 corner-squircle rounded-md px-3 py-1 border-[1px] border-accent-700"
                                         >
                                             <Youtube /> Youtube Channel
                                         </a>
 
                                         <a
                                             href={"https://github.com/floyare"}
-                                            class="text-black transition-colors flex items-center gap-1 bg-accent-800 rounded-md px-3 py-1 border-[1px] border-accent-700"
+                                            class="text-black transition-colors flex items-center gap-1 bg-accent-800 corner-squircle rounded-md px-3 py-1 border-[1px] border-accent-700"
                                         >
                                             <Github /> Github Profile
                                         </a>

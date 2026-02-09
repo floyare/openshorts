@@ -25,8 +25,8 @@ const ProviderItem = (({ name, provider }: { name: string, provider: any }) => {
                     caller: "SignInProviders ProviderItem onClick()"
                 })
             });
-        }} className="flex relative items-center justify-center gap-4 text-xl w-max bg-neutral-900 text-white p-6 rounded-lg cursor-pointer hover:bg-neutral-800 transition-colors duration-200">
-            {isPending && <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+        }} className="flex relative items-center justify-center gap-4 text-xl w-max bg-neutral-900 text-white p-6 corner-squircle rounded-lg cursor-pointer hover:bg-neutral-800 transition-colors duration-200">
+            {isPending && <div className="absolute inset-0 bg-black/50 corner-squircle rounded-lg flex items-center justify-center">
                 <LoaderCircle className="animate-spin" size={48} />
             </div>}
             <img src={`/${provider}.svg`} alt={`${name} Icon`} className="w-6 h-6" />

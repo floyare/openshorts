@@ -248,7 +248,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                 </p>
             </div>}
             <aside className="flex flex-col gap-2 h-fit sticky lg:top-38 top-24 lg:bottom-12 lg:z-50 z-90 lg:w-fit w-full 3xl:col-span-1 2xl:col-span-1 lg:col-span-1 col-span-4" >
-                <Container className="dark:bg-neutral-900 dark:text-text-950 backdrop-blur-2xl p-4 rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex lg:flex-col lg:gap-6 gap-3 flex-wrap flex-row space-y-5">
+                <Container className="dark:bg-neutral-900 dark:text-text-950 backdrop-blur-2xl p-4 corner-squircle rounded-lg border-[1px] border-background-800 dark:border-neutral-700 flex lg:flex-col lg:gap-6 gap-3 flex-wrap flex-row space-y-5">
                     {/* <h2 className="flex items-center gap-2 font-bold text-lg">Browse websites</h2> */}
                     <Button variant={"primary"} className="shadow-xl shadow-primary-500/30 !py-7 lg:!text-2xl sm:!text-3xl sm:!py-8 lg:py-2 !text-base font-semibold shimmer-background lg:!w-full w-fit grow mb-0" onClick={async () => {
                         sendEvent("custom_event", { source: "AI Search - Modal open" })
@@ -356,7 +356,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                             }
                         </ToggleGroup>
                     </div>}
-                    {currentUser && !isMobile && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 rounded-md">
+                    {currentUser && !isMobile && <Label htmlFor="only-liked" className="cursor-pointer hover:bg-background-900 dark:hover:bg-neutral-700 transition-colors p-2 corner-squircle rounded-md">
                         <Checkbox id="only-liked" checked={showOnlyLiked} disabled={websitesLoading} onCheckedChange={(e: boolean) => showOnlyLikedSet(e)} /> Show only liked <Heart size={18} />
                     </Label>}
                 </Container>
@@ -377,7 +377,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         <a href="https://buymeacoffee.com/floyare" target="_blank" title="floyare's buymeacoffee.com"><Button variant={"secondary"} className="bg-amber-600 hover:bg-amber-500 !text-white flex flex-col !gap-0 !h-fit"><Coffee size={20} /> Buy me a coffee!</Button></a>
                     </div>
                 </Container>}
-                <footer className="fixed lg:relative lg:left-0 lg:translate-x-0 lg:bg-transparent lg:border-transparent bottom-0 left-[50%] translate-x-[-50%] w-full lg:w-auto lg:!mx-0 !mx-2 bg-background-900/30 py-4 border-1 border-background-800 lg:backdrop-blur-none backdrop-blur-lg rounded-md mt-2 lg:mt-0">
+                <footer className="fixed lg:relative lg:left-0 lg:translate-x-0 lg:bg-transparent lg:border-transparent bottom-0 left-[50%] translate-x-[-50%] w-full lg:w-auto lg:!mx-0 !mx-2 bg-background-900/30 py-4 border-1 border-background-800 lg:backdrop-blur-none backdrop-blur-lg corner-squircle rounded-md mt-2 lg:mt-0">
                     <FooterContent />
                 </footer>
             </aside>
@@ -398,7 +398,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                             }
                         />
                     </div>
-                    <div className="bg-white dark:bg-neutral-900 border-background-800 border-[1px] rounded-sm w-fit ml-auto relative">
+                    <div className="bg-white dark:bg-neutral-900 border-background-800 border-[1px] corner-squircle rounded-sm w-fit ml-auto relative">
                         <Select disabled={websitesLoading || noEntries} onValueChange={(v) => sortingSelectedSet(v as any)} defaultValue={sortingSelected}>
                             <SelectTrigger size="default" className="text-lg w-full dark:text-text-950 dark:border-neutral-700" type="button" name="Sort by" aria-label="Sort by" title="Sort by">
                                 <SelectValue placeholder="Sort by..." defaultValue={sortingSelected} />
@@ -434,7 +434,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                             {
                                 isLoading ? (
                                     [...Array(PAGE_SIZE).keys()].map((_, idx) => (
-                                        <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse rounded-md pointer-events-none" key={idx}>
+                                        <div className="w-full h-72 bg-gray-200 dark:bg-neutral-700 !animate-pulse corner-squircle rounded-md pointer-events-none" key={idx}>
 
                                         </div>
                                     ))

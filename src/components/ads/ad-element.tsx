@@ -14,7 +14,7 @@ const AdElement: React.FC<Props> = ({ className, ...rest }) => {
     return (
         <div
             className={cn(
-                "relative overflow-hidden rounded-xl border border-amber-400/50 p-6 shadow-lg",
+                "relative overflow-hidden corner-squircle rounded-xl border border-amber-400/50 p-6 shadow-lg",
                 "bg-gradient-to-r from-amber-500 via-yellow-200 to-amber-500 bg-[length:200%_auto] animate-gradient",
                 "flex flex-col flex-wrap md:flex-row items-center justify-between gap-6",
                 className
@@ -48,7 +48,7 @@ const AdElement: React.FC<Props> = ({ className, ...rest }) => {
                         sendEvent("custom_event", { source: "AdElement Redirect" })
                     }}
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 px-8 py-4 bg-amber-950 text-amber-50 hover:bg-black transition-all duration-300 rounded-full font-bold shadow-xl hover:scale-105 active:scale-95"
+                    className="group flex items-center gap-2 px-8 py-4 bg-amber-950 text-amber-50 hover:bg-black transition-all duration-300 corner-squircle rounded-full font-bold shadow-xl hover:scale-105 active:scale-95"
                 >
                     <Heart className="w-5 h-5 fill-red-500 group-hover:scale-110 transition-transform" />
                     Buy us a coffee

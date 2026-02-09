@@ -83,7 +83,7 @@ const ReportWebsiteDialog = ({
                         {REPORT_TYPES.map((option, idx) => {
                             return (
                                 <Fragment key={idx}>
-                                    <div key={idx} className={cn(selectedReportOption?.type === option.type ? "bg-background-500 text-white" : "bg-background-950 dark:bg-neutral-800", "px-3 py-2 rounded-md cursor-pointer transition-colors")} onClick={() => selectedReportOptionSet(option)}>
+                                    <div key={idx} className={cn(selectedReportOption?.type === option.type ? "bg-background-500 text-white" : "bg-background-950 dark:bg-neutral-800", "px-3 py-2 corner-squircle rounded-md cursor-pointer transition-colors")} onClick={() => selectedReportOptionSet(option)}>
                                         {option.text}
                                     </div>
                                     {selectedReportOption?.type === "OTHER" && selectedReportOption.type === option.type && <Textarea

@@ -21,7 +21,7 @@ const WebsiteItemRenderer = ({ id }: { id: string }) => {
 
     if (isLoading) {
         return (
-            <div className="px-6 py-4 justify-center items-center min-h-52 2xl:max-w-lg max-w-full rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-secondary-900 animate-pulse dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative">
+            <div className="px-6 py-4 justify-center items-center min-h-52 2xl:max-w-lg max-w-full corner-squircle rounded-sm border-[1px] border-background-800 dark:border-neutral-700 bg-secondary-900 animate-pulse dark:bg-neutral-800 dark:text-text-950 w-full flex flex-col gap-2 grow relative">
                 <LoaderCircle className="text-text-500 animate-spin" size={48} />
             </div>
         )

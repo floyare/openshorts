@@ -33,7 +33,7 @@ const UploadForm = () => {
         mode: "onBlur"
     })
 
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError, reset } = methods
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful }, setError, clearErrors, reset } = methods
     const [previewNotUploaded, previewNotUploadedSet] = useState(false)
     const recaptchaRef = useRef<TurnstileInstance>(null);
     const { sendEvent } = useAnalytics()
@@ -89,7 +89,7 @@ const UploadForm = () => {
             <p>We are sure other users are willing to know about your new website!</p>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className={cn(
-                    "flex flex-col gap-4 bg-background-900/30 dark:bg-neutral-900 dark:border-neutral-700 p-4 rounded-md border-[1px] border-background-800 sm:min-w-xl min-w-auto transition-all relative my-4 max-w-3xs",
+                    "flex flex-col gap-4 bg-background-900/30 dark:bg-neutral-900 dark:border-neutral-700 p-4 corner-squircle rounded-md border-[1px] border-background-800 sm:min-w-xl min-w-auto transition-all relative my-4 max-w-3xs",
                     isSubmitting ? "opacity-60 animate-pulse pointer-events-none" : ""
                 )}>
                     <div className="space-y-2">
@@ -119,11 +119,11 @@ const UploadForm = () => {
 
                     {errors.root && <span className="text-red-500">{errors.root.message}</span>}
                     {isSubmitSuccessful && !errors.root && (previewNotUploaded ? (
-                        <div className="text-orange-700 bg-orange-300/70 p-3 rounded-md border-[1px] border-orange-500">
+                        <div className="text-orange-700 bg-orange-300/70 p-3 corner-squircle rounded-md border-[1px] border-orange-500">
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website has been uploaded without it's preview.</p>
                         </div>
                     ) : (
-                        <div className="text-green-700 bg-green-300/70 p-3 rounded-md border-[1px] border-green-500">
+                        <div className="text-green-700 bg-green-300/70 p-3 corner-squircle rounded-md border-[1px] border-green-500">
                             <p className="flex items-center gap-2"><CheckCircleIcon /> Website uploaded successfully!</p>
                         </div>
                     ))}

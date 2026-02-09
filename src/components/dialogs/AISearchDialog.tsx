@@ -131,10 +131,10 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                             <p className="text-neutral-200">Describe anything you want to search for...</p>
                         </div>
 
-                        <div className="max-w-lg w-full relative overflow-hidden rounded-md flex items-center gap-1">
+                        <div className="max-w-lg w-full relative overflow-hidden corner-squircle rounded-md flex items-center gap-1">
                             {(!userLoggedIn || aiNoUsagesLeft) && (
                                 <div className="absolute top-0 left-0 w-full h-full grid place-items-center bg-background-200/10 z-10">
-                                    <Lock size={28} className="text-primary-600 bg-white border-[1px] border-primary-400 p-1 rounded-sm" />
+                                    <Lock size={28} className="text-primary-600 bg-white border-[1px] border-primary-400 p-1 corner-squircle rounded-sm" />
                                 </div>
                             )
                             }
@@ -159,7 +159,7 @@ const AISearchDialog = ({ onClose, additionalProps, ...rest }: AISearchDialogPro
                         </div>}
                     </div>
                     <div className={cn("flex flex-col md:items-center gap-2 -mb-4 -mx-6 py-6 px-4 relative overflow-y-auto md:max-h-[70vh] items-center max-h-[50vh]")}>
-                        {isSearching && <div className={cn("bg-white dark:bg-neutral-700 p-4 z-20 w-fit rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
+                        {isSearching && <div className={cn("bg-white dark:bg-neutral-700 p-4 z-20 w-fit corner-squircle rounded-md flex flex-col justify-center items-center gap-2 border-[1px] border-primary-300 animate-in", websitesResult.length <= 0 ? "relative" : "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]")} ref={animationParent}>
                             <LoaderCircle size={48} className="text-primary-500 animate-spin" />
                             <h2 className="text-xl">Thinking...</h2>
                         </div>}
