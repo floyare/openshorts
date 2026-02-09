@@ -426,7 +426,7 @@ const WebsiteBrowser = ({ /*entryWebsites, totalWebsites, tags,*/ currentUser }:
                         loader={<div className="w-full text-center py-4 flex items-center justify-center">
                             <p className="flex items-center gap-2"><LoaderCircle className="animate-spin" /> Loading...</p>
                         </div>}
-                        endMessage={<p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p>}
+                        endMessage={filteredWebsites.length > 0 ? <p className="text-center my-4 text-text-200 dark:text-text-900">Wow! You've reached the end. Good Job! 😊</p> : null}
                         scrollThreshold={0.95}
                         className="!overflow-visible"
                     >
