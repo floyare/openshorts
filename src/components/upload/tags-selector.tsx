@@ -11,11 +11,18 @@ type TagsSelectorProps = {};
 const TagsSelector = ({ }: TagsSelectorProps) => {
     const { register, setValue, formState } = useFormContext();
 
+    const localSubmitCount = useRef<number>(0)
+
     useEffect(() => {
-        if (!formState.errors.root && formState.isSubmitted) {
+        if (!formState.errors.root && formState.isSubmitted && formState.submitCount > localSubmitCount.current) {
             selectedTagsSet([]);
+            localSubmitCount.current = formState.submitCount
         }
-    }, [formState.errors.root, formState.isSubmitted]);
+    }, [formState.errors.root, formState.isSubmitted, formState.submitCount]);
+
+    useEffect(() => {
+        console.warn('form', formState.isSubmitSuccessful, formState.isSubmitted, formState.submitCount)
+    }, [formState])
 
     const [selectedTags, selectedTagsSet] = useState<string[]>([]);
 
