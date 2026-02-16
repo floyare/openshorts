@@ -1,3 +1,4 @@
+import { defineDialogs } from "easy-dialogs";
 import { lazy } from "react";
 
 const AISearchDialog = lazy(() => import("@/components/dialogs/AISearchDialog"));
@@ -8,12 +9,12 @@ const ReportWebsiteDialog = lazy(() => import("@/components/dialogs/ReportWebsit
 const UserBanDialog = lazy(() => import("@/components/dialogs/UserBanDialog"));
 const WebsiteDetailsDialog = lazy(() => import("@/components/dialogs/WebsiteDetailsDialog"));
 
-export const dialogs = [
+export const dialogs = defineDialogs([
     { id: "edit-website", component: EditDialogWebsite, useExitAnimation: true },
     { id: "ai-search", component: AISearchDialog, useExitAnimation: true },
     { id: "website-details", component: WebsiteDetailsDialog, useExitAnimation: true },
     { id: "confirmation-dialog", component: ConfirmationDialog, useExitAnimation: true },
     { id: "userban-dialog", component: UserBanDialog, useExitAnimation: true },
     { id: "report-dialog", component: ReportWebsiteDialog, useExitAnimation: true },
-    { id: "feedback-dialog", component: FeedbackDialog, useExitAnimation: true }
-] as const
+    { id: "feedback-dialog", component: FeedbackDialog, useExitAnimation: true },
+])
