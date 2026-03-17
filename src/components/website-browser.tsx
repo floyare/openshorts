@@ -7,7 +7,7 @@ import { useDialogManager } from "easy-dialogs";
 import { dialogs } from "@/lib/dialogs";
 import FooterContent from "./footer/footer-content";
 import { useAnalytics } from "shibuitracker-client/client";
-import useIsMobile from "@/hooks/useIsMobile";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 import { useWebsiteSearch } from "@/hooks/use-website-search";
 import { AISearchButton } from "./websites/browser/ai-search-button";

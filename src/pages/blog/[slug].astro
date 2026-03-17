@@ -5,9 +5,9 @@ import {
     render,
     type CollectionEntry,
 } from "astro:content";
-import BlogPostLayout from "@/layouts/BlogPostLayout.astro";
-import ArticleSchema from "@/constants/schemas/ArticleSchema.astro";
-import BreadcrumbSchema from "@/constants/schemas/BreadcrumbSchema.astro";
+import BlogPostLayout from "@/layouts/blog-post-layout.astro";
+import ArticleSchema from "@/constants/schemas/article-schema.astro";
+import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
 
 interface Props {
     post: CollectionEntry<"blog">;

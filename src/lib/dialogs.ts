@@ -1,13 +1,13 @@
 import { defineDialogs } from "easy-dialogs";
 import { lazy } from "react";
 
-const AISearchDialog = lazy(() => import("@/components/dialogs/AISearchDialog"));
-const ConfirmationDialog = lazy(() => import("@/components/dialogs/ConfirmationDialog"));
-const EditDialogWebsite = lazy(() => import("@/components/dialogs/EditWebsiteDialog"));
-const FeedbackDialog = lazy(() => import("@/components/dialogs/FeedbackDialog"));
-const ReportWebsiteDialog = lazy(() => import("@/components/dialogs/ReportWebsiteDialog"));
-const UserBanDialog = lazy(() => import("@/components/dialogs/UserBanDialog"));
-const WebsiteDetailsDialog = lazy(() => import("@/components/dialogs/WebsiteDetailsDialog"));
+const AISearchDialog = lazy(() => import("@/components/dialogs/ai-search-dialog"));
+const ConfirmationDialog = lazy(() => import("@/components/dialogs/confirmation-dialog"));
+const EditDialogWebsite = lazy(() => import("@/components/dialogs/edit-website-dialog"));
+const FeedbackDialog = lazy(() => import("@/components/dialogs/feedback-dialog"));
+const ReportWebsiteDialog = lazy(() => import("@/components/dialogs/report-website-dialog"));
+const UserBanDialog = lazy(() => import("@/components/dialogs/user-ban-dialog"));
+const WebsiteDetailsDialog = lazy(() => import("@/components/dialogs/website-details-dialog"));
 
 export const dialogs = defineDialogs([
     { id: "edit-website", component: EditDialogWebsite, useExitAnimation: true },

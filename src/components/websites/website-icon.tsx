@@ -60,20 +60,6 @@ const WebsiteIcon: React.FC<WebsiteIconProps> = ({
                 </span>
             )}
             {!error && (
-                // <img
-                //     src={src}
-                //     alt={alt}
-                //     width={size}
-                //     height={size}
-                //     className={`object-contain ${loading ? "hidden" : "block"} w-full h-full`}
-                //     onLoad={() => setLoading(false)}
-                //     onError={() => {
-                //         setLoading(false);
-                //         setError(true);
-                //     }}
-                //     style={sizeStyle}
-                // />
-
                 <Image
                     src={src}
                     alt={alt}

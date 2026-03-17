@@ -1,4 +1,4 @@
-import useOnScreen from "@/hooks/useOnScreen";
+import useOnScreen from "@/hooks/use-on-screen";
 import { cn } from "@/lib/utils";
 import { FileQuestion, LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";

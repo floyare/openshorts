@@ -1,15 +1,15 @@
 import { useState, useEffect, useMemo, useRef, useTransition } from "react";
 import { actions } from "astro:actions";
 import useSWR from "swr";
-import useDebounce from "@/hooks/useDebounce";
-import { useSearchParamState } from "@/hooks/useSearchParamState";
+import useDebounce from "@/hooks/use-debounce";
+import { useSearchParamState } from "@/hooks/use-search-param-state";
 import { toast } from "sonner";
 import { debugLog } from "@/lib/log";
 import { PAGE_SIZE } from "@/helpers/websites.helper";
 import type { WebsiteType, SearchContentType, WebsiteTag } from "@/types/website";
 import type { SORTING_TYPE } from "@/helpers/websites.helper";
 import { useAnalytics } from "shibuitracker-client/client";
-import useIsMobile from "@/hooks/useIsMobile";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export const useWebsiteSearch = () => {
     const [page, setPage] = useState(1);
