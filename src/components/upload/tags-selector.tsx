@@ -9,7 +9,7 @@ import { useEffect } from "react";
 type TagsSelectorProps = {};
 
 const TagsSelector = ({ }: TagsSelectorProps) => {
-    const { register, setValue, formState } = useFormContext();
+    const { register, setValue, formState, watch } = useFormContext();
 
     const localSubmitCount = useRef<number>(0)
 
@@ -20,11 +20,14 @@ const TagsSelector = ({ }: TagsSelectorProps) => {
         }
     }, [formState.errors.root, formState.isSubmitted, formState.submitCount]);
 
-    useEffect(() => {
-        console.warn('form', formState.isSubmitSuccessful, formState.isSubmitted, formState.submitCount)
-    }, [formState])
-
     const [selectedTags, selectedTagsSet] = useState<string[]>([]);
+    const watchedTags = watch("tags")
+
+    useEffect(() => {
+        if (watchedTags && Array.isArray(watchedTags)) {
+            selectedTagsSet(watchedTags);
+        }
+    }, [watchedTags])
 
     const canAddMore = useMemo(() => selectedTags.length < MAX_TAGS_PER_UPLOAD, [selectedTags])
 

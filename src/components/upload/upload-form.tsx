@@ -73,11 +73,13 @@ const UploadForm = () => {
             return
         }
 
-        if (!result.data.image) previewNotUploadedSet(true)
+        if (!result.data?.image) previewNotUploadedSet(true)
 
         await sendEvent("custom_event", { source: "Uploaded website" })
 
         recaptchaRef.current?.reset()
+
+        methods.setValue("tags", [])
         reset()
     }
 
