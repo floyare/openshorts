@@ -19,6 +19,9 @@ const { PROFILE_FETCH_KEY } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 // https://astro.build/config
 export default defineConfig({
+    build: {
+        inlineStylesheets: 'always', 
+    },
     vite: {
         plugins: [tailwindcss()],
         build: {
