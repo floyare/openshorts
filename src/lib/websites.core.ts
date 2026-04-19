@@ -144,7 +144,11 @@ export const updateWebsitePreview = async ({ headers, url }: { headers: Headers,
 export const doesWebsiteExists = async (url: string) => {
     return !!(
         (await prisma.websites.findFirst({
-            where: { url },
+            where: {
+                url: {
+                    contains: new URL(url).origin
+                }
+            },
             select: { id: true }
         }))
     ) as boolean
