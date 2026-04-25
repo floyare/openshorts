@@ -1,10 +1,19 @@
 User-agent: *
 Allow: /
 
+User-agent: GPTBot
+Allow: /
+
 User-agent: Googlebot
 Disallow: /signout
-
-User-agent: Googlebot
+Disallow: /admin
 Disallow: /_server-islands/
 
+User-agent: Applebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
 Sitemap: https://www.openshorts.dev/sitemap-index.xml
+Sitemap: https://www.openshorts.dev/sitemap-websites.xml

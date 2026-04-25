@@ -3,12 +3,19 @@ import Container from "@/components/container";
 import Layout from "./layout.astro";
 import { Image } from "astro:assets";
 import { Compass, Share2 } from "lucide-react";
+import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
 ---
 
 <Layout
     subtitle="About project"
     description="OpenShorts is a platform where people can share and discover useful websites and online tools."
 >
+    <BreadcrumbSchema
+        items={[
+            { name: "Home", url: Astro.site?.toString() || "https://www.openshorts.dev" },
+            { name: "About", url: Astro.url.toString() },
+        ]}
+    />
     <section class="flex flex-col items-center">
         <div class="flex flex-col items-center gap-8 w-fit">
             <Container

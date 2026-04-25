@@ -14,6 +14,8 @@ import {
     Youtube,
 } from "lucide-react";
 import RelatedPostsComponent from "@/content/related-posts-component.astro";
+import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
+import ArticleSchema from "@/constants/schemas/article-schema.astro";
 const { frontmatter } = Astro.props;
 
 const profileData = await prisma.user.findFirst({
@@ -32,6 +34,21 @@ if (!profileData) throw new Error("Author not found");
 ---
 
 <Layout subtitle={frontmatter.title} description={frontmatter.description}>
+    <BreadcrumbSchema
+        items={[
+            { name: "Home", url: Astro.site?.toString() || "https://www.openshorts.dev" },
+            { name: "Blog", url: new URL("/blog", Astro.site).toString() },
+            { name: frontmatter.title, url: Astro.url.toString() },
+        ]}
+    />
+    <ArticleSchema
+        title={frontmatter.title}
+        description={frontmatter.description}
+        image={frontmatter.image}
+        pubDate={frontmatter.pubDate}
+        author={frontmatter.author}
+        url={Astro.url.toString()}
+    />
     <main class="flex flex-col items-center gap-2 justify-center">
         <article
             class="flex flex-col items-start gap-2 justify-center lg:max-w-[85%] max-w-full"
@@ -108,7 +125,6 @@ if (!profileData) throw new Error("Author not found");
                     <div
                         class="prose dark:prose-invert prose-h1:text-2xl prose-h2:text-xl prose-p:text-base"
                     >
-                        <h1 class="text-3xl font-bold">{frontmatter.title}</h1>
                         <slot />
                     </div>
                     <RelatedPostsComponent

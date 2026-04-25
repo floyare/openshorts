@@ -49,18 +49,9 @@ if (!website) {
 
 <BreadcrumbSchema
     items={[
-        {
-            "@type": "ListItem",
-            position: 1,
-            name: "Browse websites",
-            item: `${import.meta.env.SITE}/browse/`,
-        },
-        {
-            "@type": "ListItem",
-            position: 2,
-            name: website.name,
-            item: `${import.meta.env.SITE}/browse/${website.name.toLowerCase()}`,
-        },
+        { name: "Home", url: Astro.site?.toString() || "https://www.openshorts.dev" },
+        { name: "Browse", url: new URL("/browse", Astro.site).toString() },
+        { name: website.name, url: Astro.url.toString() },
     ]}
 />
 <WebsiteEntrySchema

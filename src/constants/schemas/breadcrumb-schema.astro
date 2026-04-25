@@ -1,12 +1,29 @@
 ---
 import { Schema } from "astro-seo-schema";
+
+interface BreadcrumbItem {
+    name: string;
+    url: string;
+}
+
+interface Props {
+    items: BreadcrumbItem[];
+}
+
 const { items } = Astro.props;
+
+const itemListElement = items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.name,
+    item: item.url,
+}));
 ---
 
 <Schema
     item={{
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
-        itemListElement: items,
+        itemListElement: itemListElement,
     }}
 />

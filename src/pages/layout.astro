@@ -3,7 +3,7 @@ export const prerender = true;
 
 const TITLE = "openshorts.dev";
 const DESCRIPTION =
-    "Discover and share the best online tools and websites. Explore useful tools, assets, graphics and more. Contribute your favorites websites to our growing community and enhance your searching experience with AI Search feature.";
+    "Browse, search, and upload the best free developer tools, UI assets, and graphics. Join our community to share your favorites and enhance your workflow with AI search.";
 
 import "../styles/global.css";
 import { AnalyticsProvider } from "shibuitracker-client/client";
@@ -24,6 +24,7 @@ import FooterContent from "@/components/footer/footer-content";
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
         <GoogleTagmanagerPartytown id="GTM-T57K4JBX" />
         <script is:inline>
             const theme = localStorage.getItem("theme");
@@ -66,7 +67,6 @@ import FooterContent from "@/components/footer/footer-content";
 
         <meta name="google-adsense-account" content="ca-pub-9939390828296488" />
         <link rel="icon" type="image/png" href="/favicon.png" />
-        <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
         <meta name="robots" content="index,follow" />
         <meta
@@ -78,7 +78,7 @@ import FooterContent from "@/components/footer/footer-content";
             name="keywords"
             content="tools, websites, search, create, share, online tools, assets, graphics, curated websites, ui inspiration, free web assets, design resources, website examples, ai search"
         />
-        <title>{TITLE} {subtitle ? ` - ${subtitle}` : ""}</title>
+        <title>{subtitle ? `${subtitle} | ${TITLE}` : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}</title>
         <meta
             name="description"
             content={Astro.props.description || DESCRIPTION}
@@ -91,7 +91,7 @@ import FooterContent from "@/components/footer/footer-content";
 
         <meta
             property="og:title"
-            content={`${TITLE} ${subtitle ? ` - ${subtitle}` : ""}`}
+            content={subtitle ? `${subtitle} | ${TITLE}` : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}
         />
         <meta property="og:site_name" content="openshorts.dev" />
         <meta
@@ -101,17 +101,21 @@ import FooterContent from "@/components/footer/footer-content";
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url} />
         <meta property="og:image" content="/og-bc.webp" />
+        <meta property="og:image:alt" content="openshorts.dev - search fast, create faster" />
 
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@floyare" />
+        <meta name="twitter:creator" content="@floyare" />
         <meta
             name="twitter:title"
-            content={`${TITLE} ${subtitle ? ` - ${subtitle}` : "| search fast, create faster"}`}
+            content={subtitle ? `${subtitle} | ${TITLE}` : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}
         />
         <meta
             name="twitter:description"
             content={Astro.props.description || DESCRIPTION}
         />
         <meta name="twitter:image" content="/og-bc.webp" />
+        <meta name="twitter:image:alt" content="openshorts.dev - search fast, create faster" />
         <!-- <script
             is:inline
             async

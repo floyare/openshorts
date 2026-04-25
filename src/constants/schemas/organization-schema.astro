@@ -1,0 +1,25 @@
+---
+import { Schema } from "astro-seo-schema";
+
+const siteUrl = import.meta.env.SITE || "https://www.openshorts.dev";
+---
+
+<Schema
+    item={{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "openshorts.dev",
+        url: siteUrl,
+        logo: `${siteUrl}/favicon.png`,
+        sameAs: [
+            "https://www.youtube.com/@floyare",
+            "https://github.com/floyare",
+            "https://x.com/floyarestyles"
+        ],
+        contactPoint: {
+            "@type": "ContactPoint",
+            email: "floyarehooked@gmail.com",
+            contactType: "customer service"
+        }
+    }}
+/>

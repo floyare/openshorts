@@ -10,12 +10,19 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import FAQSection from "@/components/faq/faq-section";
+import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
 ---
 
 <Layout
     subtitle="FAQ"
     description="Everything you need to know about openshorts.dev"
 >
+    <BreadcrumbSchema
+        items={[
+            { name: "Home", url: Astro.site?.toString() || "https://www.openshorts.dev" },
+            { name: "FAQ", url: Astro.url.toString() },
+        ]}
+    />
     <section class="flex flex-col items-center py-4">
         <div class="text-center">
             <h1 class="text-3xl font-extrabold tracking-tighter">
