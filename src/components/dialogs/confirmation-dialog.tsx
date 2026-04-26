@@ -8,12 +8,12 @@ type ConfirmationDialogProps = {
         title: string,
         description: string,
         buttons: {
-            confirm: {
+            confirm?: {
                 label: string,
                 action: () => void,
                 variant?: "default" | "destructive" | "outline" | "secondary"
             },
-            cancel: {
+            cancel?: {
                 label: string,
                 action: () => void,
                 variant?: "default" | "outline" | "secondary"
@@ -26,29 +26,29 @@ const ConfirmationDialog = ({ onClose, additionalProps, ...rest }: ConfirmationD
     return (
         <Dialog open onOpenChange={onClose}>
             <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
-                <Container className="dark:!bg-neutral-900 dark:!border-neutral-700">
+                <Container className="dark:!bg-neutral-900 dark:!border-neutral-700 bg-background-950 border-background-800 min-w-md">
                     <h2 className="text-2xl font-semibold">{additionalProps.title}</h2>
                     <p className="text-lg text-gray-700 dark:text-text-700">{additionalProps.description}</p>
                     <div className="flex justify-end gap-2 mt-4">
-                        <Button
+                        {additionalProps.buttons.cancel && <Button
                             onClick={() => {
-                                additionalProps.buttons.cancel.action()
+                                additionalProps.buttons.cancel?.action()
                                 onClose(false)
                             }}
                             variant={additionalProps.buttons.cancel.variant}
                         >
                             {additionalProps.buttons.cancel.label}
-                        </Button>
+                        </Button>}
 
-                        <Button
+                        {additionalProps.buttons.confirm && <Button
                             onClick={() => {
-                                additionalProps.buttons.confirm.action()
+                                additionalProps.buttons.confirm?.action()
                                 onClose(true)
                             }}
                             variant={additionalProps.buttons.confirm.variant}
                         >
                             {additionalProps.buttons.confirm.label}
-                        </Button>
+                        </Button>}
                     </div>
                 </Container>
             </DialogContent >

@@ -1,5 +1,6 @@
 import { MAX_PROFILE_NAME_LENGTH, MIN_PROFILE_NAME_LENGTH } from "@/helpers/user.helper";
 import { auth } from "@/lib/auth";
+import { debugLog } from "@/lib/log";
 import { prisma } from "@/lib/prisma";
 import { isUserBanned } from "@/lib/user.core";
 import { z } from "astro/zod";
@@ -73,5 +74,42 @@ export const user = {
                 },
             });
         },
+    }),
+    getUserNotifications: defineAction({
+        handler: async (input, ctx) => {
+            debugLog("ACTION", 'Getting user notifications...')
+            const currentUser = await auth.api.getSession({
+                headers: ctx.request.headers,
+            });
+
+            if (!currentUser?.user) return []
+
+            const userNotifications = await prisma.notification.findMany({
+                select: {
+                    id: true,
+                    notification_type: true,
+                    name: true,
+                    content: true
+                },
+                where: {
+                    OR: [
+                        {
+                            user_targets: {
+                                has: currentUser?.user.id
+                            }
+                        },
+                        {
+                            user_targets: {
+                                equals: []
+                            }
+                        }
+                    ]
+                }
+            }).catch((er) => console.warn('err', er))
+
+            console.log('notif', userNotifications)
+
+            return userNotifications
+        }
     })
 }

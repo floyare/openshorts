@@ -105,5 +105,29 @@ export const admin = {
                 }
             })
         }
+    }),
+    pushNotification: defineAction({
+        input: z.object({
+            notification_type: z.enum(["INFO", "WARNING"]),
+            name: z.string().optional(),
+            content: z.string(),
+            user_targets: z.string().array()
+        }),
+        handler: async (input, ctx) => {
+            const currentUser = await auth.api.getSession({
+                headers: ctx.request.headers,
+            });
+
+            if (currentUser?.user.role !== "OWNER") throw new Error("You are not allowed to perform this action");
+
+            return await prisma.notification.create({
+                data: {
+                    name: input.name,
+                    content: input.content,
+                    notification_type: input.notification_type,
+                    user_targets: input.user_targets
+                }
+            })
+        }
     })
 }

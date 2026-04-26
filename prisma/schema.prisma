@@ -132,6 +132,16 @@ model feedback {
   content    String
 }
 
+model notification {
+  id                Int               @id @default(autoincrement())
+  notification_type notification_type
+  name              String?
+  content           String?
+  user_targets      String[]
+
+  @@index([id], map: "index_id")
+}
+
 enum categories {
   PROGRAMMING
   UI_UX           @map("UI/UX")
@@ -142,4 +152,9 @@ enum user_role {
   USER
   OWNER
   MODERATOR
+}
+
+enum notification_type {
+  INFO
+  WARNING
 }

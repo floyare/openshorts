@@ -19,6 +19,7 @@ import WebsiteSchema from "@/constants/schemas/website-schema.astro";
 import FeedbackButton from "@/components/feedback-button";
 import { GoogleTagmanagerPartytown } from "@digi4care/astro-google-tagmanager";
 import FooterContent from "@/components/footer/footer-content";
+import GlobalNotification from "@/components/global-notification";
 ---
 
 <html lang="en">
@@ -78,7 +79,13 @@ import FooterContent from "@/components/footer/footer-content";
             name="keywords"
             content="tools, websites, search, create, share, online tools, assets, graphics, curated websites, ui inspiration, free web assets, design resources, website examples, ai search"
         />
-        <title>{subtitle ? `${subtitle} | ${TITLE}` : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}</title>
+        <title>
+            {
+                subtitle
+                    ? `${subtitle} | ${TITLE}`
+                    : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"
+            }
+        </title>
         <meta
             name="description"
             content={Astro.props.description || DESCRIPTION}
@@ -91,7 +98,9 @@ import FooterContent from "@/components/footer/footer-content";
 
         <meta
             property="og:title"
-            content={subtitle ? `${subtitle} | ${TITLE}` : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}
+            content={subtitle
+                ? `${subtitle} | ${TITLE}`
+                : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}
         />
         <meta property="og:site_name" content="openshorts.dev" />
         <meta
@@ -101,21 +110,29 @@ import FooterContent from "@/components/footer/footer-content";
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url} />
         <meta property="og:image" content="/og-bc.webp" />
-        <meta property="og:image:alt" content="openshorts.dev - search fast, create faster" />
+        <meta
+            property="og:image:alt"
+            content="openshorts.dev - search fast, create faster"
+        />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@floyare" />
         <meta name="twitter:creator" content="@floyare" />
         <meta
             name="twitter:title"
-            content={subtitle ? `${subtitle} | ${TITLE}` : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}
+            content={subtitle
+                ? `${subtitle} | ${TITLE}`
+                : "openshorts.dev | Best Free Developer Tools & UI Assets Directory"}
         />
         <meta
             name="twitter:description"
             content={Astro.props.description || DESCRIPTION}
         />
         <meta name="twitter:image" content="/og-bc.webp" />
-        <meta name="twitter:image:alt" content="openshorts.dev - search fast, create faster" />
+        <meta
+            name="twitter:image:alt"
+            content="openshorts.dev - search fast, create faster"
+        />
         <!-- <script
             is:inline
             async
@@ -129,6 +146,7 @@ import FooterContent from "@/components/footer/footer-content";
         ]}
         {...props}
     >
+        <GlobalNotification client:idle />
         <Dialog client:only />
         <LoadingIndicator height="8px" color="var(--color-primary-600)" />
         <Toaster position="top-right" richColors client:visible />

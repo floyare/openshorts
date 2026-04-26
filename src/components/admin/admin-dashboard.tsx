@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import type { BannedDetailsType } from "@/types/user";
 import { getURLHost } from "@/lib/utils";
 import { Check } from "lucide-react";
+import AdminNotificationPusher from "./admin-notification-pusher";
 
 const PAGE_SIZE = 5;
 
@@ -475,6 +476,8 @@ const AdminDashboard = ({ websites, users, reports, feedbacks }: { websites: web
                     </div>
                 </CardContent>
             </Card>
+
+            <AdminNotificationPusher users={users} />
         </div>
     );
 };

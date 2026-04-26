@@ -11,7 +11,6 @@ import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 //import getPrismaInstance from '@/lib/prisma';
 
-//const customPages = await fetch("https://example.com").then(users => { return ["https://openshorts.dev/XD"] });
 import { loadEnv } from "vite";
 
 import playformCompress from "@playform/compress";
@@ -73,11 +72,10 @@ export default defineConfig({
             }
             return { ...item, priority };
         }
-    }), //     config: {
-    //             forward: ['dataLayer.push'],
-    //     }
-    // }),
-    mdx(), , playformInline(), playformCompress()],
+    }),
+    mdx(), 
+    playformInline(), 
+    playformCompress()],
     trailingSlash: 'never',
     output: 'static',
     adapter: vercel(),//node({mode: "standalone"}),
