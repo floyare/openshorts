@@ -7,7 +7,10 @@ import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
 <Layout subtitle="Terms of Service">
     <BreadcrumbSchema
         items={[
-            { name: "Home", url: Astro.site?.toString() || "https://www.openshorts.dev" },
+            {
+                name: "Home",
+                url: Astro.site?.toString() || "https://www.openshorts.dev",
+            },
             { name: "Terms of Service", url: Astro.url.toString() },
         ]}
     />
@@ -17,7 +20,7 @@ import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
         >
             <h1 class="text-3xl font-semibold mb-4">
                 Terms of Service
-                <p class="text-xs font-medium">Latest update: 24.05.2025</p>
+                <p class="text-xs font-medium">Latest update: 26.04.2026</p>
             </h1>
             <p class="mb-6">
                 Welcome to openshorts ("we," "our," or "us"). By accessing or
@@ -48,18 +51,31 @@ import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
                             violate any laws or infringe upon any third-party rights.
                         </li>
                         <li>
+                            <strong>Uniqueness:</strong> All submitted websites, tools,
+                            and resources must be unique. Duplicate submissions of
+                            existing entries in our directory are not allowed and
+                            will be removed.
+                        </li>
+                        <li>
+                            <strong>Prohibited Platforms:</strong> We do not accept
+                            submissions of links to social media profiles or content
+                            hosted on platforms such as YouTube, Instagram, X (Twitter),
+                            TikTok, Facebook, or similar. Submissions must lead to
+                            standalone tools, websites, or developer assets.
+                        </li>
+                        <li>
                             <strong>Prohibited Content:</strong> Do not submit content
                             that is unlawful, harmful, threatening, abusive, harassing,
                             defamatory, vulgar, obscene, or otherwise objectionable.
                         </li>
                         <li>
-                            <strong>License:</strong> By submitting content, you
-                            grant us a non-exclusive, worldwide, royalty-free license
-                            to use, display, and distribute your content on our platform.
+                            <strong>License:</strong> By submitting content, you grant
+                            us a non-exclusive, worldwide, royalty-free license to
+                            use, display, and distribute your content on our platform.
                         </li>
                         <li>
-                            <strong>Ownership:</strong> You affirm that you have
-                            the legal right to share all content you submit.
+                            <strong>Ownership:</strong> You affirm that you have the
+                            legal right to share all content you submit.
                         </li>
                     </ul>
                 </li>
@@ -69,6 +85,9 @@ import BreadcrumbSchema from "@/constants/schemas/breadcrumb-schema.astro";
                         You agree not to: spam the platform, manipulate likes or
                         comments, harass users, scrape the site, attempt to
                         reverse-engineer the system, or submit malicious links.
+                        Intentional submission of duplicate content or
+                        restricted social media links may result in account
+                        suspension.
                     </p>
                 </li>
                 <li>
