@@ -25,7 +25,7 @@ type ConfirmationDialogProps = {
 const ConfirmationDialog = ({ onClose, additionalProps, ...rest }: ConfirmationDialogProps) => {
     return (
         <Dialog open onOpenChange={onClose}>
-            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" {...rest}>
+            <DialogContent className="flex flex-col gap-2 overflow-y-auto !max-h-full py-6 data-[state=closed]:!animate-fadeout animate-fadein" onInteractOutside={(e) => e.preventDefault()} onFocusOutside={(e) => e.preventDefault()} onPointerDownOutside={(e) => e.preventDefault()} {...rest}>
                 <Container className="dark:!bg-neutral-900 dark:!border-neutral-700 bg-background-950 border-background-800 min-w-md">
                     <h2 className="text-2xl font-semibold">{additionalProps.title}</h2>
                     <p className="text-lg text-gray-700 dark:text-text-700">{additionalProps.description}</p>
